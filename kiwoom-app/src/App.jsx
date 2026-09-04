@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useId } from 'react';
 import {
-  ChevronLeft, Check, Signal, Wifi, BatteryFull,
+  ChevronLeft, Check, Signal, Wifi, BatteryFull, Bell, Menu, Bookmark, Activity, MessageCircle, X,
 } from 'lucide-react';
 
 const C = {
@@ -147,9 +147,12 @@ function Illustration({ icon }) {
   );
 }
 
-function Chip({ children }) {
+function Chip({ children, onClick }) {
   return (
-    <span style={{ height: 24, borderRadius: 6, background: C.chipBg, padding: '0 8px', display: 'inline-flex', alignItems: 'center', fontSize: 12.5, fontWeight: 500, color: C.textSecondary, whiteSpace: 'nowrap', fontFamily: FONT, flexShrink: 0 }}>
+    <span
+      onClick={onClick ? (e) => { e.stopPropagation(); onClick(children); } : undefined}
+      style={{ height: 24, borderRadius: 6, background: C.chipBg, padding: '0 8px', display: 'inline-flex', alignItems: 'center', fontSize: 12.5, fontWeight: 500, color: C.textSecondary, whiteSpace: 'nowrap', fontFamily: FONT, flexShrink: 0, cursor: onClick ? 'pointer' : 'default' }}
+    >
       {children}
     </span>
   );
@@ -181,7 +184,7 @@ function Frame({ children }) {
 }
 
 /* 스와이프 가능한 칩 행: 더 스크롤할 구간이 남아있는 쪽에만 16px 페이드 표시 */
-function ScrollChipRow({ chips, active }) {
+function ScrollChipRow({ chips, active, onChipClick }) {
   const ref = useRef(null);
   const rafRef = useRef(null);
   const timerRef = useRef(null);
@@ -246,7 +249,7 @@ function ScrollChipRow({ chips, active }) {
   return (
     <div style={{ position: 'relative', marginTop: 16 }}>
       <div ref={ref} onScroll={update} className="no-scrollbar" style={{ display: 'flex', gap: 6, overflowX: 'auto', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-        {chips.map((c) => <Chip key={c}>{c}</Chip>)}
+        {chips.map((c) => <Chip key={c} onClick={onChipClick}>{c}</Chip>)}
       </div>
       {edge.left && <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 16, background: 'linear-gradient(90deg, #FFFFFF, rgba(255,255,255,0))', pointerEvents: 'none' }} />}
       {edge.right && <div style={{ position: 'absolute', right: 0, top: 0, bottom: 0, width: 16, background: 'linear-gradient(270deg, #FFFFFF, rgba(255,255,255,0))', pointerEvents: 'none' }} />}
@@ -254,7 +257,7 @@ function ScrollChipRow({ chips, active }) {
   );
 }
 
-function PersonaCard({ card, selected, onSelect, onPreview }) {
+function PersonaCard({ card, selected, onSelect, onPreview, onChipClick }) {
   return (
     <div
       onClick={() => onSelect(card.id)}
@@ -285,7 +288,7 @@ function PersonaCard({ card, selected, onSelect, onPreview }) {
         <Illustration icon={card.icon} />
       </div>
 
-      <ScrollChipRow chips={card.chips} active={selected} />
+      <ScrollChipRow chips={card.chips} active={selected} onChipClick={onChipClick} />
 
       <button
         onClick={(e) => { e.stopPropagation(); onPreview(card); }}
@@ -330,16 +333,19 @@ function Delta({ c, up, size = 13 }) {
     </span>
   );
 }
-function CardShell({ title, children }) {
+function CardShell({ title, subtitle, children, showCheck = true }) {
   const [checked, setChecked] = useState(true);
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span style={{ fontSize: 20, fontWeight: 700, color: C.textPrimary }}>{title}</span>
-        <div onClick={(e) => { e.stopPropagation(); setChecked(!checked); }} style={{ width: 22, height: 22, borderRadius: '50%', background: checked ? C.yellow : 'transparent', border: checked ? 'none' : `1.5px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxSizing: 'border-box' }}>
-          {checked && <Check size={13} color={C.textPrimary} strokeWidth={3} />}
-        </div>
+        {showCheck && (
+          <div onClick={(e) => { e.stopPropagation(); setChecked(!checked); }} style={{ width: 22, height: 22, borderRadius: '50%', background: checked ? C.yellow : 'transparent', border: checked ? 'none' : `1.5px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxSizing: 'border-box' }}>
+            {checked && <Check size={13} color={C.textPrimary} strokeWidth={3} />}
+          </div>
+        )}
       </div>
+      {subtitle && <div style={{ marginTop: 4, fontSize: 14, color: C.textTertiary }}>{subtitle}</div>}
       {children}
     </div>
   );
@@ -392,7 +398,7 @@ const IDX = [
   { n: 'S&P 500', v: '5,912.40', c: '0.31%', up: true },
   { n: '달러 환율', v: '1,359.00', c: '0.11%', up: false },
 ];
-function IndexCard() {
+function IndexCard({ showCheck = true, subtitle } = {}) {
   const [kospiLive, setKospiLive] = useState(null); // null = not loaded yet, keeps static value shown
   useEffect(() => {
     let cancelled = false;
@@ -410,7 +416,7 @@ function IndexCard() {
       : i
   );
   return (
-    <CardShell title="지수" checked>
+    <CardShell title="지수" showCheck={showCheck} subtitle={subtitle}>
       <div style={{ position: 'relative', marginTop: 12 }}>
         <div className="no-scrollbar" style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none' }}>
           {idx.map((i) => (
@@ -437,11 +443,11 @@ const CLOSE_SECTIONS = [
   },
   { tag: '내일 장 대비', title: '다음 변수는~~ 내일은 트럼프가 어떤 결정을 할지 고려하면 좋겠고~~ 주목할만한 섹터는 ~~', body: '' },
 ];
-function CloseReviewCard() {
+function CloseReviewCard({ showCheck = true, subtitle } = {}) {
   const [open, setOpen] = useState(true);
   const sections = open ? CLOSE_SECTIONS : CLOSE_SECTIONS.slice(0, 1);
   return (
-    <CardShell title="장마감 리뷰" checked>
+    <CardShell title="장마감 리뷰" showCheck={showCheck} subtitle={subtitle}>
       <div style={{ marginTop: 12 }}>
         <Tag>오늘 시장</Tag>
         <div style={{ marginTop: 8, fontSize: 14, fontWeight: 600, color: '#444B52' }}>코스피 6,689 <Delta c="1.64%" up size={13} /> 상승 마감</div>
@@ -479,9 +485,9 @@ const HOLDINGS = [
   { n: '삼성전자', t: '000000', c: '0.00%', up: true, p: '247,9800원' },
   { n: '삼성전자', t: '000000', c: '0.00%', up: true, p: '247,9800원' },
 ];
-function PortfolioCard() {
+function PortfolioCard({ showCheck = true, subtitle } = {}) {
   return (
-    <CardShell title="포트폴리오" checked>
+    <CardShell title="포트폴리오" showCheck={showCheck} subtitle={subtitle}>
       <div style={{ marginTop: 12 }}>
         <div style={{ fontSize: 12.5, color: C.textTertiary }}>총 평가액</div>
         <div style={{ fontSize: 22, fontWeight: 700, color: C.textPrimary, marginTop: 0 }}>3,574,000원</div>
@@ -510,10 +516,10 @@ const FILLS = [
   { t: '26/9/5 13:22', n: '삼성전자', act: '12주 판매', up: false, p: '000,000원', unit: '주당 000,000원' },
   { t: '26/9/5 10:50', n: '삼성전자', act: '12주 구매', up: true, p: '000,000원', unit: '주당 000,000원' },
 ];
-function AlertCard() {
+function AlertCard({ showCheck = true, subtitle } = {}) {
   const [tab, setTab] = useState('체결내역');
   return (
-    <CardShell title="알림" checked>
+    <CardShell title="알림" showCheck={showCheck} subtitle={subtitle}>
       <Underline items={['거래 대기', '체결내역']} active={tab} onChange={setTab} />
       <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 14 }}>
         {FILLS.map((f, i) => (
@@ -543,10 +549,10 @@ const NEWS = [
   { h: '애플의 프리미엄 아이폰이 사용자를 더 비싼 모델로 끌어들이는 방법', meta: '3시간 전 · 파이낸셜타임즈' },
   { h: '연합인포맥스 美 투자은행 "애플, 세계 최대 시총 자리 내줄 것', meta: '4시간 전 · 헤럴드 경제' },
 ];
-function NewsCard() {
+function NewsCard({ showCheck = true, subtitle } = {}) {
   const [co, setCo] = useState('전체');
   return (
-    <CardShell title="뉴스" checked>
+    <CardShell title="뉴스" showCheck={showCheck} subtitle={subtitle}>
       <PillTabs items={NEWS_CO} active={co} onChange={setCo} />
       <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 14 }}>
         {NEWS.map((n, i) => (
@@ -580,11 +586,11 @@ const POSTS = [
   { n: '삼성전자', c: '1.40%', up: false, body: '몸살이 제대로 났네요. 열두 나고요. 어제 쉬었어야했는데 억지로 봉사 다녀왔더니 호되게 걸렸어요.' },
   { n: '삼성전자', c: '1.40%', up: false, body: '몸살이 제대로 났네요. 열두 나고요. 어제 쉬었어야했는데 억지로 봉사 다녀왔더니 호되게 걸렸어요.' },
 ];
-function CommunityCard() {
+function CommunityCard({ showCheck = true, subtitle } = {}) {
   const [tab, setTab] = useState('토론방');
   const [open, setOpen] = useState(0);
   return (
-    <CardShell title="커뮤니티" checked>
+    <CardShell title="커뮤니티" showCheck={showCheck} subtitle={subtitle}>
       <Underline items={['토론방', '실시간 검색어']} active={tab} onChange={setTab} />
       {tab === '토론방' && (
         <div style={{ marginTop: 16 }}>
@@ -659,23 +665,40 @@ const RANK = [
   { n: 'SK하이닉스', t: '000660', c: '2.29%', up: false, p: '1,576,000원' },
   { n: '바이오어피니티 테크놀로지스', t: 'BIAF', c: '37.23%', up: true, p: '$13.38' },
 ];
-function RankingCard() {
+function RankingCard({ showCheck = true, subtitle } = {}) {
   const [tab, setTab] = useState('상승');
+  const [liveRows, setLiveRows] = useState({}); // { '상승': [...], '하락': [...] }
+  useEffect(() => {
+    if (tab !== '상승' && tab !== '하락') return; // 거래대금 탭은 아직 미연동
+    if (liveRows[tab]) return; // already fetched once
+    const type = tab === '상승' ? 'up' : 'down';
+    let cancelled = false;
+    fetch(`/api/kiwoom/ranking?type=${type}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (!cancelled && !data.error && data.rows) {
+          setLiveRows((prev) => ({ ...prev, [tab]: data.rows }));
+        }
+      })
+      .catch(() => {}); // network hiccup: silently keep static placeholder rows
+    return () => { cancelled = true; };
+  }, [tab]); // eslint-disable-line react-hooks/exhaustive-deps
+  const rows = liveRows[tab] || RANK;
   return (
-    <CardShell title="랭킹" checked>
+    <CardShell title="랭킹" showCheck={showCheck} subtitle={subtitle}>
       <Underline items={RANK_TABS} active={tab} onChange={setTab} />
       <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 14 }}>
-        {RANK.map((r, i) => (
+        {rows.map((r, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontSize: 13, color: C.textTertiary, width: 12 }}>{i + 1}</span>
-            <Avatar name={r.n} />
+            <Avatar name={r.n || r.name} />
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary }}>{r.n}</div>
-              <div style={{ fontSize: 12, color: C.textTertiary }}>{r.t}</div>
+              <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary }}>{r.n || r.name}</div>
+              <div style={{ fontSize: 12, color: C.textTertiary }}>{r.t || r.code}</div>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <Delta c={r.c} up={r.up} />
-              <div style={{ fontSize: 12.5, color: C.textTertiary, marginTop: 2 }}>{r.p}</div>
+              <Delta c={r.c || r.changePct} up={r.up} />
+              <div style={{ fontSize: 12.5, color: C.textTertiary, marginTop: 2 }}>{r.p || r.price}</div>
             </div>
             <svg width="15" height="15" viewBox="0 0 24 24"><path d="M6 3a2 2 0 0 0-2 2v16l8-5.333L20 21V5a2 2 0 0 0-2-2H6z" fill={C.border} /></svg>
           </div>
@@ -692,11 +715,11 @@ const NEWS_FEED = [
   { t: '5시간 전', tag: 'HBM 점유율 1위', h: '중국 정부의 새로운 빅테크 특별규제에 애플이 선택의 기로에 놓였어요.' },
   { t: '정규장 개시', tag: '', h: '' },
 ];
-function WatchlistCard() {
+function WatchlistCard({ showCheck = true, subtitle } = {}) {
   const [open, setOpen] = useState(0);
   const rows = [{ n: '삼성전자' }, { n: '삼성전자' }, { n: '삼성전자' }];
   return (
-    <CardShell title="관심 종목" checked>
+    <CardShell title="관심 종목" showCheck={showCheck} subtitle={subtitle}>
       <div style={{ marginTop: 8 }}>
         {rows.map((r, i) => (
           <div key={i}>
@@ -744,10 +767,10 @@ const CAL_DATES = [
   { d: '9월 5일', events: [{ n: '일본은행 기준 금리 발표', s: '오전 11시 예정' }, { n: 'FOMC 미팅', s: '오후 3시 예정' }] },
   { d: '9월 7일', events: [{ n: '평균 임금 상승률 발표', s: '시간 미정' }] },
 ];
-function CalendarCard() {
+function CalendarCard({ showCheck = true, subtitle } = {}) {
   const [tab, setTab] = useState('전체');
   return (
-    <CardShell title="증권 캘린더" checked>
+    <CardShell title="증권 캘린더" showCheck={showCheck} subtitle={subtitle}>
       <PillTabs items={CAL_TABS} active={tab} onChange={setTab} />
       {CAL_DATES.map((g) => (
         <div key={g.d} style={{ marginTop: 14 }}>
@@ -776,10 +799,10 @@ const POPULAR_REPORTS = [
   { title: '반도체와반도체장비-반도체 및 소부장 Weekly: 견조한 메모리 업황', src: 'NH투자증권 홍길동 · 08.31' },
   { title: '반도체와반도체장비-반도체 및 소부장 Weekly: 견조한 메모리 업황', src: 'NH투자증권 홍길동 · 08.31' },
 ];
-function ReportCard() {
+function ReportCard({ showCheck = true, subtitle } = {}) {
   const [tab, setTab] = useState('신규 목표가');
   return (
-    <CardShell title="리포트" checked>
+    <CardShell title="리포트" showCheck={showCheck} subtitle={subtitle}>
       <PillTabs items={['인기', '신규 목표가']} active={tab} onChange={setTab} />
       <div className="no-scrollbar" style={{ display: 'flex', gap: 8, marginTop: 12, overflowX: 'auto', scrollbarWidth: 'none' }}>
         {tab === '인기' && POPULAR_REPORTS.map((r, i) => (
@@ -822,7 +845,66 @@ const CATEGORIES_FEED = [
   { id: 'report', title: '리포트', Comp: ReportCard },
 ];
 
-function PreviewScreen({ onBack, onStart }) {
+function FlagDot({ left, right }) {
+  const id = useId();
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" style={{ flexShrink: 0 }}>
+      <defs>
+        <clipPath id={id}><circle cx="7" cy="7" r="7" /></clipPath>
+      </defs>
+      <g clipPath={`url(#${id})`}>
+        <rect x="0" y="0" width="7" height="14" fill={left} />
+        <rect x="7" y="0" width="7" height="14" fill={right} />
+      </g>
+    </svg>
+  );
+}
+
+function HomeTopBar() {
+  return (
+    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 2, background: '#F3F4F5', padding: '16px 20px 12px' }}>
+      <StatusBar />
+      <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 13, fontWeight: 600, color: C.textPrimary, fontFamily: FONT }}>
+            <FlagDot left="#EC5F5F" right="#3D8AF7" />애프터마켓
+          </span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 13, fontWeight: 600, color: C.textPrimary, fontFamily: FONT }}>
+            <FlagDot left="#3D8AF7" right="#EC5F5F" />프리마켓
+          </span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <Bell size={20} color={C.textSecondary} strokeWidth={1.75} />
+          <Menu size={20} color={C.textSecondary} strokeWidth={1.75} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function HomeBottomTabBar() {
+  const tabs = [
+    { key: 'watch', label: '관심', Icon: Bookmark },
+    { key: 'discover', label: '발견', Icon: Activity },
+    { key: 'news', label: '소식', Icon: MessageCircle },
+  ];
+  return (
+    <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: C.white, borderTop: `1px solid ${C.borderLight}`, padding: '10px 20px 24px', display: 'flex', justifyContent: 'space-around', alignItems: 'center', fontFamily: FONT }}>
+      {tabs.map((t) => (
+        <div key={t.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+          <span style={{ fontSize: 11, fontWeight: 500, color: C.textSecondary }}>{t.label}</span>
+          <t.Icon size={20} color={C.textSecondary} strokeWidth={1.75} />
+        </div>
+      ))}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: C.textPrimary }}>증권홈</span>
+        <div style={{ width: 22, height: 20, borderRadius: 6, background: C.dark }} />
+      </div>
+    </div>
+  );
+}
+
+function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동님 맞춤 피드 미리보기' }) {
   const [order, setOrder] = useState(CATEGORIES_FEED.map((c) => c.id));
   const [dragId, setDragId] = useState(null);
   const [dragY, setDragY] = useState(0);
@@ -873,16 +955,20 @@ function PreviewScreen({ onBack, onStart }) {
 
   return (
     <Frame>
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 2, background: '#F3F4F5', padding: '16px 24px 4px' }}>
-        <StatusBar />
-        <div style={{ marginTop: 20 }}>
-          <BackButton onClick={onBack} />
+      {variant === 'home' ? (
+        <HomeTopBar />
+      ) : (
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 2, background: '#F3F4F5', padding: '16px 24px 4px' }}>
+          <StatusBar />
+          <div style={{ marginTop: 20 }}>
+            <BackButton onClick={onBack} />
+          </div>
         </div>
-      </div>
+      )}
       <div style={{ flex: 1, overflowY: 'auto', padding: '100px 20px 148px', background: '#F3F4F5' }}>
         <div style={{ padding: '0 4px', fontFamily: FONT }}>
           <Illustration icon="reco" />
-          <h1 style={{ fontSize: 22, fontWeight: 700, lineHeight: 1.35, margin: '4px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>홍길동님 맞춤 피드 미리보기</h1>
+          <h1 style={{ fontSize: 22, fontWeight: 700, lineHeight: 1.35, margin: '4px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>{title}</h1>
           <p style={{ fontSize: 14, color: C.textTertiary, margin: '8px 0 0' }}>드래그 해서 순서를 바꿀 수 있어요</p>
         </div>
         <div style={{ height: 20 }} />
@@ -902,25 +988,113 @@ function PreviewScreen({ onBack, onStart }) {
           const Comp = cat.Comp;
           return (
             <div key={id} ref={(el) => (refs.current[id] = el)} onPointerDown={(e) => onDown(id, e)} style={style}>
-              <Comp />
+              <Comp showCheck={variant !== 'home'} />
             </div>
           );
         })}
       </div>
-      <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: FOOTER_GRADIENT, padding: '20px 24px 28px', fontFamily: FONT, textAlign: 'center' }}>
-        <button onClick={onStart} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 700, color: C.textPrimary, cursor: 'pointer' }}>
-          다음
-        </button>
-        <div style={{ fontSize: 12.5, color: C.textTertiary, marginTop: 12 }}>다음 화면에서 세부사항을 수정할 수 있어요</div>
-      </div>
+      {variant === 'home' ? (
+        <HomeBottomTabBar />
+      ) : (
+        <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: FOOTER_GRADIENT, padding: '20px 24px 28px', fontFamily: FONT, textAlign: 'center' }}>
+          <button onClick={onStart} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 700, color: C.textPrimary, cursor: 'pointer' }}>
+            다음
+          </button>
+          <div style={{ fontSize: 12.5, color: C.textTertiary, marginTop: 12 }}>다음 화면에서 세부사항을 수정할 수 있어요</div>
+        </div>
+      )}
     </Frame>
   );
 }
 
-function RecommendScreen({ onManual, onPreview }) {
+function BottomSheet({ title, subtitle, onClose, children }) {
+  return (
+    <div style={{ position: 'absolute', inset: 0, zIndex: 10 }}>
+      <div onClick={onClose} style={{ position: 'absolute', inset: 0, background: 'rgba(6,11,17,0.5)' }} />
+      <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, maxHeight: '82%', background: C.white, borderRadius: '24px 24px 0 0', display: 'flex', flexDirection: 'column', fontFamily: FONT, boxShadow: '0 -8px 24px rgba(6,11,17,0.12)' }}>
+        <div style={{ padding: '24px 20px 4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+          <span style={{ fontSize: 20, fontWeight: 700, color: C.textPrimary }}>{title}</span>
+          <X size={22} color={C.textPrimary} strokeWidth={2} onClick={onClose} style={{ cursor: 'pointer', flexShrink: 0 }} />
+        </div>
+        <div style={{ padding: '8px 20px 0', fontSize: 14, color: C.textTertiary, flexShrink: 0 }}>{subtitle}</div>
+        <div style={{ overflowY: 'auto', padding: '16px 20px 28px' }}>{children}</div>
+      </div>
+    </div>
+  );
+}
+
+function IndexInfoBody() {
+  return (
+    <div className="no-scrollbar" style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none' }}>
+      {IDX.map((i) => (
+        <div key={i.n} style={{ flexShrink: 0, width: 116, background: '#F7F9F9', borderRadius: 10, padding: 14 }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary }}>{i.n}</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: i.up ? UP : DOWN, marginTop: 2 }}>{i.v}</div>
+          <Delta c={i.c} up={i.up} size={12} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function CloseReviewInfoBody() {
+  return (
+    <div>
+      <Tag>오늘 시장</Tag>
+      <div style={{ marginTop: 8, fontSize: 14, color: C.textPrimary }}>KOSPI 6,687 <Delta c="1.64%" up size={13} /></div>
+      {CLOSE_SECTIONS.map((s, i) => (
+        <div key={i} style={{ marginTop: 16, paddingTop: 16, borderTop: `1px solid ${C.borderLight}` }}>
+          <Tag>{s.tag}</Tag>
+          {s.title && <div style={{ marginTop: 8, fontSize: 14, fontWeight: 600, color: '#444B52' }}>{s.title}</div>}
+          {s.body && <Note>{s.body}</Note>}
+          {s.stocks && s.stocks.map((st) => (
+            <div key={st.n} style={{ marginTop: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Avatar name={st.n} size={32} />
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>{st.n}</div>
+                  <div style={{ fontSize: 12, color: C.textTertiary }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
+                </div>
+              </div>
+              <Note>{st.body}</Note>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// 장마감 리뷰 / 지수는 첨부된 레퍼런스를 그대로 트레이스했고, 나머지는 이미 구현된
+// 카드 컴포넌트를 그대로 재사용한 것 (자체 제목이 한 번 더 보임 - 의도된 절충).
+const CHIP_INFO = {
+  '시황 분석': { subtitle: '시황 분석에 대한 설명이에요', body: () => <CloseReviewInfoBody /> },
+  '장마감 리뷰': { subtitle: '장마감 리뷰에 대한 설명이에요', body: () => <CloseReviewInfoBody /> },
+  '지수': { subtitle: '지수 항목에 대한 설명이에요', body: () => <IndexInfoBody /> },
+  '포트폴리오': { subtitle: '포트폴리오 항목에 대한 설명이에요', body: () => <PortfolioCard showCheck={false} /> },
+  '관심 종목': { subtitle: '관심 종목 항목에 대한 설명이에요', body: () => <WatchlistCard showCheck={false} /> },
+  '알림': { subtitle: '알림 항목에 대한 설명이에요', body: () => <AlertCard showCheck={false} /> },
+  '뉴스': { subtitle: '뉴스 항목에 대한 설명이에요', body: () => <NewsCard showCheck={false} /> },
+  '커뮤니티': { subtitle: '커뮤니티 항목에 대한 설명이에요', body: () => <CommunityCard showCheck={false} /> },
+  '랭킹': { subtitle: '랭킹 항목에 대한 설명이에요', body: () => <RankingCard showCheck={false} /> },
+  '증권 캘린더': { subtitle: '증권 캘린더 항목에 대한 설명이에요', body: () => <CalendarCard showCheck={false} /> },
+  '리포트': { subtitle: '리포트 항목에 대한 설명이에요', body: () => <ReportCard showCheck={false} /> },
+};
+
+function ChipInfoSheet({ chipKey, onClose }) {
+  const info = CHIP_INFO[chipKey] || { subtitle: `${chipKey}에 대한 설명이에요`, body: () => null };
+  return (
+    <BottomSheet title={chipKey} subtitle={info.subtitle} onClose={onClose}>
+      {info.body()}
+    </BottomSheet>
+  );
+}
+
+function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
   const [activeTab, setActiveTab] = useState('reco');
   const [selectedCard, setSelectedCard] = useState('reco');
   const [pinned, setPinned] = useState(false);
+  const [infoChip, setInfoChip] = useState(null);
   const refs = useRef({});
   const rowRef = useRef(null);
   const naturalTop = useRef(null);
@@ -1006,11 +1180,11 @@ function RecommendScreen({ onManual, onPreview }) {
             </div>
             <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 6 }}>
               <div style={{ display: 'flex', justifyContent: 'center', gap: 6 }}>
-                {recoCard.chips.slice(0, 3).map((c) => <Chip key={c}>{c}</Chip>)}
+                {recoCard.chips.slice(0, 3).map((c) => <Chip key={c} onClick={setInfoChip}>{c}</Chip>)}
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 6 }}>
-                {recoCard.chips.slice(3).map((c) => <Chip key={c}>{c}</Chip>)}
-                {expanded && recoCard.more.map((c) => <Chip key={c}>{c}</Chip>)}
+                {recoCard.chips.slice(3).map((c) => <Chip key={c} onClick={setInfoChip}>{c}</Chip>)}
+                {expanded && recoCard.more.map((c) => <Chip key={c} onClick={setInfoChip}>{c}</Chip>)}
                 <span
                   onClick={(e) => { e.stopPropagation(); setExpanded(!expanded); }}
                   style={{ height: 24, borderRadius: 6, background: '#E5F4FF', padding: '0 8px', display: 'inline-flex', alignItems: 'center', fontSize: 12.5, fontWeight: 500, color: '#0090FF', whiteSpace: 'nowrap', fontFamily: FONT, cursor: 'pointer' }}
@@ -1031,7 +1205,7 @@ function RecommendScreen({ onManual, onPreview }) {
             <div style={{ fontSize: 18, fontWeight: 700, color: C.textPrimary, padding: '0 17px', fontFamily: FONT }}>{section.title}</div>
             <div className="no-scrollbar" style={{ display: 'flex', gap: 12, overflowX: 'auto', padding: '16px 17px 4px', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {section.cards.map((card) => (
-                <PersonaCard key={card.id} card={card} selected={selectedCard === card.id} onSelect={setSelectedCard} onPreview={onPreview} />
+                <PersonaCard key={card.id} card={card} selected={selectedCard === card.id} onSelect={setSelectedCard} onPreview={onPreview} onChipClick={setInfoChip} />
               ))}
             </div>
           </div>
@@ -1039,22 +1213,60 @@ function RecommendScreen({ onManual, onPreview }) {
       </div>
 
       <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: FOOTER_GRADIENT, padding: '48px 24px 28px', fontFamily: FONT }}>
-        <button style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 700, color: C.textPrimary, cursor: 'pointer' }}>
+        <button onClick={onStartTemplate} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 700, color: C.textPrimary, cursor: 'pointer' }}>
           이 템플릿으로 시작하기
         </button>
         <div onClick={onManual} style={{ textAlign: 'center', marginTop: 14, fontSize: 14, fontWeight: 600, color: C.textTertiary, cursor: 'pointer' }}>직접 고르기</div>
       </div>
+      {infoChip && <ChipInfoSheet chipKey={infoChip} onClose={() => setInfoChip(null)} />}
     </Frame>
   );
 }
 
-function ManualScreen({ onBack }) {
+const EXAMPLE_META = {
+  market: { subtitle: '장마감 리뷰에 대한 설명이에요', Comp: CloseReviewCard },
+  news: { subtitle: '뉴스에 대한 설명이에요', Comp: NewsCard },
+  portfolio: { subtitle: '포트폴리오에 대한 설명이에요', Comp: PortfolioCard },
+  watchlist: { subtitle: '관심 종목에 대한 설명이에요', Comp: WatchlistCard },
+  alert: { subtitle: '알림에 대한 설명이에요', Comp: AlertCard },
+  calendar: { subtitle: '증권 캘린더에 대한 설명이에요', Comp: CalendarCard },
+  community: { subtitle: '커뮤니티에 대한 설명이에요', Comp: CommunityCard },
+  index: { subtitle: '지수 항목에 대한 설명이에요', Comp: IndexCard },
+  ranking: { subtitle: '랭킹에 대한 설명이에요', Comp: RankingCard },
+  report: { subtitle: '리포트에 대한 설명이에요', Comp: ReportCard },
+};
+
+function ExampleSheet({ categoryKey, onClose }) {
+  const meta = EXAMPLE_META[categoryKey];
+  if (!meta) return null;
+  const { Comp, subtitle } = meta;
+  return (
+    <>
+      <div onClick={onClose} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 10 }} />
+      <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, maxHeight: '76%', background: C.white, borderRadius: '24px 24px 0 0', zIndex: 11, display: 'flex', flexDirection: 'column' }}>
+        <button onClick={onClose} style={{ position: 'absolute', top: 20, right: 20, background: 'none', border: 'none', cursor: 'pointer', padding: 0, zIndex: 1 }}>
+          <X size={22} color={C.textPrimary} />
+        </button>
+        <div style={{ overflowY: 'auto', padding: '20px 20px 32px', fontFamily: FONT }}>
+          <Comp showCheck={false} subtitle={subtitle} />
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ManualScreen({ onBack, onPreview }) {
   const initial = {};
   ALL_CATEGORIES_FOR_MANUAL.forEach((cat) => cat.items.forEach((it) => (initial[`${cat.key}:${it}`] = false)));
   const [state, setState] = useState(initial);
 
   const toggle = (k) => setState((prev) => ({ ...prev, [k]: !prev[k] }));
   const count = Object.values(state).filter(Boolean).length;
+  const [exampleCat, setExampleCat] = useState(null);
+  const handleChipClick = (catKey, k) => {
+    if (!state[k]) setExampleCat(catKey);
+    toggle(k);
+  };
 
   return (
     <Frame>
@@ -1075,7 +1287,7 @@ function ManualScreen({ onBack }) {
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {cat.items.map((it) => {
                 const k = `${cat.key}:${it}`;
-                return <ToggleChip key={k} label={it} on={state[k]} onClick={() => toggle(k)} />;
+                return <ToggleChip key={k} label={it} on={state[k]} onClick={() => handleChipClick(cat.key, k)} />;
               })}
             </div>
           </div>
@@ -1083,8 +1295,122 @@ function ManualScreen({ onBack }) {
       </div>
 
       <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: FOOTER_GRADIENT, padding: '48px 24px 28px', fontFamily: FONT }}>
-        <button style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 700, color: C.textPrimary, cursor: 'pointer' }}>
+        <button onClick={onPreview} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 700, color: C.textPrimary, cursor: 'pointer' }}>
           {count}개 항목 · 피드 미리보기
+        </button>
+      </div>
+      {exampleCat && <ExampleSheet categoryKey={exampleCat} onClose={() => setExampleCat(null)} />}
+    </Frame>
+  );
+}
+
+const DENSITY_LEVELS = [
+  { key: 'summary', label: '요약' },
+  { key: 'briefing', label: '브리핑' },
+  { key: 'analysis', label: '분석' },
+];
+const DENSITY_SUBTITLE = '핵심 요약에 핵심 포인트를 더한 형태로 전달해요';
+
+function DensitySlider({ value, onChange }) {
+  return (
+    <div style={{ padding: '0 20px' }}>
+      <div style={{ height: 44, borderRadius: 22, background: '#F7F9F9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {DENSITY_LEVELS.map((lv) => {
+          const selected = lv.key === value;
+          return (
+            <div
+              key={lv.key}
+              onClick={() => onChange(lv.key)}
+              style={{
+                width: selected ? 40 : 20, height: selected ? 40 : 20, borderRadius: '50%',
+                background: selected ? C.yellow : C.borderLight, cursor: 'pointer', flexShrink: 0,
+              }}
+            />
+          );
+        })}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 14 }}>
+        {DENSITY_LEVELS.map((lv) => (
+          <span key={lv.key} style={{ flex: 1, textAlign: lv.key === 'summary' ? 'left' : lv.key === 'analysis' ? 'right' : 'center', fontSize: 13, fontWeight: 500, color: C.textTertiary }}>
+            {lv.label}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function DensityExampleCard({ level }) {
+  const detailed = level !== 'summary';
+  return (
+    <div style={{ background: C.white, borderRadius: 16, padding: 16, fontFamily: FONT }}>
+      <div style={{ fontSize: 20, fontWeight: 700, color: C.textPrimary }}>장마감 리뷰</div>
+      <div style={{ marginTop: 12 }}>
+        <Tag>오늘 시장</Tag>
+        <div style={{ marginTop: 8, fontSize: 14, fontWeight: 600, color: '#444B52' }}>코스피 6,687 <Delta c="1.64%" up size={13} /> 상승 마감</div>
+        {detailed && <Note>이런이런 이유로 급락했다. 이런이런 이유로 급락했다. 이런이런 이유로 급락했다.</Note>}
+      </div>
+      {CLOSE_SECTIONS.map((s, i) => (
+        <div key={i} style={{ marginTop: 16, paddingTop: 16, borderTop: `1px solid ${C.borderLight}` }}>
+          <Tag>{s.tag}</Tag>
+          {s.title && <div style={{ marginTop: 8, fontSize: 14, fontWeight: 600, color: '#444B52' }}>{s.title}</div>}
+          {detailed && s.body && <Note>{s.body}</Note>}
+          {s.stocks && s.stocks.map((st) => (
+            <div key={st.n} style={{ marginTop: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Avatar name={st.n} size={32} />
+                <div>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>{st.n}</div>
+                  <div style={{ fontSize: 12, color: C.textTertiary }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
+                </div>
+              </div>
+              {detailed && <Note>{st.body}</Note>}
+            </div>
+          ))}
+        </div>
+      ))}
+      {detailed && (
+        <div style={{ marginTop: 12 }}>
+          <div style={{ borderTop: `1px solid ${C.borderLight}`, margin: '0 -16px' }} />
+          <div style={{ paddingTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, fontSize: 13, fontWeight: 600, color: C.textTertiary }}>
+            접기 <ArrowIcon up />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DensityScreen({ onBack, onSave }) {
+  const [level, setLevel] = useState('briefing');
+  const currentLabel = DENSITY_LEVELS.find((l) => l.key === level).label;
+  return (
+    <Frame>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 2, background: C.white, padding: '16px 24px 4px' }}>
+        <StatusBar />
+        <div style={{ marginTop: 20 }}>
+          <BackButton onClick={onBack} bg={C.white} />
+        </div>
+      </div>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '100px 0 148px' }}>
+        <div style={{ padding: '0 16px', fontFamily: FONT }}>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: C.textPrimary, letterSpacing: '-0.3px', margin: 0 }}>정보의 밀도를 설정해보세요</h1>
+          <div style={{ marginTop: 16 }}><Tag>{currentLabel}</Tag></div>
+          <p style={{ marginTop: 8, fontSize: 14, color: C.textTertiary }}>{DENSITY_SUBTITLE}</p>
+          <div style={{ marginTop: 20 }}>
+            <DensitySlider value={level} onChange={setLevel} />
+          </div>
+        </div>
+        <div style={{ marginTop: 24, background: '#F3F4F5', padding: '20px 16px 32px' }}>
+          <div style={{ fontSize: 15, fontWeight: 700, color: C.textPrimary, fontFamily: FONT }}>{currentLabel} 예시</div>
+          <div style={{ marginTop: 12 }}>
+            <DensityExampleCard level={level} />
+          </div>
+        </div>
+      </div>
+      <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: FOOTER_GRADIENT, padding: '20px 24px 28px', fontFamily: FONT }}>
+        <button onClick={onSave} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 700, color: C.textPrimary, cursor: 'pointer' }}>
+          이대로 저장하기
         </button>
       </div>
     </Frame>
@@ -1094,16 +1420,22 @@ function ManualScreen({ onBack }) {
 export default function App() {
   const [screen, setScreen] = useState('main');
   const [previewCard, setPreviewCard] = useState(null);
+  const [previewTitle, setPreviewTitle] = useState('홍길동님 맞춤 피드 미리보기');
 
-  const openPreview = (card) => { setPreviewCard(card); setScreen('preview'); };
+  const openPreview = (card) => { setPreviewCard(card); setPreviewTitle('홍길동님 맞춤 피드 미리보기'); setScreen('preview'); };
+  const openManualPreview = () => { setPreviewTitle('나만의 피드 미리보기'); setScreen('preview'); };
 
   return (
     <div style={{ padding: '1rem 0', display: 'flex', justifyContent: 'center', background: '#FAFAFA' }}>
-      {screen === 'main' && <RecommendScreen onManual={() => setScreen('manual')} onPreview={openPreview} />}
-      {screen === 'manual' && <ManualScreen onBack={() => setScreen('main')} />}
+      {screen === 'main' && <RecommendScreen onManual={() => setScreen('manual')} onPreview={openPreview} onStartTemplate={() => setScreen('density')} />}
+      {screen === 'manual' && <ManualScreen onBack={() => setScreen('main')} onPreview={openManualPreview} />}
       {screen === 'preview' && (
-        <PreviewScreen onBack={() => setScreen('main')} onStart={() => setScreen('main')} />
+        <PreviewScreen onBack={() => setScreen('main')} onStart={() => setScreen('density')} title={previewTitle} />
       )}
+      {screen === 'density' && (
+        <DensityScreen onBack={() => setScreen('main')} onSave={() => setScreen('home')} />
+      )}
+      {screen === 'home' && <PreviewScreen variant="home" />}
     </div>
   );
 }
