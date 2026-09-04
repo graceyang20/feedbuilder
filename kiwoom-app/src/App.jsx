@@ -318,13 +318,33 @@ function ToggleChip({ label, on, onClick }) {
 
 const UP = '#EA3A3A', DOWN = '#3D8BF7', META = '#AEB0B4';
 
+// 네이버 imgstock 고정 URL은 핫링크가 막혀 있어 전부 실패했음 - 종목코드 대신
+// 회사 도메인을 아는 경우 구글 파비콘 서비스(무료, 키 불필요, 안정적)로 대체.
+// 매핑에 없는 코드는 기존처럼 이니셜로 자연스럽게 폴백.
+const STOCK_DOMAINS = {
+  '005930': 'samsung.com',
+  '000660': 'skhynix.com',
+  '035720': 'kakaocorp.com',
+  '035420': 'navercorp.com',
+  '373220': 'lgensol.com',
+  '323410': 'kakaobank.com',
+  '068270': 'celltrion.com',
+  '003670': 'posco-futurem.com',
+  '247540': 'ecoprobm.co.kr',
+  '329180': 'hd-hhi.com',
+  '051910': 'lgchem.com',
+  '034020': 'doosanenerbility.com',
+  '006400': 'samsungsdi.com',
+};
+
 function Avatar({ name, code, size = 40 }) {
   const [imgError, setImgError] = useState(false);
   const radius = size === 40 ? 16 : size * 0.4;
-  if (code && !imgError) {
+  const domain = code && STOCK_DOMAINS[code];
+  if (domain && !imgError) {
     return (
       <img
-        src={`https://imgstock.naver.com/upload/company/${code}.png`}
+        src={`https://www.google.com/s2/favicons?domain=${domain}&sz=128`}
         alt={name}
         onError={() => setImgError(true)}
         style={{ width: size, height: size, borderRadius: radius, objectFit: 'cover', flexShrink: 0, background: '#E8E9EC' }}
@@ -500,12 +520,30 @@ const HOLDINGS = [
   { n: 'LG에너지솔루션', t: '373220', c: '2.14%', up: true, p: '412,000원' },
 ];
 function PortfolioCard({ showCheck = true, subtitle, showTitle = true } = {}) {
+  const [live, setLive] = useState(null); // null = not loaded yet, keeps static value shown
+  useEffect(() => {
+    let cancelled = false;
+    const load = () => {
+      fetch('/api/kiwoom/portfolio')
+        .then((r) => r.json())
+        .then((data) => {
+          if (!cancelled && !data.error) setLive(data);
+        })
+        .catch(() => {}); // network hiccup: silently keep last known value
+    };
+    load();
+    const id = setInterval(load, 15000); // poll for real-time movement
+    return () => { cancelled = true; clearInterval(id); };
+  }, []);
+  const totalEvalAmount = live ? live.totalEvalAmount : '3,574,000원';
+  const changeText = live ? `${live.changePct} (${live.changeAmount})` : '0.00% (00,000원)';
+  const up = live ? live.up : true;
   return (
     <CardShell title="포트폴리오" showCheck={showCheck} subtitle={subtitle} showTitle={showTitle}>
       <div style={{ marginTop: 12 }}>
         <div style={{ fontSize: 12.5, color: C.textTertiary }}>총 평가액</div>
-        <div style={{ fontSize: 22, fontWeight: 700, color: C.textPrimary, marginTop: 0 }}>3,574,000원</div>
-        <div style={{ marginTop: 0 }}><Delta c="0.00% (00,000원)" up size={13} /></div>
+        <div style={{ fontSize: 22, fontWeight: 700, color: C.textPrimary, marginTop: 0 }}>{totalEvalAmount}</div>
+        <div style={{ marginTop: 0 }}><Delta c={changeText} up={up} size={13} /></div>
       </div>
       <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 12 }}>
         {HOLDINGS.map((h, i) => (
