@@ -318,8 +318,20 @@ function ToggleChip({ label, on, onClick }) {
 
 const UP = '#EA3A3A', DOWN = '#3D8BF7', META = '#AEB0B4';
 
-function Avatar({ name, size = 40 }) {
-  return <div style={{ width: size, height: size, borderRadius: size === 40 ? 16 : size * 0.4, background: '#E8E9EC', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.4, fontWeight: 700, color: C.textTertiary }}>{name[0]}</div>;
+function Avatar({ name, code, size = 40 }) {
+  const [imgError, setImgError] = useState(false);
+  const radius = size === 40 ? 16 : size * 0.4;
+  if (code && !imgError) {
+    return (
+      <img
+        src={`https://imgstock.naver.com/upload/company/${code}.png`}
+        alt={name}
+        onError={() => setImgError(true)}
+        style={{ width: size, height: size, borderRadius: radius, objectFit: 'cover', flexShrink: 0, background: '#E8E9EC' }}
+      />
+    );
+  }
+  return <div style={{ width: size, height: size, borderRadius: radius, background: '#E8E9EC', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.4, fontWeight: 700, color: C.textTertiary }}>{name[0]}</div>;
 }
 function Delta({ c, up, size = 13 }) {
   return (
@@ -439,8 +451,8 @@ const CLOSE_SECTIONS = [
   { tag: '눈에 띄는 움직임', title: '외국인/기관 매수세에 반도체 중심 상승', body: '외국인과 기관의 순매수가 몰리며 반도체 대형주 위주로 지수 상승을 이끌었어요.' },
   {
     tag: '주목할 종목', stocks: [
-      { n: '삼성전자', c: '0.00%', up: false, tag: '급락', body: '메모리 가격 조정 우려와 차익 실현 매물이 겹치며 약세를 보였어요.' },
-      { n: 'SK하이닉스', c: '0.00%', up: true, tag: '급등', body: 'HBM 수주 기대감이 커지며 외국인 매수세가 집중됐어요.' },
+      { n: '삼성전자', t: '005930', c: '0.00%', up: false, tag: '급락', body: '메모리 가격 조정 우려와 차익 실현 매물이 겹치며 약세를 보였어요.' },
+      { n: 'SK하이닉스', t: '000660', c: '0.00%', up: true, tag: '급등', body: 'HBM 수주 기대감이 커지며 외국인 매수세가 집중됐어요.' },
     ],
   },
   { tag: '내일 장 대비', title: '다음 변수는 미국 FOMC 결과와 반도체 업황 지표예요. 발표 이후 관련 섹터 변동성에 유의하세요.', body: '' },
@@ -463,7 +475,7 @@ function CloseReviewCard({ showCheck = true, subtitle } = {}) {
           {s.stocks && s.stocks.map((st) => (
             <div key={st.n} style={{ marginTop: 10 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Avatar name={st.n} size={32} />
+                <Avatar name={st.n} code={st.t} size={32} />
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>{st.n}</div>
                   <div style={{ fontSize: 12, color: C.textTertiary }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
@@ -498,7 +510,7 @@ function PortfolioCard({ showCheck = true, subtitle, showTitle = true } = {}) {
       <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 12 }}>
         {HOLDINGS.map((h, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <Avatar name={h.n} />
+            <Avatar name={h.n} code={h.t} />
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary }}>{h.n}</div>
               <div style={{ fontSize: 12, color: C.textTertiary }}>{h.t}</div>
@@ -515,8 +527,8 @@ function PortfolioCard({ showCheck = true, subtitle, showTitle = true } = {}) {
 }
 
 const FILLS = [
-  { t: '26/9/5 13:22', n: '카카오뱅크', act: '10주 판매', up: false, p: '523,000원', unit: '주당 52,300원' },
-  { t: '26/9/5 10:50', n: '셀트리온', act: '5주 구매', up: true, p: '895,000원', unit: '주당 179,000원' },
+  { t: '26/9/5 13:22', n: '카카오뱅크', code: '323410', act: '10주 판매', up: false, p: '523,000원', unit: '주당 52,300원' },
+  { t: '26/9/5 10:50', n: '셀트리온', code: '068270', act: '5주 구매', up: true, p: '895,000원', unit: '주당 179,000원' },
 ];
 function AlertCard({ showCheck = true, subtitle, showTitle = true } = {}) {
   const [tab, setTab] = useState('체결내역');
@@ -528,7 +540,7 @@ function AlertCard({ showCheck = true, subtitle, showTitle = true } = {}) {
           <div key={i}>
             <div style={{ fontSize: 11.5, color: C.textTertiary }}>{f.t}</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 6 }}>
-              <Avatar name={f.n} />
+              <Avatar name={f.n} code={f.code} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary }}>{f.n}</div>
                 <div style={{ fontSize: 12.5, color: f.up ? UP : DOWN, fontWeight: 600 }}>{f.act}</div>
@@ -574,9 +586,9 @@ function NewsCard({ showCheck = true, subtitle, showTitle = true } = {}) {
 
 const KEYWORDS = [
   { n: '2차전지', c: 3, up: true, related: [
-    { n: 'LG에너지솔루션', c: '2.14%', up: true },
-    { n: '삼성SDI', c: '1.02%', up: false },
-    { n: '에코프로비엠', c: '1.05%', up: false },
+    { n: 'LG에너지솔루션', t: '373220', c: '2.14%', up: true },
+    { n: '삼성SDI', t: '006400', c: '1.02%', up: false },
+    { n: '에코프로비엠', t: '247540', c: '1.05%', up: false },
   ] },
   { n: '반도체 슈퍼사이클', c: 5, up: true },
   { n: '조선업 수주', c: 2, up: true },
@@ -589,8 +601,8 @@ const SENTIMENT = [
   { label: '부정', pct: 32, bg: '#FFE5E8', color: '#FF0019' },
 ];
 const POSTS = [
-  { n: '카카오', c: '1.85%', up: true, body: '실적 발표 앞두고 기대감이 커지고 있네요. 이번 분기는 정말 다를까요?' },
-  { n: 'NAVER', c: '0.62%', up: false, body: '오늘 좀 빠지긴 했는데 장기적으로는 크게 걱정 안 해요. 다들 어떻게 보세요?' },
+  { n: '카카오', t: '035720', c: '1.85%', up: true, body: '실적 발표 앞두고 기대감이 커지고 있네요. 이번 분기는 정말 다를까요?' },
+  { n: 'NAVER', t: '035420', c: '0.62%', up: false, body: '오늘 좀 빠지긴 했는데 장기적으로는 크게 걱정 안 해요. 다들 어떻게 보세요?' },
 ];
 function CommunityCard({ showCheck = true, subtitle, showTitle = true } = {}) {
   const [tab, setTab] = useState('토론방');
@@ -620,7 +632,7 @@ function CommunityCard({ showCheck = true, subtitle, showTitle = true } = {}) {
             {POSTS.map((p, i) => (
               <div key={i} style={{ flexShrink: 0, width: 240, background: '#F7F9F9', borderRadius: 10, padding: 16 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <Avatar name={p.n} size={24} />
+                  <Avatar name={p.n} code={p.t} size={24} />
                   <span style={{ fontSize: 13.5, fontWeight: 700, color: C.textPrimary }}>{p.n} 토론방</span>
                   <Delta c={p.c} up={p.up} size={12} />
                 </div>
@@ -649,7 +661,7 @@ function CommunityCard({ showCheck = true, subtitle, showTitle = true } = {}) {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {k.related.map((r, j) => (
                     <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <Avatar name={r.n} size={32} />
+                      <Avatar name={r.n} code={r.t} size={32} />
                       <span style={{ fontSize: 13, color: C.textPrimary, flex: 1 }}>{r.n}</span>
                       <Delta c={r.c} up={r.up} size={12} />
                     </div>
@@ -697,7 +709,7 @@ function RankingCard({ showCheck = true, subtitle, showTitle = true } = {}) {
         {rows.map((r, i) => (
           <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontSize: 13, color: C.textTertiary, width: 12 }}>{i + 1}</span>
-            <Avatar name={r.n || r.name} />
+            <Avatar name={r.n || r.name} code={r.t || r.code} />
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary }}>{r.n || r.name}</div>
               <div style={{ fontSize: 12, color: C.textTertiary }}>{r.t || r.code}</div>
@@ -734,7 +746,7 @@ function WatchlistCard({ showCheck = true, subtitle, showTitle = true } = {}) {
         {rows.map((r, i) => (
           <div key={i}>
             <div onClick={() => setOpen(open === i ? -1 : i)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 0', cursor: 'pointer' }}>
-              <Avatar name={r.n} />
+              <Avatar name={r.n} code={r.t} />
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary }}>{r.n}</div>
                 <div style={{ fontSize: 12, color: C.textTertiary }}>{r.t}</div>
@@ -807,8 +819,8 @@ function CalendarCard({ showCheck = true, subtitle, showTitle = true } = {}) {
 }
 
 const REPORTS = [
-  { n: 'LG화학', target: '520,000원', c: '4.12%', up: true, tag: '상향 조정', src: 'NH투자증권 · 08.31' },
-  { n: '두산에너빌리티', target: '68,000원', c: '2.87%', up: true, tag: '상향 조정', src: '미래에셋증권 · 08.31' },
+  { n: 'LG화학', t: '051910', target: '520,000원', c: '4.12%', up: true, tag: '상향 조정', src: 'NH투자증권 · 08.31' },
+  { n: '두산에너빌리티', t: '034020', target: '68,000원', c: '2.87%', up: true, tag: '상향 조정', src: '미래에셋증권 · 08.31' },
 ];
 const REPORT_ICONS = {
   battery: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+CjxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8yNTZfMTAzOTgpIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iMTYiIGZpbGw9IiNEOUQ5RDkiLz4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iMTYiIGZpbGw9InVybCgjcGF0dGVybjBfMjU2XzEwMzk4KSIvPgo8L2c+CjxkZWZzPgo8cGF0dGVybiBpZD0icGF0dGVybjBfMjU2XzEwMzk4IiBwYXR0ZXJuQ29udGVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgd2lkdGg9IjEiIGhlaWdodD0iMSI+Cjx1c2UgeGxpbms6aHJlZj0iI2ltYWdlMF8yNTZfMTAzOTgiIHRyYW5zZm9ybT0ic2NhbGUoMC4wMDM1NzE0MykiLz4KPC9wYXR0ZXJuPgo8Y2xpcFBhdGggaWQ9ImNsaXAwXzI1Nl8xMDM5OCI+CjxyZWN0IHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsbD0id2hpdGUiLz4KPC9jbGlwUGF0aD4KPGltYWdlIGlkPSJpbWFnZTBfMjU2XzEwMzk4IiB3aWR0aD0iMjgwIiBoZWlnaHQ9IjI4MCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSIgeGxpbms6aHJlZj0iZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFSZ0FBQUVZQ0FZQUFBQ0hqdW1NQUFBQUFYTlNSMElBcnM0YzZRQUFBRVJsV0VsbVRVMEFLZ0FBQUFnQUFZZHBBQVFBQUFBQkFBQUFHZ0FBQUFBQUE2QUJBQU1BQUFBQkFBRUFBS0FDQUFRQUFBQUJBQUFCR0tBREFBUUFBQUFCQUFBQkdBQUFBQURHT3hEcEFBQVpaa2xFUVZSNEFlMmRiNmduVjNuSFoyczBFUU83cEdJRWNWZTRJV0VqNWdZbGdUYVlHTVdHVXNOU1Ywc3hrb1VvQ0VZU3lKdENYeVJOM3RVWFFvSytzTFNCRGFGZzJaVnUwemZCbW1SWFV0cGRXcjJwS0x2c3R0a05TbFpCczVKUTEyalQrYzVtYnVaMzd1L1B6Snkvejl6UGdYdC8vMmJPZWM3bm1mbk9jLzdNbVIzVlhZZmVxRWdRZ0FBRUloRDR2UWg1a2lVRUlBQ0JoZ0FDdzRFQUFRaEVJNERBUkVOTHhoQ0FBQUxETVFBQkNFUWpnTUJFUTB2R0VJQUFBc014QUFFSVJDT0F3RVJEUzhZUWdBQUN3ekVBQVFoRUk0REFSRU5MeGhDQUFBTERNUUFCQ0VRamdNQkVRMHZHRUlBQUFzTXhBQUVJUkNPQXdFUkRTOFlRZ0FBQ3d6RUFBUWhFSTREQVJFTkx4aENBQUFMRE1RQUJDRVFqZ01CRVEwdkdFSUFBQXNNeEFBRUlSQ09Bd0VSRFM4WVFnQUFDd3pFQUFRaEVJNERBUkVOTHhoQ0FBQUxETVFBQkNFUWpnTUJFUTB2R0VJQUFBc014QUFFSVJDT0F3RVJEUzhZUWdBQUN3ekVBQVFoRUk0REFSRU5MeGhDQUFBTERNUUFCQ0VRamdNQkVRMHZHRUlBQUFzTXhBQUVJUkNPQXdFUkRTOFlRZ0FBQ3d6RUFBUWhFSTREQVJFTkx4aENBQUFMRE1RQUJDRVFqZ01CRVEwdkdFSUFBQXNNeEFBRUlSQ09Bd0VSRFM4WVFnQUFDd3pFQUFRaEVJNERBUkVOTHhoQ0FBQUxETVFBQkNFUWpnTUJFUTB2R0VJQUFBc014QUFFSVJDT0F3RVJEUzhZUWdBQUN3ekVBQVFoRUk0REFSRU5MeGhDQUFBTERNUUFCQ0VRamdNQkVRMHZHRUlBQUFzTXhBQUVJUkNPQXdFUkRTOFlRZ0FBQ3d6RUFBUWhFSTREQVJFTkx4aENBQUFMRE1RQUJDRVFqZ01CRVEwdkdFSUFBQXNNeEFBRUlSQ09Bd0VSRFM4WVFnQUFDd3pFQUFRaEVJNERBUkVOTHhoQ0FBQUxETVFBQkNFUWpnTUJFUTB2R0VJQUFBc014QUFFSVJDT0F3RVJEUzhZUWdBQUN3ekVBQVFoRUk0REFSRU5MeGhDQUFBTERNUUFCQ0VRamdNQkVRMHZHRUlBQUFzTXhBQUVJUkNPQXdFUkRTOFlRZ0FBQ3d6RUFBUWhFSTREQVJFTWJOK1BiM251MmV1YU9KeXU5VGpWdGh6cE8xWGR0dlJDWWxvU3gxNk12NzJrc2xzaE1UV2hhWVZHOWxOcTZOaC80WjRyQVphYXN4ZGdaQWc5dmZMUjZwbzVnbWhPeWZ0V0pxTytzbnBDcXgwUHIzNXVKeWxRZmtsMENPNnE3RHIxaDEzd3NmL3lXcDZvRDE3d3dBOEthME13VEZsWG80T2ticW51ZXYzT21ibnl3UllBbWtvZS9icnpxZlBYUWpjZXFEMXg1d1NNWHYxMGYyYmgxU3diZEpvYmVsNXBXMlRtdmJxbnFJcC9LdC9JeGFUd0Jta2pqMlZVNzMvSHI2c0U2cE5lZnJyWUh6OXlRdkhueTRxczdtN0xkS0ViVmFrN2dBcHRPKzNhZnJPN2ZlMkttS2VTNlFUeFZ0OVJKekE2c3ZiQVpGVDczWmw5WGFqdW1VaDRDRThpVE9zSDFwNU5DVjk0ajU2NnRYdm5ORllGeVg1N05BeWMrV2UzYmZhcmFWUXZldk5RS1RXdWJUdDRjU1h3ZVhGOGQ4WW1iNnBRcWladjQ5YkV0bFUxVEtRZUJDZXhKaGRicUYzbmxwaXNha1pIWXhMNFM2NFI4N01jM05aSFVzdXEwdHVsRWtsMnBoS2F2c0xTMnF5NHB4Rms4N3R0N3ZMa3dMQkxuMWlaZXh4R2drM2NjdDJhdnRnOWhWUmJxZEgyMFBtbU9uTHR1MWFhamY5Y0pjbWIvTnhaR01mTXlqaDNSREJVVzJTaGhXVHQ4YjFTQjZkTkVhM2w5L09uUEoyLzJ0bVZQNFpVSUpvRVhKVVQ2MHduOVJOMVA4K2lQYmc1K0F2V05ZcnJWalJYUmpCR1cxcTVZMFlzRStQN3JqMWQzMS8wcnFqY3BEUUVpR0EvT2ZTT1llVVhFNmhRK3MvL3JvMDhnMzRqR1IxakVTT1d2SGY3S1BGeWp2NU9QdXAyMlF6TWlnaGxLYkhaN0lwaFpIc2srNldUVTN3OStjWFhkZjNKenNQNFE5YTJvRDJoTUdodlIrQXBMYTZ0c0Q1VmtrL3BYR0dZT1JYUmNQa1F3NDdnMWUvbEVNRzZ4YXVJb3FwSFk2RXJ1azN5aW1HNjVxeUthVU1LaU1rTkVMekU2YllsZ3VrZkU4UGNJekhCbW0zdUVGSmpOVE9zMzZndytlT1pEb3p1RlE5dmxDazFJWVducjdYTWlxOVAyd05wLzFVUE5KOXZzZ3IzNjJCWE1DTU1aMFVRcTBIazZVZlNuRTd0dFBnMFp0dFdvbGY0a05DRlN0K21rL0VKM2tyYjJEckZWbmJadE15aTBQVVBzWU52bEJCQ1k1WHl5L3FvVDUyczNmYWY1YTV0UDZyUHBrOW9iSWZ0czIzZWJXQ2Z5a0JzYTFhZlN6bDNwYXpmYjVTT0F3T1JqUDZoa1hhMzFwNnU5YmtsWU5VbXVqUXBDUlRHRGpCMndzWnFEc25WVmF1cGZEekdYWHA5VjlkaHV2eU13eGp5dUUweC9pbXcwWitUZzZmV0ZuY0s2RTFrZHZpV25aYmNFS0dJNmNNMUdIYkdjR0RTQnNPVDZiamZiRUJpakhsY2ZSSHVqcGFJQXpSUjJJd0gxNFNqUzBkVy94Q1RiWktPYkpLQzZHVEpHcDYxYkZwL2pFa0JnNHZKTmtudTNVMWhSUzFkb05MZWtWSUZ4NTcxSVdEU0hKMVpmVHhKblVNZ01BZGFEbWNGaCs0Tk9USjJnaW03YWRHbUl1YnhWNFI2cFY2cnJSaSt5K2R1M0gwSmNXc2RONUJXQm1ZZ2oyMnBJWkhUUFRUZkZ1UGVwbS8vUTl4cHlsMDNkSkp1N3d0ajlqZmQyQ1NBd2RuMjMwSEszVTdTOUVYTGhEb2wvY0c5b2xMREladEwwQ0NBdzAvTnBFd21VR3NXb1dlUkdMK3FzSm5xWjRJRllWd21CbWFaZm14R21ibWVwb3BobFE4S3BNS2hqdHpzcmVWNlRMcFV0bEJPZkFBSVRuM0cyRXJSeVhUY3RHaGJ1YmhQenZhSVhkNEtnYTJQTThzazdQUUVFSmozelpDVnFlTG9ieGFoZ2QyZzRtVEZ6eXRhMC8xS0gwRk55bVhKWkNNeVV2VnZYelYwYlJoRkVkNTVNcXVxclREZDYwV3hrMHJRSklERFQ5bTl6VzRFbXNIWFRrSnNMdS92NXZIZkxsRTJ1WFQ3NXMyK1pCQkNZTXYwUzFDbzlqcldiRkUya2pHTG1sZWZhMUxXUDk5TWhnTUJNeDVjTGE2Skl3YjJ2eDQwb0Z1NGM0QWQzOUVyOUxrUXZBY0FheUFLQk1lQ2tFQ2E2L1IzeitrUkNsT1Btb1g0WGR3MGJSbzVjU3RQOWpNQk0xN2N6TmROb2tqdGlrMkpFeVMxajNzaldqS0Y4bUJRQkJNYkRuV2RmM1RWNjNWeVBZa2Z2NmtZTzgrYWxqTTU4em82S1h0d2JHbDBiNXV4V3pGZGFCa00rSm8wbjhMYnFoai83cS9HN2IrODlOU1AxV3k5ZVh6OU1iYjI2OFBybDFmcFZQNnV1ZU50dmk0V3k2eDBYcXgwN3Fwa08zcVBuOTFSZnV1Nzd3ZTBXbXovNWx6K3ZmdjI3dDFZRStZc1AvV3ZkRjNTcVdENHlUSFovOCtTSHE3dU8vV24xelZNZm5wbDFYTFRoaFJxSHdBUndqQTVLOVdsODlZZC9XSjE5YlZkOVg4M0ZMUlBjQWhRVEpBdUo0Ti9VSjA1NzR1djFuWmY5dHU1MFBSY2svemFUci83d0Q2cW5mN0xXZm16dU5mcjdXLzh4dUpCdEZ1RDVSdjVUYys1enRiQTgvZE0xaE1XVFo3czdBdE9TQ1BTNlVTL0tyVFZ6RmRYb0JqNzFmWlFVMWNpV2kvOTMyVXdVSTV0RFJqRVNYSjJvcllnSnJhS1hPOTczMzRFb2g4bEdkbjdyZjY2dnZsQXYwdlhYOWNWQkhFaGhDU0F3WVhsdTVxYUQ5OGhMMXpYUndzbGZ2YnR1UHAxdklwdk5EVEsrVVJUekR5OStjUE1xSFRxSytjdi92SDFHd0NTeVdreXFsS1Irb1FkTy9GSDE1WC83NDdxSis4SHE1Zis5c2hUVEptY0hEMTVMNkZMTi9mQjVUbkpJVTlVQnErVTF1eW5FRXlGMThyclBsOWJ0Q3U0SVZyZmNWTzlWWjBXWGFnNlIwaEJBWU5Kd25pbEZUU2V0MTNKMy9SZ085MmJFbVEwamY1QVFkRWQ1SkFMdXZVdERUWkJvNlVSdWsrcVg4OGtHcXQ4VHpXTmVGajk5b2JXVjEvQUVFSmp3VEFmbHFCbTJXa0UveDh4V0RjTisrdG5Qek5qckU4Vm9RdDFIbnZyaVRIN1AzUEZrbHJvcFN0R1RGbFJIVWo0Q0NFdys5ak1sNjByZlByRXc1ZXB1N3JPWEpYUVNoVEVwWkY1anlsZS9sNkluUFc2M0c1bU55WXQ5d2hCZ29sMFlqdDY1dEtIOEs3KzUzRHV2SVJtNE54M3F5aittajJMZWZtN2VRK3dhczYzWXFUbUV1SXloRjJjZkJDWU8xOEc1YXZHbDc5YVJRK28rR1VVc2J2TnN6STJRN2o1cStybjVEb1l5Y0FleEUwT3hKSlZCQUlFcHdBK3R1S1JzR25XcjdYYnNLaG9aMG5laGJkMm94NzI1c2x0ZXpQZGlpTWpFSkR3c2J3Um1HSy9nVytjV0YxVklWMzUzR05sZFltRlp4ZDF0YzkvUWlNZ3M4MWJhM3hDWXRMeG5TaXRCWEZxRDNKc1ExWS9SSFc1dXQzTmZ0VTIzejBNbnQ1dVh1MCtLejRoTUNzcXJ5MEJnVmpPS3NrVko0cUlLS29wNTZNWmpNM1YxbDFxWStiSCtvRkViZHh2TjcwbmRqK1RhMVg1R1pGb1MrVjRSbUF6czJ3TmZyeVVsOTRtUWlrejBET2xGU1U5b2RLT1gwcDdRV0NyclJVeW45ajBDazlpakpSL3dzcTN2RXlFVnZiaFBhTlMrcFltbTNGc3k4OFNIWC9MaUVKakV5RFc2b3VaUnFjbU5ZaVFraWxUYzVENWZXczBpUFFLMjFDVG11VWEyU21XU3dpNEVKZ1hsTjh2UUZkNGRyVWxZZksraWRMVjNUMFJGS3QybWtONjcwVXNKSGJ1cktpajJib1MyYWg5Kzl5T0F3UGp4NjcyM3BTdW9POHpzZHVhcVkxZmZ0V25lTUhmN1cybXZwVWVRcGZIeXRRZUI4U1hZWTM5RkJYOVhMMWxnS2JrUlNUc2NyZWpGSGI1MkorcVZYay81b3NTK290SzVqYkVQZ1JsRGJlQSs2cHNvdWQ5bFhuVVV4YmhUL1JXNXVKUHE1dDFxTUMrL2tyNlRMMHJ1THlxSmxhOHRDSXd2d1JYNzZ3UzAydTUzYjFaVTVPTGVRdUJ1c3dKSE1UL0xKOVpFdnhoNEF3eEJZQWJBR3JPcDIyRTZKbzljKzZ5S1RuTGMwQmlTaGJWbWE4aTZwOHFMTlhramtyWXdhdVJXWDUyMy8vN3o5elhMSGp4YXI2dHk4c0s3WnpwMHU5dGYvTjNicTZQbmQxY25mL1g3OWRjN21qV0hTMXJndkd2cnZQZnZmZWRyOWVObUx0VjMzdTk4NTArQUJhZjhHYzdOUVoySVovWi93MFJub2pwdTFmVFJXaXJ1WTE3blZtN0psMnAyYUNsUVJUZWwzREt3eE54R1BOY08zN3RRUkpmdHkyK3JDU0F3cXhtTjJrTDM5WlRla2FnK2xaaUxZRGY5VC9WeW9CS2JrcE51aDNqNEI3ZVdiS0paMnhDWUNLNHJQWHFSc0doRXFEdDVMZ0tHelN3dnpmSTlWdXdrUXpVTGlXSTIzUlgwRFoyOFFYRmV5a3g5THlYT3MyZ1g1ZGJLLzZuRVJVUlVsc3JVbXIyK1RiQUk3bXA4WlhXa0x3YVBrSGtpTUNGcDFubEpXRXE3bzFoVlZETkFLLzduUE1HMTZwMXNXSGFIZG1CMzlNN092UWVyOTQ1c3VKUUFBck1Vei9BZk5VR3RwT2hGMFlOTzZwTDZHR1NMYk9yZWJqQ2NkTmc5NURQNWpoU1dBQUlUbG1mejZKSEFXWTdPcm0wUzVZeGFGaGt2bTlUdlVaSnRlbXdNS1N3QkJDWWd6NUtHWm5YaWZxTHU4eWdwU25CUnl6YlpXSXJJcURPNjlCRXZsMkhwbnhHWWdCN2E5LzVUQVhNYm41VUZjV2xyVjVySWxPTERsby8xVndRbWtBZExhY05iRXBjV2ZVa2lVMW9mV3N2STZpc0NFOGh6KzNibmoxN2FFMVd2MXBKczN2L3NaNHRvMHBYZ1MyditXMlF2QXJPSXpNRHZTd2l0OVNCN2krTFNvcjQwWCtaVDdjZHNyeVg0TWx2bEF4ZU13QVFDbXJ0elVFdFl1azlYREZTMXBObm9uaWgzT2M2a0J0U0Y2UllIVWhnQ0NFd0FqcmtQU0YzNVM1eThOaGF0NnFJNjVVcnFUOHZ0MDF4MUQxMHVBaE9BYU82UVdxdk1XVzRhdVM1UVhkd0h1cm5ieFA3OE1hS1lJSWdSbUFBWWM2Nk1OdlJCOVFHcW15UUwzWkNaTTRxNTdlcHpTZW81OVVJUW1BQWV6aGxPUDd6a3lZc0JxcFkxaTV4UlRFNmZab1VldUhBRXhoTm96Z05SVi9ncGRPd3Vja0gyS0labTBpTFg5UDRlZ2VtTmF2NkdPWnRIajlWTFdrNDlhWlc5WE1uQ2lueTUyUFF0RjRIcFMyckJkbnZlZFdIQkwvRy9kbGY0ajE5aStoSU9ubDVQWCtpYkpYN2d5bGV5bFQyVmdoRVlUMC9taW1CMFMwRE9UbEJQYkwxM1Z4MXozUXhKUjI5dk55M2NFSUZaaUtiZkR6dnJPUk01MGorOWRHMk9Zck9VbWF1ZktaZHZzMENPVkNnQzR3azJWd1R6WEwwNjNIWkpSektKYVM3ZlRzbXZDSXhSYithNnF1ZkF0VkUzQjBrMkNTQXdIbjdMTlVTOUhmcGV1bTdSek41Y001V0pZcnFlR1A0ZWdSbk9MUHNlWjEvZGxkMkcxQWJraW1Mb2gvSHpOQUxqeHkvTDNybXU1bGtxUzZHbUNTQXdCdDIzOGN2M0dMVGF6K1JjUTlWK1ZyTTNBc014WUlMQWhkY3ZOMkVuUnM0U1FHQm1lZkFKQWhBSVNBQ0JDUWlUck9JUnlIbExScnhhVFQ5bkJNYWdqN2ZqRkhadVBEUjRvTlltSXpBMi9ZYlZFREJCQUlIeGNOT0ZUSThIV2IvcXZJZlZObmZOTmFseE84NDVDbm1FSURBZU5ITU5uV3BSNnUzVVpNaFoxKzAyYTlyamRKaTdLd0l6RjB2NVg2NWY5WEw1UmdheU1GZjBFc2o4YlowTkF1UHAvbHczSFc2bmp0N2Jyczd6bktKY3Z2VThKSXZhSFlFcHloMzlqY245b0xmK2x2cHZTUVRqenpCWERnaU1KL21qNTNkNzVqQnVkL1ZMYkljN2ZWWEhYSDB3dVh3NzdvZ29jeThFeHRNdkwyYThzL251dFJjOHJTOS85L3YySHM5bVpFN2ZacXQwNElJUkdFK2d1WllSa05rSHJubWgwb2pTVkpQcXRtLzNxV3pWeStuYmJKVU9YREFDNHdsVVE5VzVsay9RQ1NpUm1XcTYvL3JqMlFSVVBzMDFEV0ZLL2tSZ0FuZ3o1NVZPVFlncFJqR3EwMzE3VHdUd3pyZ3NjdnAwbk1WbDdvWEFCUEJMenM1QWRZRHFTaisxbERONkVjdGNDNDFQelk4SVRBQ1A1bjRBbXE3MHVVWmFBdURia29YcTh1RDY5N1o4bi9JTDVzQ0VvWTNBQk9DWXN4OUc1cXM1OGZndFR3V29TUmxaNUs0TC9TL2hqZ01FSmhETEkrZnlQZ2hOazlFZXV2RllvTnJreTBaMXlEMnhMcmN2ODlFUFh6SUNFNGhwQ1cxMk5TdHluNXcrT0RVN09YZlRTUGFYNEVzZmppWHRpOEFFOG9iNllYSU5WM2VyOE8zYkQ1bWM0YXNadTQvZjhzL2RxbVI1THgvbTdsUExVdkZJaFNJd0FjRWVQSDFEd056R1phWCttTy9lOGFRcGtaRzR5T1lTaHR0TDhPRTR6NWU1RndJVDBDOVBuTWt2TUtxT0paRXBTVnpFcmhRZnlwWXBKQVFtb0JjMW1sVEs4R1lyTWlYM3ljaTJVaUlYSFFieUhiTjNBNTRRZFZZSVRGaWUxY0ZDb2hoVlN5THpUTjMwS0hFaW5rYUxaRnNKemFMMkVDakpkNjFOMWw4Um1NQWVWQnUrdEdVV3YzYlRkNXFUdVlUSmVMSkJ3bExDYUZIWDlmSVovUzlkSW1IZUl6QmhPTTdrOHNqR3JUT2ZTL2lnNXNoLzNQbTNXZWZLS0dxUkRTVTIyMHIwV1FuSGphOE5PNnE3RHIzaG13bjdieVZ3WnYvWGk1MityNnUxVHFoVVYyemQ4ZjNnK3JHaWVhd2Qvc3BXSi9LTk53RUV4aHZoL0F4MFV1V2U4ajdmc3JlK2xkQm8xT1RnNmZYZ3pUbzFoUTVjczFGcFVhd1NtbVp2MVhycnUzdWV2ek9aMkc0dGZkcmZJREFSL2F2bWdJWmhMU1NObmtoc2ZFWlNWRmMxZnlRcWx1cjlrYWUrYU1GRkptMUVZQ0s2VFNlYk9qU3RKYzFtMVhvb0VwMExyMTllUFZjUDM4NUxINnZydC9QdEZ4c3gwY1BnU2hvUm1tZnZ2TzgrL3ZUbmk1bGFNTTgrNjk4aE1KRTlxS243MitrSkFKRnhCczFlZlZCcUhwSGlFV0FVS1I3Ykp1ZDdudjlVRWZjb1JhNm11ZXdWcFQxdzRwUG03TFptTUFJVDJXTTZrQ1V5cExJSUlQeHAvSUhBSk9Dc3UzTzVRemNCNko1RjRJK2VvQUpzaHNBRWdOZ25DMTB4UzV2aDI4ZnVxVzBqSHhCUnB2TXFBcE9JdFpwSys1LzliS0xTS0dZUkFmbEF2aUNsSVlEQXBPSGNsS0poWDBZdEVnSjNpaEo3N3BaMm9FVCtpTUJFQnV4bXI2SFJWRlAwM2JLMzgyZTQ1L0UrQXBPQnU2NmtwYXdiazZINnlZdFVweTZSWTNMc1RZRUlUQjd1MWFlZi9RemhlZ0wybDVxbFRCTklnSHB1RVFqTVhDenh2MVJINHlmcWFlcjBDY1JqTGJaaVRLZHVQTWFyY2taZ1ZoR0srRHNpRXc4dTRoS1A3WkNjRVpnaHRDSnNpOGlFaDRxNGhHYzZOa2NFWml5NWdQc2hNdUZncXZPY1psRTRucjQ1SVRDK0JBUHRMNUhSdWlRTVlZOEhLblphZmtFc1NXVVFRR0RLOE1PbUZScE81UzdmVFJ5OTM0Z1pROUc5Y1NYYkVJRkpocnAvUVkvKzZHYXV4RDF4S1ZwUjFDSm1wUElJSUREbCthU3hTSDBKYWpJeElXK3hnOFJtN2ZDOU1GcU1LUHN2Q0V4MkZ5dzJRSGYrNnVyOHlNWkhGMiswVFg5Ums0aitsdktkejVLWjVmdW9zVkNMYU9zQmFpVStVeWdsUWtVdDZtdGg2WXVVMU1lWGhjQ01aNWRsVHowT1JVSmpjWUZ0SDJEcWExSFV3aWliRDhYMCt5SXc2Wmw3bHloeDBmT21TM3Y4cW5mRkZtU2dKcUk2Y1JsK1hnQ280SzhSbUlLZHM4bzBQZEJNVDB4VVZEUEZwR2hGVDZDa09XVFh1d2lNWGQ5dFdpNmh1Vy92OFVab3JEZWRGS1ZJV0I3NzhjMEl5NmFIN2I1QllPejZib3ZsRWhkRk14S2IwaC9YNmhxdktFV2lJbkdoS2VUU3Nmc1pnYkhydTZXV2E5UkpRck52OTZsaU80UWxKRWZPWGRzSUM4dFdMSFduMlI4UkdMT3U2Mis0aHJiM3ZmOVU4NFRKM0pHTklwWG1zU0V2WGNzRXVmNHVOTHNsQW1QV2RlTU1sOEJJY0c2NytteWw1MG5IZmtpOUloTTk1L3JvK1QyTm9OQmhPODV2VnZkQ1lLeDZMcURkRWh6MTMwaHM5cnpyd21iL1RkOUpmZTN0REJLUHM2L3RiRmJwTy92cUxsYnJDK2dqcTFraE1GWTloOTBRTUVDQWU1RU1PQWtUSVdDVkFBSmoxWFBZRFFFREJCQVlBMDdDUkFoWUpZREFXUFVjZGtQQUFBRUV4b0NUTUJFQ1Zna2dNRlk5aDkwUU1FQUFnVEhnSkV5RWdGVUNDSXhWejJFM0JBd1FRR0FNT0FrVElXQ1ZBQUpqMVhQWURRRURCQkFZQTA3Q1JBaFlKWURBV1BVY2RrUEFBQUVFeG9DVE1CRUNWZ2tnTUZZOWg5MFFNRUFBZ1RIZ0pFeUVnRlVDQ0l4VnoyRTNCQXdRUUdBTU9Ba1RJV0NWQUFKajFYUFlEUUVEQkJBWUEwN0NSQWhZSllEQVdQVWNka1BBQUFFRXhvQ1RNQkVDVmdrZ01GWTloOTBRTUVBQWdUSGdKRXlFZ0ZVQ0NJeFZ6MkUzQkF3UVFHQU1PQWtUSVdDVkFBSmoxWFBZRFFFREJCQVlBMDdDUkFoWUpZREFXUFVjZGtQQUFBRUV4b0NUTUJFQ1Zna2dNRlk5aDkwUU1FQUFnVEhnSkV5RWdGVUNDSXhWejJFM0JBd1FRR0FNT0FrVElXQ1ZBQUpqMVhQWURRRURCQkFZQTA3Q1JBaFlKWURBV1BVY2RrUEFBQUVFeG9DVE1CRUNWZ2tnTUZZOWg5MFFNRUFBZ1RIZ0pFeUVnRlVDQ0l4VnoyRTNCQXdRUUdBTU9Ba1RJV0NWQUFKajFYUFlEUUVEQkJBWUEwN0NSQWhZSllEQVdQVWNka1BBQUFFRXhvQ1RNQkVDVmdrZ01GWTloOTBRTUVBQWdUSGdKRXlFZ0ZVQ0NJeFZ6MkUzQkF3UVFHQU1PQWtUSVdDVkFBSmoxWFBZRFFFREJCQVlBMDdDUkFoWUpZREFXUFVjZGtQQUFBRUV4b0NUTUJFQ1Zna2dNRlk5aDkwUU1FQUFnVEhnSkV5RWdGVUNDSXhWejJFM0JBd1FRR0FNT0FrVElXQ1ZBQUpqMVhQWURRRURCQkFZQTA3Q1JBaFlKWURBV1BVY2RrUEFBQUVFeG9DVE1CRUNWZ2tnTUZZOWg5MFFNRUFBZ1RIZ0pFeUVnRlVDQ0l4VnoyRTNCQXdRK0g5WU8vYVdENmJvSGdBQUFBQkpSVTVFcmtKZ2dnPT0iLz4KPC9kZWZzPgo8L3N2Zz4K',
@@ -836,7 +848,7 @@ function ReportCard({ showCheck = true, subtitle, showTitle = true } = {}) {
         ))}
         {tab === '신규 목표가' && REPORTS.map((r, i) => (
           <div key={i} style={{ flexShrink: 0, width: 240, background: '#F7F9F9', borderRadius: 10, padding: 16 }}>
-            <Avatar name={r.n} size={32} />
+            <Avatar name={r.n} code={r.t} size={32} />
             <div style={{ fontSize: 13.5, fontWeight: 700, color: C.textPrimary, marginTop: 8 }}>{r.n}</div>
             <div style={{ fontSize: 15, fontWeight: 700, color: C.textPrimary, marginTop: 2 }}>{r.target}</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
@@ -1070,7 +1082,7 @@ function CloseReviewInfoBody() {
           {s.stocks && s.stocks.map((st) => (
             <div key={st.n} style={{ marginTop: 10 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Avatar name={st.n} size={32} />
+                <Avatar name={st.n} code={st.t} size={32} />
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>{st.n}</div>
                   <div style={{ fontSize: 12, color: C.textTertiary }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
@@ -1385,7 +1397,7 @@ function DensityExampleCard({ level }) {
           {s.stocks && s.stocks.map((st) => (
             <div key={st.n} style={{ marginTop: 10 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Avatar name={st.n} size={32} />
+                <Avatar name={st.n} code={st.t} size={32} />
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>{st.n}</div>
                   <div style={{ fontSize: 12, color: C.textTertiary }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
