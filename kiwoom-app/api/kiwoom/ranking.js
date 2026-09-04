@@ -8,6 +8,7 @@
 // on its existing placeholder values.
 
 import { getValidToken } from '../_lib/kiwoomToken.js';
+import { getThumbnailUrl } from '../_lib/stockThumbnail.js';
 
 const SORT_TYPE = { up: '1', down: '3' };
 
@@ -72,6 +73,7 @@ export default async function handler(req, res) {
       price: formatPrice(item.cur_prc),
       changePct: formatPct(item.flu_rt),
       up: item.pred_pre_sig === '1' || item.pred_pre_sig === '2',
+      thumbnailUrl: getThumbnailUrl(item.stk_cd),
     }));
 
     res.status(200).json({ type, rows, source: 'kiwoom:ka10027' });
