@@ -393,11 +393,27 @@ const IDX = [
   { n: '달러 환율', v: '1,359.00', c: '0.11%', up: false },
 ];
 function IndexCard() {
+  const [kospiLive, setKospiLive] = useState(null); // null = not loaded yet, keeps static value shown
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/kiwoom/index')
+      .then((r) => r.json())
+      .then((data) => {
+        if (!cancelled && !data.error) setKospiLive(data);
+      })
+      .catch(() => {}); // network hiccup: silently keep the static placeholder value
+    return () => { cancelled = true; };
+  }, []);
+  const idx = IDX.map((i) =>
+    i.n === '코스피' && kospiLive
+      ? { ...i, v: kospiLive.value, c: kospiLive.changePct, up: kospiLive.up }
+      : i
+  );
   return (
     <CardShell title="지수" checked>
       <div style={{ position: 'relative', marginTop: 12 }}>
         <div className="no-scrollbar" style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none' }}>
-          {IDX.map((i) => (
+          {idx.map((i) => (
             <div key={i.n} style={{ flexShrink: 0, width: 116, background: '#F7F9F9', borderRadius: 10, padding: 14 }}>
               <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary }}>{i.n}</div>
               <div style={{ fontSize: 16, fontWeight: 600, color: i.up ? UP : DOWN, marginTop: 2 }}>{i.v}</div>
