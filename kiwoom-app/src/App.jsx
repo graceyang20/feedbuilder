@@ -394,7 +394,7 @@ function Tag({ children }) {
   return <span style={{ display: 'inline-block', background: C.yellow, color: C.textPrimary, fontSize: 12, fontWeight: 700, borderRadius: 100, padding: '3px 10px' }}>{children}</span>;
 }
 function Note({ children }) {
-  return <div style={{ background: '#F7F9F9', borderRadius: 10, padding: 12, marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{children}</div>;
+  return <div style={{ background: '#F7F9F9', borderRadius: 10, padding: 12, marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>{children}</div>;
 }
 function ArrowIcon({ up }) {
   return (
@@ -528,7 +528,7 @@ function CloseReviewCard({ showCheck = true, subtitle, showMore = true } = {}) {
         <Tag>오늘 시장</Tag>
         <div style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
           <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>코스피 6,689 <Delta c="1.64%" up size={13} /> 상승 마감</div>
-          <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>
+          <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>
         </div>
       </div>
       {sections.map((s, i) => (
@@ -537,7 +537,7 @@ function CloseReviewCard({ showCheck = true, subtitle, showMore = true } = {}) {
           {s.items && s.items.map((item, idx) => (
             <div key={idx} style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
               {item.title && <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>{item.title}</div>}
-              {item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{item.body}</div>}
+              {item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>{item.body}</div>}
             </div>
           ))}
           {s.stocks && s.stocks.map((st) => (
@@ -549,7 +549,7 @@ function CloseReviewCard({ showCheck = true, subtitle, showMore = true } = {}) {
                   <div style={{ fontSize: 12, color: C.textTertiary }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
                 </div>
               </div>
-              <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{st.body}</div>
+              <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>{st.body}</div>
             </div>
           ))}
         </div>
@@ -772,7 +772,7 @@ function CommunityCard({ showCheck = true, subtitle, showTitle = true } = {}) {
                   </div>
                 </div>
                 <div style={{
-                  fontSize: 13, color: C.textPrimary, marginTop: 10, lineHeight: 1.45,
+                  fontSize: 13, color: C.textPrimary, marginTop: 10, lineHeight: 1.4,
                   display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
                 }}>{p.body}</div>
               </div>
@@ -908,7 +908,7 @@ function WatchlistCard({ showCheck = true, subtitle, showTitle = true } = {}) {
                     <div>
                       <div style={{ fontSize: 11.5, color: C.textTertiary }}>{n.t}</div>
                       {n.tag && <span style={{ display: 'inline-block', marginTop: 7, background: '#E5E7E9', color: C.textSecondary, fontSize: 11, borderRadius: 5, padding: '2px 6px' }}>{n.tag}</span>}
-                      {n.h && <div style={{ fontSize: 12.5, color: C.textPrimary, marginTop: 8, lineHeight: 1.45 }}>{n.h}</div>}
+                      {n.h && <div style={{ fontSize: 12.5, color: C.textPrimary, marginTop: 8, lineHeight: 1.4 }}>{n.h}</div>}
                     </div>
                   </div>
                 ))}
@@ -944,7 +944,7 @@ function CalendarCard({ showCheck = true, subtitle, showTitle = true } = {}) {
             {g.events.map((e, i) => (
               <div key={i} style={{ flexShrink: 0, width: 200, background: '#F7F9F9', borderRadius: 10, padding: 16 }}>
                 <img src={CAL_ICONS[e.icon]} alt="" style={{ width: 32, height: 32, borderRadius: 8, display: 'block' }} />
-                <div style={{ fontSize: 13, fontWeight: 700, color: C.textPrimary, marginTop: 8, lineHeight: 1.35 }}>{e.n}</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: C.textPrimary, marginTop: 8, lineHeight: 1.4 }}>{e.n}</div>
                 <div style={{ fontSize: 11.5, color: C.textTertiary, marginTop: 4 }}>{e.s}</div>
               </div>
             ))}
@@ -981,7 +981,7 @@ function ReportCard({ showCheck = true, subtitle, showTitle = true } = {}) {
           <div key={i} style={{ flexShrink: 0, width: 240, background: '#F7F9F9', borderRadius: 10, padding: 16 }}>
             <img src={REPORT_ICONS[r.icon]} alt="" style={{ width: 40, height: 40, borderRadius: 10, display: 'block' }} />
             <div style={{
-              fontSize: 14, fontWeight: 700, color: C.textPrimary, marginTop: 20, lineHeight: 1.35,
+              fontSize: 14, fontWeight: 700, color: C.textPrimary, marginTop: 20, lineHeight: 1.4,
               display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
             }}>{r.title}</div>
             <div style={{ fontSize: 11, color: C.textTertiary, marginTop: 20 }}>{r.src}</div>
@@ -1133,7 +1133,7 @@ function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동�
         {variant !== 'home' && (
           <div style={{ padding: '0 4px', fontFamily: FONT }}>
             <Illustration icon={icon} />
-            <h1 style={{ fontSize: 22, fontWeight: 700, lineHeight: 1.35, margin: '4px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>{title}</h1>
+            <h1 style={{ fontSize: 22, fontWeight: 700, lineHeight: 1.4, margin: '4px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>{title}</h1>
             <p style={{ fontSize: 14, color: C.textTertiary, margin: '8px 0 0' }}>드래그 해서 순서를 바꿀 수 있어요</p>
           </div>
         )}
@@ -1207,19 +1207,21 @@ function CloseReviewInfoBody() {
   return (
     <div>
       <Tag>오늘 시장</Tag>
-      <div style={{ marginTop: 8, fontSize: 14, color: C.textPrimary }}>KOSPI 6,687 <Delta c="1.64%" up size={13} /></div>
-      <Note>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</Note>
+      <div style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
+        <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>코스피 6,689 <Delta c="1.64%" up size={13} /> 상승 마감</div>
+        <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>
+      </div>
       {CLOSE_SECTIONS.map((s, i) => (
-        <div key={i} style={{ marginTop: 16, paddingTop: 16, borderTop: `1px solid ${C.borderLight}` }}>
+        <div key={i} style={{ marginTop: 12 }}>
           <Tag>{s.tag}</Tag>
           {s.items && s.items.map((item, idx) => (
-            <div key={idx} style={idx > 0 ? { marginTop: 10 } : undefined}>
-              {item.title && <div style={{ marginTop: 8, fontSize: 14, fontWeight: 600, color: '#444B52' }}>{item.title}</div>}
-              {item.body && <Note>{item.body}</Note>}
+            <div key={idx} style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
+              {item.title && <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>{item.title}</div>}
+              {item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>{item.body}</div>}
             </div>
           ))}
           {s.stocks && s.stocks.map((st) => (
-            <div key={st.n} style={{ marginTop: 10 }}>
+            <div key={st.n} style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Avatar name={st.n} code={st.t} size={32} />
                 <div style={{ minWidth: 0 }}>
@@ -1227,7 +1229,7 @@ function CloseReviewInfoBody() {
                   <div style={{ fontSize: 12, color: C.textTertiary }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
                 </div>
               </div>
-              <Note>{st.body}</Note>
+              <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>{st.body}</div>
             </div>
           ))}
         </div>
@@ -1300,7 +1302,7 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
 
       <div onScroll={onScroll} style={{ flex: 1, overflowY: 'auto', paddingTop: 100, paddingBottom: 148 }}>
         <div style={{ padding: '20px 24px 0', fontFamily: FONT }}>
-          <h1 style={{ fontSize: 24, fontWeight: 700, lineHeight: 1.35, margin: 0, color: C.textPrimary, letterSpacing: '-0.3px' }}>
+          <h1 style={{ fontSize: 24, fontWeight: 700, lineHeight: 1.4, margin: 0, color: C.textPrimary, letterSpacing: '-0.3px' }}>
             나만을 위한<br />투자 피드 만들기
           </h1>
           <p style={{ fontSize: 14, color: C.textTertiary, margin: '8px 0 0' }}>나에게 필요한 정보만 모아 볼 수 있어요.</p>
@@ -1444,7 +1446,7 @@ function ManualScreen({ onBack, onPreview }) {
         <StatusBar />
         <div style={{ padding: '20px 24px 0', fontFamily: FONT }}>
           <BackButton onClick={onBack} bg={C.white} />
-          <h1 style={{ fontSize: 24, fontWeight: 700, lineHeight: 1.35, margin: '16px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>
+          <h1 style={{ fontSize: 24, fontWeight: 700, lineHeight: 1.4, margin: '16px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>
             보고 싶은 정보를<br />선택해주세요
           </h1>
         </div>
@@ -1525,20 +1527,22 @@ function DensityExampleCard({ level }) {
       <div style={{ fontSize: 20, fontWeight: 700, color: C.textPrimary }}>장마감 리뷰</div>
       <div style={{ marginTop: 12 }}>
         <Tag>오늘 시장</Tag>
-        <div style={{ marginTop: 8, fontSize: 14, fontWeight: 600, color: '#444B52' }}>코스피 6,687 <Delta c="1.64%" up size={13} /> 상승 마감</div>
-        {detailed && <Note>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</Note>}
+        <div style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>코스피 6,687 <Delta c="1.64%" up size={13} /> 상승 마감</div>
+          {detailed && <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>}
+        </div>
       </div>
       {CLOSE_SECTIONS.map((s, i) => (
-        <div key={i} style={{ marginTop: 16, paddingTop: 16, borderTop: `1px solid ${C.borderLight}` }}>
+        <div key={i} style={{ marginTop: 12 }}>
           <Tag>{s.tag}</Tag>
           {s.items && s.items.map((item, idx) => (
-            <div key={idx} style={idx > 0 ? { marginTop: 10 } : undefined}>
-              {item.title && <div style={{ marginTop: 8, fontSize: 14, fontWeight: 600, color: '#444B52' }}>{item.title}</div>}
-              {detailed && item.body && <Note>{item.body}</Note>}
+            <div key={idx} style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
+              {item.title && <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>{item.title}</div>}
+              {detailed && item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>{item.body}</div>}
             </div>
           ))}
           {s.stocks && s.stocks.map((st) => (
-            <div key={st.n} style={{ marginTop: 10 }}>
+            <div key={st.n} style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Avatar name={st.n} code={st.t} size={32} />
                 <div style={{ minWidth: 0 }}>
@@ -1546,7 +1550,7 @@ function DensityExampleCard({ level }) {
                   <div style={{ fontSize: 12, color: C.textTertiary }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
                 </div>
               </div>
-              {detailed && <Note>{st.body}</Note>}
+              {detailed && <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>{st.body}</div>}
             </div>
           ))}
         </div>
@@ -1566,7 +1570,7 @@ function DensityScreen({ onBack, onSave }) {
           <BackButton onClick={onBack} bg={C.white} />
         </div>
       </div>
-      <div style={{ flex: 1, overflowY: 'auto', padding: '100px 0 148px' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '124px 0 148px' }}>
         <div style={{ padding: '0 16px', fontFamily: FONT }}>
           <h1 style={{ fontSize: 24, fontWeight: 700, color: C.textPrimary, letterSpacing: '-0.3px', margin: 0 }}>정보의 밀도를 설정해보세요</h1>
           <div style={{ marginTop: 16 }}><Tag>{currentLabel}</Tag></div>
