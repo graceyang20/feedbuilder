@@ -14,7 +14,7 @@ const C = {
   borderLight: '#E8E9EC',
   white: '#FFFFFF',
 };
-const FONT = "'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', sans-serif";
+const FONT = "-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Segoe UI', Roboto, sans-serif";
 // 하단 32px 구간은 완전 불투명, 그 위로만 페이드
 const FOOTER_GRADIENT = 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.55) 45%, #FFFFFF calc(100% - 32px), #FFFFFF 100%)';
 const HEADER_GRADIENT = 'linear-gradient(180deg, #FFFFFF 0%, #FFFFFF calc(100% - 12px), rgba(255,255,255,0) 100%)';
@@ -391,7 +391,7 @@ function CardShell({ title, subtitle, children, showCheck = true, showTitle = tr
   );
 }
 function Tag({ children }) {
-  return <span style={{ display: 'inline-block', background: C.yellow, color: C.textPrimary, fontSize: 12, fontWeight: 600, borderRadius: 100, padding: '3px 10px' }}>{children}</span>;
+  return <span style={{ display: 'inline-block', background: C.yellow, color: C.textPrimary, fontSize: 12, fontWeight: 500, borderRadius: 100, padding: '7px 14px' }}>{children}</span>;
 }
 function Note({ children }) {
   return <div style={{ background: '#F7F9F9', borderRadius: 10, padding: 12, marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{children}</div>;
@@ -1595,21 +1595,7 @@ function DensityScreen({ onBack, onSave }) {
   );
 }
 
-function useLoadPretendardFont() {
-  useEffect(() => {
-    const id = 'pretendard-font-link';
-    if (document.getElementById(id)) return;
-    const link = document.createElement('link');
-    link.id = id;
-    link.rel = 'stylesheet';
-    link.crossOrigin = 'anonymous';
-    link.href = 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css';
-    document.head.appendChild(link);
-  }, []);
-}
-
 export default function App() {
-  useLoadPretendardFont();
   const [screen, setScreen] = useState('main');
   const [previewCard, setPreviewCard] = useState(null);
   const [previewTitle, setPreviewTitle] = useState('홍길동님 맞춤 피드 미리보기');
