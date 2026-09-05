@@ -163,7 +163,7 @@ function BackButton({ onClick, bg = C.chipBg }) {
 
 function Frame({ children }) {
   return (
-    <div style={{ width: 402, height: 850, background: C.white, borderRadius: 32, border: `1px solid ${C.borderLight}`, overflow: 'hidden', display: 'flex', flexDirection: 'column', margin: '0 auto', position: 'relative', lineHeight: 1.5 }}>
+    <div style={{ width: '100%', height: '100dvh', background: C.white, overflow: 'hidden', display: 'flex', flexDirection: 'column', position: 'relative', lineHeight: 1.5 }}>
       <NoScrollbarStyle />
       {children}
     </div>
@@ -1256,9 +1256,14 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
   const [infoChip, setInfoChip] = useState(null);
   const refs = useRef({});
   const rowRef = useRef(null);
+  const headerRef = useRef(null);
   const naturalTop = useRef(null);
+  const [headerHeight, setHeaderHeight] = useState(64);
 
   useEffect(() => { naturalTop.current = rowRef.current?.offsetTop; }, []);
+  useEffect(() => {
+    if (headerRef.current) setHeaderHeight(headerRef.current.offsetHeight);
+  }, []);
   const onScroll = (e) => {
     if (naturalTop.current == null) return;
     setPinned(e.target.scrollTop >= naturalTop.current - 100);
@@ -1279,13 +1284,13 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
 
   return (
     <Frame>
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 2, background: C.white, padding: '16px 24px 4px' }}>
+      <div ref={headerRef} style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 2, background: C.white, padding: '16px 24px 4px' }}>
         <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', color: C.textPrimary, marginTop: 20 }}>
           <BackIcon />
         </div>
       </div>
 
-      <div onScroll={onScroll} style={{ flex: 1, overflowY: 'auto', paddingTop: 100, paddingBottom: 148 }}>
+      <div onScroll={onScroll} style={{ flex: 1, overflowY: 'auto', paddingTop: headerHeight + 36, paddingBottom: 148 }}>
         <div style={{ padding: '20px 24px 0', fontFamily: FONT }}>
           <h1 style={{ fontSize: 24, fontWeight: 600, lineHeight: 1.5, margin: 0, color: C.textPrimary, letterSpacing: '-0.3px' }}>
             나만을 위한<br />투자 피드 만들기
@@ -1293,7 +1298,7 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
           <p style={{ fontSize: 14, color: C.textTertiary, margin: '8px 0 0' }}>나에게 필요한 정보만 모아 볼 수 있어요.</p>
         </div>
         {pinned && <div style={{ height: 68 }} />}
-        <div style={{ position: pinned ? 'absolute' : 'static', top: pinned ? 100 : 'auto', left: 0, right: 0, zIndex: 1 }}>
+        <div style={{ position: pinned ? 'absolute' : 'static', top: pinned ? headerHeight : 'auto', left: 0, right: 0, zIndex: 1 }}>
           <div ref={rowRef} className="no-scrollbar" style={{ display: 'flex', gap: 8, overflowX: 'auto', padding: '20px 24px 0', scrollbarWidth: 'none', msOverflowStyle: 'none', background: C.white }}>
           {FILTER_TABS.map((t) => (
             <button
@@ -1588,7 +1593,7 @@ export default function App() {
   const openManualPreview = () => { setPreviewTitle('나만의 피드 미리보기'); setPreviewIcon('reco'); setScreen('preview'); };
 
   return (
-    <div style={{ padding: '1rem 0', display: 'flex', justifyContent: 'center', background: '#FAFAFA' }}>
+    <div style={{ background: '#FAFAFA' }}>
       {screen === 'main' && <RecommendScreen onManual={() => setScreen('manual')} onPreview={openPreview} onStartTemplate={() => setScreen('density')} />}
       {screen === 'manual' && <ManualScreen onBack={() => setScreen('main')} onPreview={openManualPreview} />}
       {screen === 'preview' && (
