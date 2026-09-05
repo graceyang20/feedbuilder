@@ -1595,7 +1595,21 @@ function DensityScreen({ onBack, onSave }) {
   );
 }
 
+function useLoadPretendardFont() {
+  useEffect(() => {
+    const id = 'pretendard-font-link';
+    if (document.getElementById(id)) return;
+    const link = document.createElement('link');
+    link.id = id;
+    link.rel = 'stylesheet';
+    link.crossOrigin = 'anonymous';
+    link.href = 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css';
+    document.head.appendChild(link);
+  }, []);
+}
+
 export default function App() {
+  useLoadPretendardFont();
   const [screen, setScreen] = useState('main');
   const [previewCard, setPreviewCard] = useState(null);
   const [previewTitle, setPreviewTitle] = useState('홍길동님 맞춤 피드 미리보기');
