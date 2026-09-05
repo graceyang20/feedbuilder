@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useId } from 'react';
 import {
-  ChevronLeft, Check, Signal, Wifi, BatteryFull, Bell, Menu, Bookmark, Activity, MessageCircle, X,
+  ChevronLeft, Check, Bell, Menu, Bookmark, Activity, MessageCircle, X,
 } from 'lucide-react';
 
 const C = {
@@ -125,19 +125,6 @@ function BackIcon() {
     <svg width="24" height="24" viewBox="0 0 25 24" fill="none">
       <path d="M8.25 19.5L0.75 12L8.25 4.5M0.75 12H18.75" stroke="#060B11" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
-  );
-}
-
-function StatusBar() {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px 0', fontFamily: FONT, fontSize: 15, fontWeight: 500, color: C.textPrimary }}>
-      <span>9:41</span>
-      <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-        <Signal size={15} />
-        <Wifi size={15} />
-        <BatteryFull size={17} />
-      </div>
-    </div>
   );
 }
 
@@ -1037,7 +1024,6 @@ function FlagDot({ left, right }) {
 function HomeTopBar() {
   return (
     <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 2, background: '#F3F4F5', padding: '16px 20px 12px' }}>
-      <StatusBar />
       <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 13, fontWeight: 500, color: C.textPrimary, fontFamily: FONT }}>
@@ -1123,7 +1109,6 @@ function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동�
         <HomeTopBar />
       ) : (
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 2, background: '#F3F4F5', padding: '16px 24px 4px' }}>
-          <StatusBar />
           <div style={{ marginTop: 20 }}>
             <BackButton onClick={onBack} />
           </div>
@@ -1294,7 +1279,6 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
   return (
     <Frame>
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 2, background: C.white, padding: '16px 24px 4px' }}>
-        <StatusBar />
         <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', color: C.textPrimary, marginTop: 20 }}>
           <BackIcon />
         </div>
@@ -1443,7 +1427,6 @@ function ManualScreen({ onBack, onPreview }) {
   return (
     <Frame>
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 2, background: HEADER_GRADIENT, paddingBottom: 20 }}>
-        <StatusBar />
         <div style={{ padding: '20px 24px 0', fontFamily: FONT }}>
           <BackButton onClick={onBack} bg={C.white} />
           <h1 style={{ fontSize: 24, fontWeight: 600, lineHeight: 1.5, margin: '16px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>
@@ -1565,7 +1548,6 @@ function DensityScreen({ onBack, onSave }) {
   return (
     <Frame>
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 2, background: C.white, padding: '16px 24px 4px' }}>
-        <StatusBar />
         <div style={{ marginTop: 20 }}>
           <BackButton onClick={onBack} bg={C.white} />
         </div>
