@@ -1070,6 +1070,7 @@ function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동�
         pressTimer.current = null;
       }
       if (!dragId) return;
+      e.preventDefault();
       setDragY(y);
       let newIdx = 0;
       order.forEach((id) => {
@@ -1134,7 +1135,7 @@ function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동�
             transform: dragging && rect ? `translateY(${dragY - (rect.top + rect.height / 2)}px) scale(1.02)` : 'none',
             position: dragging ? 'relative' : 'static',
             zIndex: dragging ? 5 : 1,
-            touchAction: 'none',
+            touchAction: dragging ? 'none' : 'pan-y',
           };
           const Comp = cat.Comp;
           return (
