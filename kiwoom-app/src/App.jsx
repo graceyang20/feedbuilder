@@ -130,7 +130,7 @@ function BackIcon() {
 
 function StatusBar() {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px 0', fontFamily: FONT, fontSize: 15, fontWeight: 600, color: C.textPrimary }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px 0', fontFamily: FONT, fontSize: 15, fontWeight: 500, color: C.textPrimary }}>
       <span>9:41</span>
       <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
         <Signal size={15} />
@@ -151,7 +151,7 @@ function Chip({ children, onClick }) {
   return (
     <span
       onClick={onClick ? (e) => { e.stopPropagation(); onClick(children); } : undefined}
-      style={{ height: 24, borderRadius: 6, background: C.chipBg, padding: '0 8px', display: 'inline-flex', alignItems: 'center', fontSize: 12.5, fontWeight: 500, color: C.textSecondary, whiteSpace: 'nowrap', fontFamily: FONT, flexShrink: 0, cursor: onClick ? 'pointer' : 'default' }}
+      style={{ height: 24, borderRadius: 6, background: C.chipBg, padding: '0 8px', display: 'inline-flex', alignItems: 'center', fontSize: 12.5, fontWeight: 400, color: C.textSecondary, whiteSpace: 'nowrap', fontFamily: FONT, flexShrink: 0, cursor: onClick ? 'pointer' : 'default' }}
     >
       {children}
     </span>
@@ -160,7 +160,7 @@ function Chip({ children, onClick }) {
 
 function CountBadge({ children }) {
   return (
-    <span style={{ height: 24, borderRadius: 12, background: C.yellow, padding: '0 8px', display: 'inline-flex', alignItems: 'center', fontSize: 11.5, fontWeight: 500, color: C.textPrimary, flexShrink: 0 }}>
+    <span style={{ height: 24, borderRadius: 12, background: C.yellow, padding: '0 8px', display: 'inline-flex', alignItems: 'center', fontSize: 11.5, fontWeight: 400, color: C.textPrimary, flexShrink: 0 }}>
       {children}
     </span>
   );
@@ -176,7 +176,7 @@ function BackButton({ onClick, bg = C.chipBg }) {
 
 function Frame({ children }) {
   return (
-    <div style={{ width: 402, height: 850, background: C.white, borderRadius: 32, border: `1px solid ${C.borderLight}`, overflow: 'hidden', display: 'flex', flexDirection: 'column', margin: '0 auto', position: 'relative' }}>
+    <div style={{ width: 402, height: 850, background: C.white, borderRadius: 32, border: `1px solid ${C.borderLight}`, overflow: 'hidden', display: 'flex', flexDirection: 'column', margin: '0 auto', position: 'relative', lineHeight: 1.5 }}>
       <NoScrollbarStyle />
       {children}
     </div>
@@ -269,7 +269,7 @@ function PersonaCard({ card, selected, onSelect, onPreview, onChipClick }) {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', height: 24, minWidth: 0 }}>
-        <span style={{ fontSize: 17, fontWeight: 700, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>{card.label}</span>
+        <span style={{ fontSize: 17, fontWeight: 600, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>{card.label}</span>
         <span style={{ marginLeft: 8, flexShrink: 0 }}><CountBadge>{card.chips.length}개 항목</CountBadge></span>
         <div style={{ flex: 1, minWidth: 8 }} />
         <div style={{
@@ -292,7 +292,7 @@ function PersonaCard({ card, selected, onSelect, onPreview, onChipClick }) {
 
       <button
         onClick={(e) => { e.stopPropagation(); onPreview(card); }}
-        style={{ marginTop: 16, width: '100%', height: 43, borderRadius: 21.5, border: `1px solid ${C.border}`, background: 'transparent', fontSize: 14.5, fontWeight: 600, color: C.textPrimary, cursor: 'pointer', fontFamily: FONT }}
+        style={{ marginTop: 16, width: '100%', height: 43, borderRadius: 21.5, border: `1px solid ${C.border}`, background: 'transparent', fontSize: 14.5, fontWeight: 500, color: C.textPrimary, cursor: 'pointer', fontFamily: FONT }}
       >
         미리보기
       </button>
@@ -308,7 +308,7 @@ function ToggleChip({ label, on, onClick }) {
         height: 36, borderRadius: 8, padding: '0 12px', cursor: 'pointer',
         border: on ? 'none' : `1px solid ${C.border}`,
         background: on ? C.dark : 'transparent', color: on ? C.white : C.textTertiary,
-        fontSize: 14, fontWeight: 500, fontFamily: FONT, whiteSpace: 'nowrap',
+        fontSize: 14, fontWeight: 400, fontFamily: FONT, whiteSpace: 'nowrap',
       }}
     >
       {label}
@@ -357,11 +357,11 @@ function Avatar({ name, code, size = 40 }) {
       />
     );
   }
-  return <div style={{ width: size, height: size, borderRadius: radius, background: '#E8E9EC', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.4, fontWeight: 700, color: C.textTertiary }}>{name[0]}</div>;
+  return <div style={{ width: size, height: size, borderRadius: radius, background: '#E8E9EC', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: size * 0.4, fontWeight: 600, color: C.textTertiary }}>{name[0]}</div>;
 }
 function Delta({ c, up, size = 13 }) {
   return (
-    <span style={{ fontSize: size, fontWeight: 600, color: up ? UP : DOWN, display: 'inline-flex', alignItems: 'center', gap: 2, verticalAlign: '-1px' }}>
+    <span style={{ fontSize: size, fontWeight: 500, color: up ? UP : DOWN, display: 'inline-flex', alignItems: 'center', gap: 2, verticalAlign: '-1px' }}>
       <svg width="12.5" height="12.5" viewBox="0 0 20 20">
         {up
           ? <path d="M8.93926 6.54041C9.52505 5.95463 10.4748 5.95463 11.0606 6.54041L15.8583 11.3381C16.8032 12.2831 16.134 13.8988 14.7976 13.8988H5.20223C3.86587 13.8988 3.19662 12.2831 4.14157 11.3381L8.93926 6.54041Z" fill="#FF0019" />
@@ -377,7 +377,7 @@ function CardShell({ title, subtitle, children, showCheck = true, showTitle = tr
     <div>
       {showTitle && (
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontSize: 20, fontWeight: 700, color: C.textPrimary }}>{title}</span>
+        <span style={{ fontSize: 20, fontWeight: 600, color: C.textPrimary }}>{title}</span>
         {showCheck && (
           <div onClick={(e) => { e.stopPropagation(); setChecked(!checked); }} style={{ width: 22, height: 22, borderRadius: '50%', background: checked ? C.yellow : 'transparent', border: checked ? 'none' : `1.5px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxSizing: 'border-box' }}>
             {checked && <Check size={13} color={C.textPrimary} strokeWidth={3} />}
@@ -391,10 +391,10 @@ function CardShell({ title, subtitle, children, showCheck = true, showTitle = tr
   );
 }
 function Tag({ children }) {
-  return <span style={{ display: 'inline-block', background: C.yellow, color: C.textPrimary, fontSize: 12, fontWeight: 700, borderRadius: 100, padding: '3px 10px' }}>{children}</span>;
+  return <span style={{ display: 'inline-block', background: C.yellow, color: C.textPrimary, fontSize: 12, fontWeight: 600, borderRadius: 100, padding: '3px 10px' }}>{children}</span>;
 }
 function Note({ children }) {
-  return <div style={{ background: '#F7F9F9', borderRadius: 10, padding: 12, marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>{children}</div>;
+  return <div style={{ background: '#F7F9F9', borderRadius: 10, padding: 12, marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{children}</div>;
 }
 function ArrowIcon({ up }) {
   return (
@@ -458,7 +458,7 @@ function MoreLink() {
   return (
     <div style={{ marginTop: 12 }}>
       <div style={{ borderTop: `1px solid ${C.borderLight}`, margin: '0 -16px' }} />
-      <div style={{ paddingTop: 12, textAlign: 'center', fontSize: 13, fontWeight: 600, color: C.textTertiary }}>더보기 ›</div>
+      <div style={{ paddingTop: 12, textAlign: 'center', fontSize: 13, fontWeight: 500, color: C.textTertiary }}>더보기 ›</div>
     </div>
   );
 }
@@ -491,8 +491,8 @@ function IndexCard({ showCheck = true, subtitle } = {}) {
         <div className="no-scrollbar" style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none' }}>
           {idx.map((i) => (
             <div key={i.n} style={{ flexShrink: 0, width: 116, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{i.n}</div>
-              <div style={{ fontSize: 16, fontWeight: 600, color: i.up ? UP : DOWN, marginTop: 2 }}>{i.v}</div>
+              <div style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{i.n}</div>
+              <div style={{ fontSize: 16, fontWeight: 500, color: i.up ? UP : DOWN, marginTop: 2 }}>{i.v}</div>
               <div style={{ marginTop: -4 }}><Delta c={i.c} up={i.up} size={12} /></div>
             </div>
           ))}
@@ -527,8 +527,8 @@ function CloseReviewCard({ showCheck = true, subtitle, showMore = true } = {}) {
       <div style={{ marginTop: 12 }}>
         <Tag>오늘 시장</Tag>
         <div style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
-          <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>코스피 6,689 <Delta c="1.64%" up size={13} /> 상승 마감</div>
-          <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>
+          <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52' }}>코스피 6,689 <Delta c="1.64%" up size={13} /> 상승 마감</div>
+          <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>
         </div>
       </div>
       {sections.map((s, i) => (
@@ -536,8 +536,8 @@ function CloseReviewCard({ showCheck = true, subtitle, showMore = true } = {}) {
           <Tag>{s.tag}</Tag>
           {s.items && s.items.map((item, idx) => (
             <div key={idx} style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
-              {item.title && <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>{item.title}</div>}
-              {item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>{item.body}</div>}
+              {item.title && <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52' }}>{item.title}</div>}
+              {item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{item.body}</div>}
             </div>
           ))}
           {s.stocks && s.stocks.map((st) => (
@@ -545,11 +545,11 @@ function CloseReviewCard({ showCheck = true, subtitle, showMore = true } = {}) {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Avatar name={st.n} code={st.t} size={32} />
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{st.n}</div>
+                  <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{st.n}</div>
                   <div style={{ fontSize: 12, color: C.textTertiary }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
                 </div>
               </div>
-              <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>{st.body}</div>
+              <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{st.body}</div>
             </div>
           ))}
         </div>
@@ -557,7 +557,7 @@ function CloseReviewCard({ showCheck = true, subtitle, showMore = true } = {}) {
       {showMore && (
         <div style={{ marginTop: 12 }}>
           <div style={{ borderTop: `1px solid ${C.borderLight}`, margin: '0 -16px' }} />
-          <div onClick={() => setOpen(!open)} style={{ paddingTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, fontSize: 13, fontWeight: 600, color: C.textTertiary, cursor: 'pointer' }}>{open ? '접기' : '더보기'} <ArrowIcon up={open} /></div>
+          <div onClick={() => setOpen(!open)} style={{ paddingTop: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, fontSize: 13, fontWeight: 500, color: C.textTertiary, cursor: 'pointer' }}>{open ? '접기' : '더보기'} <ArrowIcon up={open} /></div>
         </div>
       )}
     </CardShell>
@@ -609,7 +609,7 @@ function PortfolioCard({ showCheck = true, subtitle, showTitle = true } = {}) {
     <CardShell title="포트폴리오" showCheck={showCheck} subtitle={subtitle} showTitle={showTitle}>
       <div style={{ marginTop: 12 }}>
         <div style={{ fontSize: 12.5, color: C.textTertiary }}>총 평가액</div>
-        <div style={{ fontSize: 22, fontWeight: 600, color: C.textPrimary, marginTop: 0 }}>{formatWon(totalEval)}</div>
+        <div style={{ fontSize: 22, fontWeight: 500, color: C.textPrimary, marginTop: 0 }}>{formatWon(totalEval)}</div>
         <div style={{ marginTop: -4 }}><Delta c={`${Math.abs(changePct).toFixed(2)}% (${formatWon(Math.abs(changeAmount))})`} up={up} size={13} /></div>
       </div>
       <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -620,7 +620,7 @@ function PortfolioCard({ showCheck = true, subtitle, showTitle = true } = {}) {
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <Avatar name={h.n} code={h.t} />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.n}</div>
+                <div style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{h.n}</div>
                 <div style={{ fontSize: 12, color: C.textTertiary }}>{h.qty}주</div>
               </div>
               <div style={{ textAlign: 'right' }}>
@@ -655,10 +655,10 @@ function AlertCard({ showCheck = true, subtitle, showTitle = true } = {}) {
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <Avatar name={o.n} code={o.code} />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{o.n}</div>
+                <div style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{o.n}</div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary }}>{o.act}</div>
+                <div style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary }}>{o.act}</div>
                 <div style={{ fontSize: 12, color: C.textTertiary, marginTop: 2 }}>{o.unit}</div>
               </div>
             </div>
@@ -673,11 +673,11 @@ function AlertCard({ showCheck = true, subtitle, showTitle = true } = {}) {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 6 }}>
               <Avatar name={f.n} code={f.code} />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{f.n}</div>
-                <div style={{ fontSize: 12.5, color: f.up ? UP : DOWN, fontWeight: 600 }}>{f.act}</div>
+                <div style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{f.n}</div>
+                <div style={{ fontSize: 12.5, color: f.up ? UP : DOWN, fontWeight: 500 }}>{f.act}</div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary }}>{f.p}</div>
+                <div style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary }}>{f.p}</div>
                 <div style={{ fontSize: 12, color: C.textTertiary, marginTop: 2 }}>{f.unit}</div>
               </div>
             </div>
@@ -704,7 +704,7 @@ function NewsCard({ showCheck = true, subtitle, showTitle = true } = {}) {
         {NEWS.map((n, i) => (
           <div key={i} style={{ display: 'flex', gap: 10 }}>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary, lineHeight: 1.4 }}>{n.h}</div>
+              <div style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary, lineHeight: 1.5 }}>{n.h}</div>
               <div style={{ fontSize: 12, color: C.textTertiary, marginTop: 6 }}>{n.meta}</div>
             </div>
             <img src={n.img} alt="" style={{ width: 64, height: 64, borderRadius: 10, objectFit: 'cover', flexShrink: 0 }} />
@@ -746,20 +746,20 @@ function CommunityCard({ showCheck = true, subtitle, showTitle = true } = {}) {
         <div style={{ marginTop: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 16, fontWeight: 700, color: C.textPrimary }}>커뮤니티 여론</span>
-              <span style={{ width: 16, height: 16, borderRadius: '50%', background: C.chipBg, color: C.textTertiary, fontSize: 10, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>?</span>
+              <span style={{ fontSize: 16, fontWeight: 600, color: C.textPrimary }}>커뮤니티 여론</span>
+              <span style={{ width: 16, height: 16, borderRadius: '50%', background: C.chipBg, color: C.textTertiary, fontSize: 10, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>?</span>
             </div>
             <span style={{ fontSize: 11.5, color: C.textTertiary }}>124개의 종목 · 498개의 글 분석</span>
           </div>
           <div style={{ display: 'flex', gap: 2, marginTop: 12 }}>
             {SENTIMENT.map((s) => (
               <div key={s.label} style={{ flex: s.pct, height: 40, background: s.bg, borderRadius: 6, padding: '12px 8px', boxSizing: 'border-box', minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: s.align === 'center' ? 'center' : s.align === 'right' ? 'flex-end' : 'flex-start', justifyContent: 'center' }}>
-                <div style={{ fontSize: 12, fontWeight: 500, color: s.color, whiteSpace: 'nowrap' }}>{s.label}</div>
-                <div style={{ fontSize: 12, fontWeight: 500, color: s.color, marginTop: -2 }}>{s.pct}%</div>
+                <div style={{ fontSize: 12, fontWeight: 400, color: s.color, whiteSpace: 'nowrap' }}>{s.label}</div>
+                <div style={{ fontSize: 12, fontWeight: 400, color: s.color, marginTop: -2 }}>{s.pct}%</div>
               </div>
             ))}
           </div>
-          <div style={{ fontSize: 16, fontWeight: 700, color: C.textPrimary, marginTop: 16 }}>인기글</div>
+          <div style={{ fontSize: 16, fontWeight: 600, color: C.textPrimary, marginTop: 16 }}>인기글</div>
           <div style={{ position: 'relative' }}>
           <div className="no-scrollbar" style={{ display: 'flex', gap: 8, marginTop: 12, overflowX: 'auto', scrollbarWidth: 'none' }}>
             {POSTS.map((p, i) => (
@@ -767,12 +767,12 @@ function CommunityCard({ showCheck = true, subtitle, showTitle = true } = {}) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Avatar name={p.n} code={p.t} size={16} />
                   <div style={{ display: 'flex', alignItems: 'center', gap: 4, flex: 1, minWidth: 0 }}>
-                    <span style={{ fontSize: 13.5, fontWeight: 700, color: C.textPrimary, minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.n} 토론방</span>
+                    <span style={{ fontSize: 13.5, fontWeight: 600, color: C.textPrimary, minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.n} 토론방</span>
                     <Delta c={p.c} up={p.up} size={12} />
                   </div>
                 </div>
                 <div style={{
-                  fontSize: 13, color: C.textPrimary, marginTop: 10, lineHeight: 1.4,
+                  fontSize: 13, color: C.textPrimary, marginTop: 10, lineHeight: 1.5,
                   display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
                 }}>{p.body}</div>
               </div>
@@ -788,7 +788,7 @@ function CommunityCard({ showCheck = true, subtitle, showTitle = true } = {}) {
           <div key={i}>
             <div onClick={() => setOpen(open === i ? -1 : i)} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 0', cursor: 'pointer' }}>
               <span style={{ fontSize: 13, color: C.textTertiary, width: 12 }}>{i + 1}</span>
-              <span style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary, flex: 1 }}>{k.n}</span>
+              <span style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary, flex: 1 }}>{k.n}</span>
               <Delta c={String(k.c)} up={k.up} size={13} />
               <ArrowIcon up={open === i} />
             </div>
@@ -799,7 +799,7 @@ function CommunityCard({ showCheck = true, subtitle, showTitle = true } = {}) {
                   {k.related.map((r, j) => (
                     <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <Avatar name={r.n} code={r.t} size={24} />
-                      <span style={{ fontSize: 13, fontWeight: 600, color: C.textPrimary, flex: 1 }}>{r.n}</span>
+                      <span style={{ fontSize: 13, fontWeight: 500, color: C.textPrimary, flex: 1 }}>{r.n}</span>
                       <Delta c={r.c} up={r.up} size={12} />
                     </div>
                   ))}
@@ -848,7 +848,7 @@ function RankingCard({ showCheck = true, subtitle, showTitle = true } = {}) {
             <span style={{ fontSize: 13, color: C.textTertiary, width: 12 }}>{i + 1}</span>
             <Avatar name={r.n || r.name} code={r.t || r.code} />
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.n || r.name}</div>
+              <div style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.n || r.name}</div>
               <div style={{ fontSize: 12, color: C.textTertiary }}>{r.t || r.code}</div>
             </div>
             <div style={{ textAlign: 'right' }}>
@@ -885,7 +885,7 @@ function WatchlistCard({ showCheck = true, subtitle, showTitle = true } = {}) {
             <div onClick={() => setOpen(open === i ? -1 : i)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 0', cursor: 'pointer' }}>
               <Avatar name={r.n} code={r.t} />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.n}</div>
+                <div style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.n}</div>
                 <div style={{ fontSize: 12, color: C.textTertiary }}>{r.t}</div>
               </div>
               <div style={{ textAlign: 'right' }}>
@@ -896,7 +896,7 @@ function WatchlistCard({ showCheck = true, subtitle, showTitle = true } = {}) {
             </div>
             {open === i && (
               <div style={{ background: '#F7F9F9', borderRadius: 16, padding: 12, marginBottom: 10 }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: C.textPrimary, marginBottom: 8 }}>관련 속보</div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary, marginBottom: 8 }}>관련 속보</div>
                 {NEWS_FEED.map((n, j) => (
                   <div key={j} style={{ display: 'flex', gap: 8, marginBottom: 4, position: 'relative' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 14, flexShrink: 0 }}>
@@ -908,7 +908,7 @@ function WatchlistCard({ showCheck = true, subtitle, showTitle = true } = {}) {
                     <div>
                       <div style={{ fontSize: 11.5, color: C.textTertiary }}>{n.t}</div>
                       {n.tag && <span style={{ display: 'inline-block', marginTop: 7, background: '#E5E7E9', color: C.textSecondary, fontSize: 11, borderRadius: 5, padding: '2px 6px' }}>{n.tag}</span>}
-                      {n.h && <div style={{ fontSize: 12.5, color: C.textPrimary, marginTop: 8, lineHeight: 1.4 }}>{n.h}</div>}
+                      {n.h && <div style={{ fontSize: 12.5, color: C.textPrimary, marginTop: 8, lineHeight: 1.5 }}>{n.h}</div>}
                     </div>
                   </div>
                 ))}
@@ -938,13 +938,13 @@ function CalendarCard({ showCheck = true, subtitle, showTitle = true } = {}) {
       <PillTabs items={CAL_TABS} active={tab} onChange={setTab} />
       {CAL_DATES.map((g) => (
         <div key={g.d} style={{ marginTop: 14 }}>
-          <div style={{ fontSize: 12, fontWeight: 500, color: '#6D7683' }}>{g.d}</div>
+          <div style={{ fontSize: 12, fontWeight: 400, color: '#6D7683' }}>{g.d}</div>
           <div style={{ position: 'relative' }}>
           <div className="no-scrollbar" style={{ display: 'flex', gap: 8, marginTop: 8, overflowX: 'auto', scrollbarWidth: 'none' }}>
             {g.events.map((e, i) => (
               <div key={i} style={{ flexShrink: 0, width: 200, background: '#F7F9F9', borderRadius: 10, padding: 16 }}>
                 <img src={CAL_ICONS[e.icon]} alt="" style={{ width: 32, height: 32, borderRadius: 8, display: 'block' }} />
-                <div style={{ fontSize: 13, fontWeight: 700, color: C.textPrimary, marginTop: 8, lineHeight: 1.4 }}>{e.n}</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: C.textPrimary, marginTop: 8, lineHeight: 1.5 }}>{e.n}</div>
                 <div style={{ fontSize: 11.5, color: C.textTertiary, marginTop: 4 }}>{e.s}</div>
               </div>
             ))}
@@ -981,7 +981,7 @@ function ReportCard({ showCheck = true, subtitle, showTitle = true } = {}) {
           <div key={i} style={{ flexShrink: 0, width: 240, background: '#F7F9F9', borderRadius: 10, padding: 16 }}>
             <img src={REPORT_ICONS[r.icon]} alt="" style={{ width: 40, height: 40, borderRadius: 10, display: 'block' }} />
             <div style={{
-              fontSize: 14, fontWeight: 700, color: C.textPrimary, marginTop: 20, lineHeight: 1.4,
+              fontSize: 14, fontWeight: 600, color: C.textPrimary, marginTop: 20, lineHeight: 1.5,
               display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
             }}>{r.title}</div>
             <div style={{ fontSize: 11, color: C.textTertiary, marginTop: 20 }}>{r.src}</div>
@@ -990,11 +990,11 @@ function ReportCard({ showCheck = true, subtitle, showTitle = true } = {}) {
         {tab === '신규 목표가' && REPORTS.map((r, i) => (
           <div key={i} style={{ flexShrink: 0, width: 240, background: '#F7F9F9', borderRadius: 10, padding: 16 }}>
             <Avatar name={r.n} code={r.t} size={32} />
-            <div style={{ fontSize: 13.5, fontWeight: 700, color: C.textPrimary, marginTop: 8, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.n}</div>
-            <div style={{ fontSize: 15, fontWeight: 600, color: C.textPrimary, marginTop: 2 }}>{r.target}</div>
+            <div style={{ fontSize: 13.5, fontWeight: 600, color: C.textPrimary, marginTop: 8, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.n}</div>
+            <div style={{ fontSize: 15, fontWeight: 500, color: C.textPrimary, marginTop: 2 }}>{r.target}</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
               <Delta c={r.c} up={r.up} size={12} />
-              <span style={{ background: '#FBE9EC', color: UP, fontSize: 11, fontWeight: 600, borderRadius: 5, padding: '2px 6px' }}>{r.tag}</span>
+              <span style={{ background: '#FBE9EC', color: UP, fontSize: 11, fontWeight: 500, borderRadius: 5, padding: '2px 6px' }}>{r.tag}</span>
             </div>
             <div style={{ fontSize: 11, color: C.textTertiary, marginTop: 8 }}>{r.src}</div>
           </div>
@@ -1040,10 +1040,10 @@ function HomeTopBar() {
       <StatusBar />
       <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 13, fontWeight: 600, color: C.textPrimary, fontFamily: FONT }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 13, fontWeight: 500, color: C.textPrimary, fontFamily: FONT }}>
             <FlagDot left="#EC5F5F" right="#3D8AF7" />애프터마켓
           </span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 13, fontWeight: 600, color: C.textPrimary, fontFamily: FONT }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 13, fontWeight: 500, color: C.textPrimary, fontFamily: FONT }}>
             <FlagDot left="#3D8AF7" right="#EC5F5F" />프리마켓
           </span>
         </div>
@@ -1133,7 +1133,7 @@ function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동�
         {variant !== 'home' && (
           <div style={{ padding: '0 4px', fontFamily: FONT }}>
             <Illustration icon={icon} />
-            <h1 style={{ fontSize: 22, fontWeight: 700, lineHeight: 1.4, margin: '4px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>{title}</h1>
+            <h1 style={{ fontSize: 22, fontWeight: 600, lineHeight: 1.5, margin: '4px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>{title}</h1>
             <p style={{ fontSize: 14, color: C.textTertiary, margin: '8px 0 0' }}>드래그 해서 순서를 바꿀 수 있어요</p>
           </div>
         )}
@@ -1163,7 +1163,7 @@ function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동�
         <HomeBottomTabBar />
       ) : (
         <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: FOOTER_GRADIENT, padding: '20px 24px 28px', fontFamily: FONT, textAlign: 'center' }}>
-          <button onClick={onStart} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 700, color: C.textPrimary, cursor: 'pointer' }}>
+          <button onClick={onStart} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 600, color: C.textPrimary, cursor: 'pointer' }}>
             다음
           </button>
           <div style={{ fontSize: 12.5, color: C.textTertiary, marginTop: 12 }}>다음 화면에서 세부사항을 수정할 수 있어요</div>
@@ -1179,7 +1179,7 @@ function BottomSheet({ title, subtitle, onClose, children }) {
       <div onClick={onClose} style={{ position: 'absolute', inset: 0, background: 'rgba(6,11,17,0.5)' }} />
       <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, maxHeight: '82%', background: C.white, borderRadius: '24px 24px 0 0', display: 'flex', flexDirection: 'column', fontFamily: FONT, boxShadow: '0 -8px 24px rgba(6,11,17,0.12)' }}>
         <div style={{ padding: '24px 20px 4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-          <span style={{ fontSize: 20, fontWeight: 700, color: C.textPrimary }}>{title}</span>
+          <span style={{ fontSize: 20, fontWeight: 600, color: C.textPrimary }}>{title}</span>
           <X size={22} color={C.textPrimary} strokeWidth={2} onClick={onClose} style={{ cursor: 'pointer', flexShrink: 0 }} />
         </div>
         <div style={{ padding: '8px 20px 0', fontSize: 14, color: C.textTertiary, flexShrink: 0 }}>{subtitle}</div>
@@ -1194,8 +1194,8 @@ function IndexInfoBody() {
     <div className="no-scrollbar" style={{ display: 'flex', gap: 8, overflowX: 'auto', scrollbarWidth: 'none' }}>
       {IDX.map((i) => (
         <div key={i.n} style={{ flexShrink: 0, width: 116, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
-          <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{i.n}</div>
-          <div style={{ fontSize: 16, fontWeight: 600, color: i.up ? UP : DOWN, marginTop: 2 }}>{i.v}</div>
+          <div style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{i.n}</div>
+          <div style={{ fontSize: 16, fontWeight: 500, color: i.up ? UP : DOWN, marginTop: 2 }}>{i.v}</div>
           <div style={{ marginTop: -4 }}><Delta c={i.c} up={i.up} size={12} /></div>
         </div>
       ))}
@@ -1208,16 +1208,16 @@ function CloseReviewInfoBody() {
     <div>
       <Tag>오늘 시장</Tag>
       <div style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
-        <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>코스피 6,689 <Delta c="1.64%" up size={13} /> 상승 마감</div>
-        <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>
+        <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52' }}>코스피 6,689 <Delta c="1.64%" up size={13} /> 상승 마감</div>
+        <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>
       </div>
       {CLOSE_SECTIONS.map((s, i) => (
         <div key={i} style={{ marginTop: 12 }}>
           <Tag>{s.tag}</Tag>
           {s.items && s.items.map((item, idx) => (
             <div key={idx} style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
-              {item.title && <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>{item.title}</div>}
-              {item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>{item.body}</div>}
+              {item.title && <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52' }}>{item.title}</div>}
+              {item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{item.body}</div>}
             </div>
           ))}
           {s.stocks && s.stocks.map((st) => (
@@ -1225,11 +1225,11 @@ function CloseReviewInfoBody() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Avatar name={st.n} code={st.t} size={32} />
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{st.n}</div>
+                  <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{st.n}</div>
                   <div style={{ fontSize: 12, color: C.textTertiary }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
                 </div>
               </div>
-              <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>{st.body}</div>
+              <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{st.body}</div>
             </div>
           ))}
         </div>
@@ -1302,7 +1302,7 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
 
       <div onScroll={onScroll} style={{ flex: 1, overflowY: 'auto', paddingTop: 100, paddingBottom: 148 }}>
         <div style={{ padding: '20px 24px 0', fontFamily: FONT }}>
-          <h1 style={{ fontSize: 24, fontWeight: 700, lineHeight: 1.4, margin: 0, color: C.textPrimary, letterSpacing: '-0.3px' }}>
+          <h1 style={{ fontSize: 24, fontWeight: 600, lineHeight: 1.5, margin: 0, color: C.textPrimary, letterSpacing: '-0.3px' }}>
             나만을 위한<br />투자 피드 만들기
           </h1>
           <p style={{ fontSize: 14, color: C.textTertiary, margin: '8px 0 0' }}>나에게 필요한 정보만 모아 볼 수 있어요.</p>
@@ -1318,7 +1318,7 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
                 flexShrink: 0, height: 36, borderRadius: 8, padding: '0 12px', border: 'none', cursor: 'pointer',
                 background: activeTab === t.key ? C.dark : C.chipBg,
                 color: activeTab === t.key ? C.white : C.textSecondary,
-                fontSize: 14, fontWeight: 600, fontFamily: FONT,
+                fontSize: 14, fontWeight: 500, fontFamily: FONT,
                 display: 'flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap',
               }}
             >
@@ -1344,7 +1344,7 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
               {recoSelected && <Check size={14} color={C.textPrimary} strokeWidth={3} />}
             </div>
             <div style={{ fontSize: 13, color: C.textTertiary }}>최근 90일 활동 이력 분석</div>
-            <div style={{ fontSize: 19, fontWeight: 700, color: C.textPrimary, marginTop: 6 }}>{recoCard.label}</div>
+            <div style={{ fontSize: 19, fontWeight: 600, color: C.textPrimary, marginTop: 6 }}>{recoCard.label}</div>
             <div style={{ marginTop: 15, display: 'flex', justifyContent: 'center' }}>
               <CountBadge>{recoCard.totalCount}개 항목</CountBadge>
             </div>
@@ -1360,13 +1360,13 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
                 {expanded && recoCard.more.map((c) => <Chip key={c} onClick={setInfoChip}>{c}</Chip>)}
                 <span
                   onClick={(e) => { e.stopPropagation(); setExpanded(!expanded); }}
-                  style={{ height: 24, borderRadius: 6, background: '#E5F4FF', padding: '0 8px', display: 'inline-flex', alignItems: 'center', fontSize: 12.5, fontWeight: 500, color: '#0090FF', whiteSpace: 'nowrap', fontFamily: FONT, cursor: 'pointer' }}
+                  style={{ height: 24, borderRadius: 6, background: '#E5F4FF', padding: '0 8px', display: 'inline-flex', alignItems: 'center', fontSize: 12.5, fontWeight: 400, color: '#0090FF', whiteSpace: 'nowrap', fontFamily: FONT, cursor: 'pointer' }}
               >{expanded ? '- 접기' : `+${recoCard.more.length}개 더보기`}</span>
               </div>
             </div>
             <button
               onClick={(e) => { e.stopPropagation(); onPreview(recoCard); }}
-              style={{ marginTop: 16, width: '100%', height: 43, borderRadius: 21.5, border: `1px solid ${C.border}`, background: 'transparent', fontSize: 14.5, fontWeight: 600, color: C.textPrimary, cursor: 'pointer', fontFamily: FONT }}
+              style={{ marginTop: 16, width: '100%', height: 43, borderRadius: 21.5, border: `1px solid ${C.border}`, background: 'transparent', fontSize: 14.5, fontWeight: 500, color: C.textPrimary, cursor: 'pointer', fontFamily: FONT }}
             >
               미리보기
             </button>
@@ -1375,7 +1375,7 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
 
         {SECTIONS.map((section) => (
           <div key={section.key} ref={(el) => (refs.current[section.key] = el)} style={{ marginTop: 36 }}>
-            <div style={{ fontSize: 18, fontWeight: 700, color: C.textPrimary, padding: '0 17px', fontFamily: FONT }}>{section.title}</div>
+            <div style={{ fontSize: 18, fontWeight: 600, color: C.textPrimary, padding: '0 17px', fontFamily: FONT }}>{section.title}</div>
             <div className="no-scrollbar" style={{ display: 'flex', gap: 12, overflowX: 'auto', padding: '16px 17px 4px', scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {section.cards.map((card) => (
                 <PersonaCard key={card.id} card={card} selected={selectedCard === card.id} onSelect={setSelectedCard} onPreview={onPreview} onChipClick={setInfoChip} />
@@ -1386,10 +1386,10 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
       </div>
 
       <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: FOOTER_GRADIENT, padding: '48px 24px 28px', fontFamily: FONT }}>
-        <button onClick={onStartTemplate} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 700, color: C.textPrimary, cursor: 'pointer' }}>
+        <button onClick={onStartTemplate} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 600, color: C.textPrimary, cursor: 'pointer' }}>
           이 템플릿으로 시작하기
         </button>
-        <div onClick={onManual} style={{ textAlign: 'center', marginTop: 14, fontSize: 14, fontWeight: 600, color: C.textTertiary, cursor: 'pointer' }}>직접 고르기</div>
+        <div onClick={onManual} style={{ textAlign: 'center', marginTop: 14, fontSize: 14, fontWeight: 500, color: C.textTertiary, cursor: 'pointer' }}>직접 고르기</div>
       </div>
       {infoChip && <ChipInfoSheet chipKey={infoChip} onClose={() => setInfoChip(null)} />}
     </Frame>
@@ -1446,7 +1446,7 @@ function ManualScreen({ onBack, onPreview }) {
         <StatusBar />
         <div style={{ padding: '20px 24px 0', fontFamily: FONT }}>
           <BackButton onClick={onBack} bg={C.white} />
-          <h1 style={{ fontSize: 24, fontWeight: 700, lineHeight: 1.4, margin: '16px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>
+          <h1 style={{ fontSize: 24, fontWeight: 600, lineHeight: 1.5, margin: '16px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>
             보고 싶은 정보를<br />선택해주세요
           </h1>
         </div>
@@ -1456,10 +1456,10 @@ function ManualScreen({ onBack, onPreview }) {
         {ALL_CATEGORIES_FOR_MANUAL.map((cat) => (
           <div key={cat.key} style={{ marginTop: 24 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
-              <span style={{ fontSize: 16, fontWeight: 700, color: C.textPrimary, fontFamily: FONT }}>{cat.label}</span>
+              <span style={{ fontSize: 16, fontWeight: 600, color: C.textPrimary, fontFamily: FONT }}>{cat.label}</span>
               <span
                 onClick={() => setExampleCat(cat.key)}
-                style={{ width: 16, height: 16, borderRadius: '50%', background: C.chipBg, color: C.textTertiary, fontSize: 10, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+                style={{ width: 16, height: 16, borderRadius: '50%', background: C.chipBg, color: C.textTertiary, fontSize: 10, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
               >?</span>
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -1473,7 +1473,7 @@ function ManualScreen({ onBack, onPreview }) {
       </div>
 
       <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: FOOTER_GRADIENT, padding: '48px 24px 28px', fontFamily: FONT }}>
-        <button onClick={onPreview} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 700, color: C.textPrimary, cursor: 'pointer' }}>
+        <button onClick={onPreview} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 600, color: C.textPrimary, cursor: 'pointer' }}>
           {count}개 항목 · 피드 미리보기
         </button>
       </div>
@@ -1511,7 +1511,7 @@ function DensitySlider({ value, onChange }) {
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 14 }}>
         {DENSITY_LEVELS.map((lv) => (
-          <span key={lv.key} style={{ flex: 1, textAlign: lv.key === 'summary' ? 'left' : lv.key === 'analysis' ? 'right' : 'center', fontSize: 13, fontWeight: 500, color: C.textTertiary }}>
+          <span key={lv.key} style={{ flex: 1, textAlign: lv.key === 'summary' ? 'left' : lv.key === 'analysis' ? 'right' : 'center', fontSize: 13, fontWeight: 400, color: C.textTertiary }}>
             {lv.label}
           </span>
         ))}
@@ -1524,12 +1524,12 @@ function DensityExampleCard({ level }) {
   const detailed = level !== 'summary';
   return (
     <div style={{ background: C.white, borderRadius: 16, padding: 16, fontFamily: FONT }}>
-      <div style={{ fontSize: 20, fontWeight: 700, color: C.textPrimary }}>장마감 리뷰</div>
+      <div style={{ fontSize: 20, fontWeight: 600, color: C.textPrimary }}>장마감 리뷰</div>
       <div style={{ marginTop: 12 }}>
         <Tag>오늘 시장</Tag>
         <div style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
-          <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>코스피 6,687 <Delta c="1.64%" up size={13} /> 상승 마감</div>
-          {detailed && <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>}
+          <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52' }}>코스피 6,687 <Delta c="1.64%" up size={13} /> 상승 마감</div>
+          {detailed && <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>}
         </div>
       </div>
       {CLOSE_SECTIONS.map((s, i) => (
@@ -1537,8 +1537,8 @@ function DensityExampleCard({ level }) {
           <Tag>{s.tag}</Tag>
           {s.items && s.items.map((item, idx) => (
             <div key={idx} style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
-              {item.title && <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52' }}>{item.title}</div>}
-              {detailed && item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>{item.body}</div>}
+              {item.title && <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52' }}>{item.title}</div>}
+              {detailed && item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{item.body}</div>}
             </div>
           ))}
           {s.stocks && s.stocks.map((st) => (
@@ -1546,11 +1546,11 @@ function DensityExampleCard({ level }) {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Avatar name={st.n} code={st.t} size={32} />
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: '#444B52', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{st.n}</div>
+                  <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{st.n}</div>
                   <div style={{ fontSize: 12, color: C.textTertiary }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
                 </div>
               </div>
-              {detailed && <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.4 }}>{st.body}</div>}
+              {detailed && <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{st.body}</div>}
             </div>
           ))}
         </div>
@@ -1572,7 +1572,7 @@ function DensityScreen({ onBack, onSave }) {
       </div>
       <div style={{ flex: 1, overflowY: 'auto', padding: '124px 0 148px' }}>
         <div style={{ padding: '0 16px', fontFamily: FONT }}>
-          <h1 style={{ fontSize: 24, fontWeight: 700, color: C.textPrimary, letterSpacing: '-0.3px', margin: 0 }}>정보의 밀도를 설정해보세요</h1>
+          <h1 style={{ fontSize: 24, fontWeight: 600, color: C.textPrimary, letterSpacing: '-0.3px', margin: 0 }}>정보의 밀도를 설정해보세요</h1>
           <div style={{ marginTop: 16 }}><Tag>{currentLabel}</Tag></div>
           <p style={{ marginTop: 8, fontSize: 14, color: C.textTertiary }}>{DENSITY_LEVELS.find((l) => l.key === level).subtitle}</p>
           <div style={{ marginTop: 20 }}>
@@ -1580,14 +1580,14 @@ function DensityScreen({ onBack, onSave }) {
           </div>
         </div>
         <div style={{ marginTop: 24, background: '#F3F4F5', padding: '20px 16px 32px' }}>
-          <div style={{ fontSize: 15, fontWeight: 700, color: C.textPrimary, fontFamily: FONT }}>{currentLabel} 예시</div>
+          <div style={{ fontSize: 15, fontWeight: 600, color: C.textPrimary, fontFamily: FONT }}>{currentLabel} 예시</div>
           <div style={{ marginTop: 12 }}>
             <DensityExampleCard level={level} />
           </div>
         </div>
       </div>
       <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: FOOTER_GRADIENT, padding: '20px 24px 28px', fontFamily: FONT }}>
-        <button onClick={onSave} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 700, color: C.textPrimary, cursor: 'pointer' }}>
+        <button onClick={onSave} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 600, color: C.textPrimary, cursor: 'pointer' }}>
           이대로 저장하기
         </button>
       </div>
