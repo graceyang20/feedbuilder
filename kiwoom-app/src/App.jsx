@@ -1162,14 +1162,14 @@ function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동�
 function BottomSheet({ title, subtitle, onClose, children }) {
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: 10 }}>
-      <div onClick={onClose} style={{ position: 'absolute', inset: 0, background: 'rgba(6,11,17,0.5)' }} />
-      <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, maxHeight: '82%', background: C.white, borderRadius: '24px 24px 0 0', display: 'flex', flexDirection: 'column', fontFamily: FONT, boxShadow: '0 -8px 24px rgba(6,11,17,0.12)' }}>
+      <div onClick={onClose} style={{ position: 'absolute', inset: 0, background: 'rgba(6,11,17,0.5)', touchAction: 'none', overscrollBehavior: 'none' }} />
+      <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, maxHeight: '82%', background: C.white, borderRadius: '24px 24px 0 0', display: 'flex', flexDirection: 'column', fontFamily: FONT, boxShadow: '0 -8px 24px rgba(6,11,17,0.12)', overscrollBehavior: 'contain' }}>
         <div style={{ padding: '24px 20px 4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
           <span style={{ fontSize: 20, fontWeight: 600, color: C.textPrimary }}>{title}</span>
           <X size={22} color={C.textPrimary} strokeWidth={2} onClick={onClose} style={{ cursor: 'pointer', flexShrink: 0 }} />
         </div>
         <div style={{ padding: '8px 20px 0', fontSize: 14, color: C.textTertiary, flexShrink: 0 }}>{subtitle}</div>
-        <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '16px 20px 28px' }}>{children}</div>
+        <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '16px 20px 28px', overscrollBehavior: 'contain' }}>{children}</div>
       </div>
     </div>
   );
@@ -1297,9 +1297,9 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
           </h1>
           <p style={{ fontSize: 14, color: C.textTertiary, margin: '8px 0 0' }}>나에게 필요한 정보만 모아 볼 수 있어요.</p>
         </div>
-        {pinned && <div style={{ height: 68 }} />}
+        {pinned && <div style={{ height: 48 }} />}
         <div style={{ position: pinned ? 'absolute' : 'static', top: pinned ? headerHeight : 'auto', left: 0, right: 0, zIndex: 1 }}>
-          <div ref={rowRef} className="no-scrollbar" style={{ display: 'flex', gap: 8, overflowX: 'auto', padding: '20px 24px 0', scrollbarWidth: 'none', msOverflowStyle: 'none', background: C.white }}>
+          <div ref={rowRef} className="no-scrollbar" style={{ display: 'flex', gap: 8, overflowX: 'auto', padding: pinned ? '0 24px 12px' : '20px 24px 0', scrollbarWidth: 'none', msOverflowStyle: 'none', background: C.white }}>
           {FILTER_TABS.map((t) => (
             <button
               key={t.key}
@@ -1405,12 +1405,12 @@ function ExampleSheet({ categoryKey, onClose }) {
   const { Comp, subtitle } = meta;
   return (
     <>
-      <div onClick={onClose} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 10 }} />
-      <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, maxHeight: '76%', background: C.white, borderRadius: '24px 24px 0 0', zIndex: 11, display: 'flex', flexDirection: 'column' }}>
+      <div onClick={onClose} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 10, touchAction: 'none', overscrollBehavior: 'none' }} />
+      <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, maxHeight: '76%', background: C.white, borderRadius: '24px 24px 0 0', zIndex: 11, display: 'flex', flexDirection: 'column', overscrollBehavior: 'contain' }}>
         <button onClick={onClose} style={{ position: 'absolute', top: 20, right: 20, background: 'none', border: 'none', cursor: 'pointer', padding: 0, zIndex: 1 }}>
           <X size={22} color={C.textPrimary} />
         </button>
-        <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '20px 20px 32px', fontFamily: FONT }}>
+        <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '20px 20px 32px', fontFamily: FONT, overscrollBehavior: 'contain' }}>
           <Comp showCheck={false} subtitle={subtitle} showMore={false} />
         </div>
       </div>
