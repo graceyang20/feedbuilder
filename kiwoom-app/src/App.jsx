@@ -163,7 +163,7 @@ function BackButton({ onClick, bg = C.chipBg }) {
 
 function Frame({ children }) {
   return (
-    <div style={{ width: '100%', maxWidth: 440, height: '100dvh', background: C.white, overflow: 'hidden', display: 'flex', flexDirection: 'column', position: 'relative', lineHeight: 1.5, margin: '0 auto' }}>
+    <div style={{ width: '100%', maxWidth: 440, height: '100dvh', background: C.white, display: 'flex', flexDirection: 'column', position: 'relative', lineHeight: 1.5, margin: '0 auto' }}>
       <NoScrollbarStyle />
       {children}
     </div>
@@ -1055,54 +1055,7 @@ function HomeBottomTabBar() {
 }
 
 function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동님 맞춤 피드 미리보기', icon = 'reco' }) {
-  const [order, setOrder] = useState(CATEGORIES_FEED.map((c) => c.id));
-  const [dragId, setDragId] = useState(null);
-  const [dragY, setDragY] = useState(0);
-  const refs = useRef({});
-  const pressTimer = useRef(null);
-  const startY = useRef(0);
-
-  useEffect(() => {
-    const onMove = (e) => {
-      const y = e.touches ? e.touches[0].clientY : e.clientY;
-      if (pressTimer.current && Math.abs(y - startY.current) > 10) {
-        clearTimeout(pressTimer.current);
-        pressTimer.current = null;
-      }
-      if (!dragId) return;
-      e.preventDefault();
-      setDragY(y);
-      let newIdx = 0;
-      order.forEach((id) => {
-        if (id === dragId) return;
-        const r = refs.current[id]?.getBoundingClientRect();
-        if (r && y > r.top + r.height / 2) newIdx++;
-      });
-      const curIdx = order.indexOf(dragId);
-      if (newIdx !== curIdx) {
-        const next = [...order];
-        next.splice(curIdx, 1);
-        next.splice(newIdx, 0, dragId);
-        setOrder(next);
-      }
-    };
-    const onUp = () => {
-      if (pressTimer.current) { clearTimeout(pressTimer.current); pressTimer.current = null; }
-      setDragId(null);
-    };
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerup', onUp);
-    return () => {
-      window.removeEventListener('pointermove', onMove);
-      window.removeEventListener('pointerup', onUp);
-    };
-  }, [dragId, order]);
-
-  const onDown = (id, e) => {
-    const y = e.touches ? e.touches[0].clientY : e.clientY;
-    startY.current = y;
-    pressTimer.current = setTimeout(() => { setDragId(id); setDragY(y); }, 450);
-  };
+  const order = CATEGORIES_FEED.map((c) => c.id);
 
   return (
     <Frame>
@@ -1126,20 +1079,13 @@ function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동�
         <div style={{ height: 20 }} />
         {order.map((id) => {
           const cat = CATEGORIES_FEED.find((c) => c.id === id);
-          const dragging = dragId === id;
-          const rect = refs.current[id]?.getBoundingClientRect();
           const style = {
             padding: '16px', marginBottom: 16, borderRadius: 16, fontFamily: FONT,
             background: C.white,
-            boxShadow: dragging ? '0 8px 20px rgba(6,11,17,0.15)' : 'none',
-            transform: dragging && rect ? `translateY(${dragY - (rect.top + rect.height / 2)}px) scale(1.02)` : 'none',
-            position: dragging ? 'relative' : 'static',
-            zIndex: dragging ? 5 : 1,
-            touchAction: dragging ? 'none' : 'pan-y',
           };
           const Comp = cat.Comp;
           return (
-            <div key={id} ref={(el) => (refs.current[id] = el)} onPointerDown={(e) => onDown(id, e)} style={style}>
+            <div key={id} style={style}>
               <Comp showCheck={variant !== 'home'} />
             </div>
           );
