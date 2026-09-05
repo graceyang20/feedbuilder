@@ -163,7 +163,7 @@ function BackButton({ onClick, bg = C.chipBg }) {
 
 function Frame({ children }) {
   return (
-    <div style={{ width: '100%', height: '100dvh', background: C.white, overflow: 'hidden', display: 'flex', flexDirection: 'column', position: 'relative', lineHeight: 1.5 }}>
+    <div style={{ width: '100%', maxWidth: 440, height: '100dvh', background: C.white, overflow: 'hidden', display: 'flex', flexDirection: 'column', position: 'relative', lineHeight: 1.5, margin: '0 auto' }}>
       <NoScrollbarStyle />
       {children}
     </div>
