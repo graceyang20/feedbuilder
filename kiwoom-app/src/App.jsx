@@ -18,7 +18,7 @@ const FONT = "-apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Segoe U
 // 하단 32px 구간은 완전 불투명, 그 위로만 페이드
 const FOOTER_GRADIENT = 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.55) 45%, #FFFFFF calc(100% - 32px), #FFFFFF 100%)';
 const HEADER_GRADIENT = 'linear-gradient(180deg, #FFFFFF 0%, #FFFFFF calc(100% - 12px), rgba(255,255,255,0) 100%)';
-const HEADER_H = 188;
+const HEADER_H = 173;
 const HELP_ICON = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAOdEVYdFNvZnR3YXJlAEZpZ21hnrGWYwAABIlJREFUeAHNmt1uGkcUx/8zLJJNKwyFGIhiyfjClUIlyGUqNXXvUyl9grRPkOQJjN8geYK6T5C8QGr3xumdyUUq1ReGyFEB2wSMVHCLdydzFi+G3eVrd9bxTzJ4h8E6Z+Z8zDljBgWUy83Ywhf6IwaRh2CrACswhpgQInY1i1XARAUQJQH2FnpoN5OJV+ATBo+Q0JEvjSdSyA0IbMATrCSYeOFHmbkVsASXQj8dXWF/yB3bNvTQ1ryKzKVA/aSxqVpwO4yzYupWYmvm+bNMqlabq4wbL6X9FnAtsIow+A+z7AafNuH4+PQxDxn71yc8IeSC6fv/1E8fTZs5UYF6vbFpCGwHaTITiEnhXppmO4GxJkTCC4gibgCT/MJVAdo60h43CM7w8/Jy8jf7uEMBcliy+c9kNpNoCSN0z+7YDh+Q0WbnBgpPxPqRcJQRBcjuKQLAJ71eD+12G41GY/CjBlGo1k+KwyMDE+rHer0MH5Cgfx8cmMKTEnYSiQS+Xl83331Q6nRC2Ww23qKHwQ7wkL4JHxxIwffevDGVcBOeoM9ozrt3f8EHsYXIxVPrwdwBv6tPwtPKz8Nadg253F14ZLAL/R0I6RvwSLfTnVt44rB86Mc3Brug0QsX7IlMWvBCtVZzHV9byyK7mkXvoofyYQVHH44cc2r1mmd/YIx9T+8amY+A7vmc47aKK3dWkLubGzwXCnl0uh3H3LOzNjwjaxA62nM/5kPQCttJZ1KOscXFCFRDVaAmDFD555lv79+fad7Hj6dQDcnOOUceAUNRqiOd3c7Kyh34Q6xq/SLcmwNPg/IBRahy2RmhI5FFJL5Kwg+csbym4ujgBoXXvT/3XFeeICcnJXwS0xAAtPLjhA+Hwyjk80in01BAMApQfHcTnmJ+IV9QsfIDNBmBWkJA6fH56OiDY4xyA+UD1XAhWAuKcUtQ6/IUGgAVTq0+KObCltyWlqJKzWYAkwrIrsN7BIymhREEhoG3GuMoqU4DPz58iOuACZRYs9mM/fe/3oRCKIweyuRFlRlFHsq44QB2QRb5WfMUVDs+3fHeYXby+vfXI2F0KbqEBw++g0rkcbqUWk7cMwsaoYs/oAg699tzwFn7TGFh38fQZVselzXxwoL2nPIBFDDu6ED1gFpCu/RqKhCPx1uWRn5Jjqmw/B7chqG7BKvBNehKqNoFq3UyzDe5nNI8QBch1u8jpUy1elKUjVRf7RULMqWuNJtoNGoe4FQha/etTOpW0Xp21GKyO7cvrvUuYB5YJZ1KZIdHHL1Rw+A/qXJolciw2aJbG/u4QwFyDkPHM9ww9Avxi9uVk+sNTSaT3BaGmPmiLWjI7m/fTr5y+2xiP0KlU3vF7rR2pjZU6nTRxvCr6qJnGmTzhq4/y2SWtyfOwwxcXrPuBNUAcCJv8GUwmeWada6WVtAm1V9140UmM95kHN/BnNBugPeKDPwxFGEJfn6uPbcuLmb+LjxiKgJ9g3Ozs+0t8THs0knYi+BXf0IBljKCGdSrvPyXmyt/MZOQQIvJ+lsXxnvGeen879Arr0IP8wnXMR3cR52gZgAAAABJRU5ErkJggg==';
 
 const ICONS = {
@@ -94,7 +94,7 @@ const CATEGORIES = [
   { key: 'watchlist', label: '관심 종목', items: ['현재가', '등락', '거래량', '체결강도', '관련 속보'] },
   { key: 'alert', label: '알림', items: ['목표가 도달', '최저가/최고가', '거래 대기', '체결 내역'] },
   { key: 'calendar', label: '증권 캘린더', items: ['실적 발표', '배당', 'IPO', '경제 지표'] },
-  { key: 'community', label: '커뮤니티', items: ['커뮤니티 여론', '인기 토론방', '실시간 검색어'] },
+  { key: 'community', label: '커뮤니티', items: ['여론 분석', '인기 토론방', '실시간 검색어'] },
   { key: 'index', label: '지수', items: ['코스피', '코스닥', 'S&P500', '나스닥', '다우존스', '닛케이225', '항셍', '상하이종합', '유로스톡스50', '달러 환율', '엔 환율', 'WTI', '금', '구리', '천연가스', '비트코인'] },
   { key: 'ranking', label: '랭킹', items: ['상승', '하락', '거래량', '거래대금', '투자자별 수급', '섹터별 수익률'] },
   { key: 'report', label: '리포트', items: ['인기', '신규 목표가'] },
@@ -600,7 +600,7 @@ function PortfolioCard({ showCheck = true, subtitle, showTitle = true } = {}) {
       <div style={{ marginTop: 12 }}>
         <div style={{ fontSize: 12.5, color: C.textTertiary }}>총 평가액</div>
         <div style={{ fontSize: 28, fontWeight: 600, lineHeight: 1.4, color: C.textPrimary, marginTop: 0 }}>{formatWon(totalEval)}</div>
-        <div style={{ marginTop: -4 }}><Delta c={`${Math.abs(changePct).toFixed(2)}% (${formatWon(Math.abs(changeAmount))})`} up={up} size={13} /></div>
+        <div style={{ marginTop: -4 }}><Delta c={`${Math.abs(changePct).toFixed(2)}% (${formatWon(Math.abs(changeAmount))})`} up={up} size={14.625} /></div>
       </div>
       <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 12 }}>
         {rows.map((h, i) => {
@@ -648,7 +648,7 @@ function AlertCard({ showCheck = true, subtitle, showTitle = true } = {}) {
                 <div style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.4, color: C.dark, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{o.n}</div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary }}>{o.act} 대기</div>
+                <div style={{ fontSize: 15.75, fontWeight: 500, color: C.textPrimary }}>{o.act} 대기</div>
                 <div style={{ fontSize: 12, color: C.textTertiary, marginTop: 2 }}>{o.unit}</div>
               </div>
             </div>
@@ -667,7 +667,7 @@ function AlertCard({ showCheck = true, subtitle, showTitle = true } = {}) {
                 <div style={{ fontSize: 12.5, color: f.up ? UP : DOWN, fontWeight: 500 }}>{f.act}</div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary }}>{f.p}</div>
+                <div style={{ fontSize: 15.75, fontWeight: 500, color: C.textPrimary }}>{f.p}</div>
                 <div style={{ fontSize: 12, color: C.textTertiary, marginTop: 2 }}>{f.unit}</div>
               </div>
             </div>
@@ -697,7 +697,7 @@ function NewsCard({ showCheck = true, subtitle, showTitle = true } = {}) {
         {NEWS.map((n, i) => (
           <div key={i} style={{ display: 'flex', gap: 10 }}>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary, lineHeight: 1.5 }}>{n.h}</div>
+              <div style={{ fontSize: 15.75, fontWeight: 500, color: C.textPrimary, lineHeight: 1.5 }}>{n.h}</div>
               <div style={{ fontSize: 12, color: C.textTertiary, marginTop: 6 }}>{n.meta}</div>
             </div>
             <img src={n.img} alt="" style={{ width: 64, height: 64, borderRadius: 10, objectFit: 'cover', flexShrink: 0 }} />
@@ -739,7 +739,7 @@ function CommunityCard({ showCheck = true, subtitle, showTitle = true } = {}) {
         <div style={{ marginTop: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary }}>커뮤니티 여론</span>
+              <span style={{ fontSize: 15.75, fontWeight: 600, color: C.textPrimary }}>여론 분석</span>
               <span style={{ width: 16, height: 16, borderRadius: '50%', background: C.chipBg, color: C.textTertiary, fontSize: 8.75, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>?</span>
             </div>
             <span style={{ fontSize: 10.0625, color: C.textTertiary }}>124개의 종목 · 498개의 글 분석</span>
@@ -753,7 +753,7 @@ function CommunityCard({ showCheck = true, subtitle, showTitle = true } = {}) {
             ))}
           </div>
           <div style={{ borderTop: `1px solid ${C.borderLight}`, margin: '16px 0 0' }} />
-          <div style={{ fontSize: 14, fontWeight: 600, color: C.textPrimary, marginTop: 16 }}>인기글</div>
+          <div style={{ fontSize: 15.75, fontWeight: 600, color: C.textPrimary, marginTop: 16 }}>인기글</div>
           <div style={{ position: 'relative' }}>
           <div className="no-scrollbar" style={{ display: 'flex', gap: 8, marginTop: 12, overflowX: 'auto', scrollbarWidth: 'none' }}>
             {POSTS.map((p, i) => (
@@ -761,12 +761,12 @@ function CommunityCard({ showCheck = true, subtitle, showTitle = true } = {}) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Avatar name={p.n} code={p.t} size={16} />
                   <div style={{ display: 'flex', alignItems: 'center', gap: 4, flex: 1, minWidth: 0 }}>
-                    <span style={{ fontSize: 11.8125, fontWeight: 600, color: C.textPrimary, minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.n} 토론방</span>
-                    <Delta c={p.c} up={p.up} size={10.5} />
+                    <span style={{ fontSize: 13.2890625, fontWeight: 600, color: C.textPrimary, minWidth: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.n} 토론방</span>
+                    <Delta c={p.c} up={p.up} size={11.8125} />
                   </div>
                 </div>
                 <div style={{
-                  fontSize: 11.375, fontWeight: 400, color: '#727679', marginTop: 10, lineHeight: 1.6,
+                  fontSize: 12.796875, fontWeight: 400, color: '#727679', marginTop: 10, lineHeight: 1.6,
                   display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
                 }}>{p.body}</div>
               </div>
@@ -781,20 +781,20 @@ function CommunityCard({ showCheck = true, subtitle, showTitle = true } = {}) {
         {KEYWORDS.map((k, i) => (
           <div key={i}>
             <div onClick={() => setOpen(open === i ? -1 : i)} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 0', cursor: 'pointer' }}>
-              <span style={{ fontSize: 13, color: C.textTertiary, width: 12 }}>{i + 1}</span>
-              <span style={{ fontSize: 14, fontWeight: 500, color: C.textPrimary, flex: 1 }}>{k.n}</span>
-              <Delta c={String(k.c)} up={k.up} size={13} />
+              <span style={{ fontSize: 14.625, color: C.textTertiary, width: 12 }}>{i + 1}</span>
+              <span style={{ fontSize: 15.75, fontWeight: 500, color: C.textPrimary, flex: 1 }}>{k.n}</span>
+              <Delta c={String(k.c)} up={k.up} size={14.625} />
               <ArrowIcon up={open === i} />
             </div>
             {open === i && k.related && (
               <div style={{ background: '#F7F9F9', borderRadius: 10, padding: 12, marginBottom: 12 }}>
-                <div style={{ fontSize: 12, color: C.textTertiary, marginBottom: 8 }}>관련 종목</div>
+                <div style={{ fontSize: 13.5, color: C.textTertiary, marginBottom: 8 }}>관련 종목</div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {k.related.map((r, j) => (
                     <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <Avatar name={r.n} code={r.t} size={24} />
-                      <span style={{ fontSize: 13, fontWeight: 500, color: C.textPrimary, flex: 1 }}>{r.n}</span>
-                      <Delta c={r.c} up={r.up} size={12} />
+                      <span style={{ fontSize: 14.625, fontWeight: 500, color: C.textPrimary, flex: 1 }}>{r.n}</span>
+                      <Delta c={r.c} up={r.up} size={13.5} />
                     </div>
                   ))}
                 </div>
@@ -1316,7 +1316,14 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
       </div>
 
       <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, background: FOOTER_GRADIENT, padding: '48px 24px 28px', fontFamily: FONT }}>
-        <button onClick={onStartTemplate} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 600, color: C.textPrimary, cursor: 'pointer' }}>
+        <button
+          onClick={() => {
+            const allCards = [recoCard, ...SECTIONS.flatMap((s) => s.cards)];
+            const card = allCards.find((c) => c.id === selectedCard) || recoCard;
+            onStartTemplate(card);
+          }}
+          style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 600, color: C.textPrimary, cursor: 'pointer' }}
+        >
           이 템플릿으로 시작하기
         </button>
         <div onClick={onManual} style={{ textAlign: 'center', marginTop: 14, fontSize: 14, fontWeight: 500, color: C.textTertiary, cursor: 'pointer' }}>직접 고르기</div>
@@ -1387,10 +1394,12 @@ function ManualScreen({ onBack, onPreview }) {
           <div key={cat.key} style={{ marginTop: 24 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
               <span style={{ fontSize: 16, fontWeight: 600, color: C.textPrimary, fontFamily: FONT }}>{cat.label}</span>
-              <span
+              <img
+                src={HELP_ICON}
+                alt="설명 보기"
                 onClick={() => setExampleCat(cat.key)}
-                style={{ width: 16, height: 16, borderRadius: '50%', background: C.chipBg, color: C.textTertiary, fontSize: 10, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
-              >?</span>
+                style={{ width: 20, height: 20, cursor: 'pointer', flexShrink: 0 }}
+              />
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {cat.items.map((it) => {
@@ -1419,18 +1428,53 @@ const DENSITY_LEVELS = [
 ];
 
 function DensitySlider({ value, onChange }) {
+  const trackRef = useRef(null);
+  const draggingRef = useRef(false);
+
+  const updateFromClientX = (clientX) => {
+    const el = trackRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+    const idx = Math.min(DENSITY_LEVELS.length - 1, Math.floor(ratio * DENSITY_LEVELS.length));
+    const key = DENSITY_LEVELS[idx].key;
+    if (key !== value) onChange(key);
+  };
+
+  const onPointerDown = (e) => {
+    draggingRef.current = true;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    updateFromClientX(e.clientX);
+  };
+  const onPointerMove = (e) => {
+    if (!draggingRef.current) return;
+    updateFromClientX(e.clientX);
+  };
+  const endDrag = (e) => {
+    draggingRef.current = false;
+    if (e.currentTarget.hasPointerCapture?.(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
+  };
+
   return (
     <div style={{ padding: '0 20px' }}>
-      <div style={{ height: 44, borderRadius: 22, background: '#F7F9F9', padding: '0 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxSizing: 'border-box' }}>
+      <div
+        ref={trackRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        style={{ height: 44, borderRadius: 22, background: '#F7F9F9', padding: '0 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxSizing: 'border-box', touchAction: 'none', cursor: 'pointer' }}
+      >
         {DENSITY_LEVELS.map((lv) => {
           const selected = lv.key === value;
           return (
             <div
               key={lv.key}
-              onClick={() => onChange(lv.key)}
               style={{
                 width: selected ? 40 : 20, height: selected ? 40 : 20, borderRadius: '50%',
-                background: selected ? C.yellow : C.borderLight, cursor: 'pointer', flexShrink: 0,
+                background: selected ? C.yellow : C.borderLight, flexShrink: 0, pointerEvents: 'none',
                 boxShadow: selected ? '0 0 0 6px #fff, 0 2px 8px rgba(6,11,17,0.5)' : 'none',
                 marginLeft: lv.key === 'summary' && selected ? -12 : 0,
                 marginRight: lv.key === 'analysis' && selected ? -12 : 0,
@@ -1453,7 +1497,7 @@ function DensitySlider({ value, onChange }) {
 function DensityExampleCard({ level }) {
   const detailed = level !== 'summary';
   return (
-    <div style={{ background: C.white, borderRadius: 16, padding: 16, fontFamily: FONT }}>
+    <div style={{ background: C.white, borderRadius: 16, padding: '16px 0', fontFamily: FONT }}>
       <div style={{ fontSize: 20, fontWeight: 700, lineHeight: 1.4, color: C.dark }}>장마감 리뷰</div>
       <div style={{ marginTop: 18 }}>
         <Tag>오늘 시장</Tag>
@@ -1508,8 +1552,9 @@ function DensityScreen({ onBack, onSave }) {
             <DensitySlider value={level} onChange={setLevel} />
           </div>
         </div>
-        <div style={{ marginTop: 24, background: '#F3F4F5', padding: '20px 16px 32px' }}>
-          <div style={{ fontSize: 15, fontWeight: 600, color: C.textPrimary, fontFamily: FONT }}>{currentLabel} 예시</div>
+        <div style={{ marginTop: 24, padding: '20px 16px 32px' }}>
+          <div style={{ borderTop: `1px solid ${C.borderLight}`, marginBottom: 10 }} />
+          <div style={{ fontSize: 18.75, fontWeight: 600, color: C.textPrimary, fontFamily: FONT }}>{currentLabel} 예시</div>
           <div style={{ marginTop: 12 }}>
             <DensityExampleCard level={level} />
           </div>
@@ -1535,7 +1580,7 @@ export default function App() {
 
   return (
     <div style={{ background: '#FAFAFA' }}>
-      {screen === 'main' && <RecommendScreen onManual={() => setScreen('manual')} onPreview={openPreview} onStartTemplate={() => setScreen('density')} />}
+      {screen === 'main' && <RecommendScreen onManual={() => setScreen('manual')} onPreview={openPreview} onStartTemplate={openPreview} />}
       {screen === 'manual' && <ManualScreen onBack={() => setScreen('main')} onPreview={openManualPreview} />}
       {screen === 'preview' && (
         <PreviewScreen onBack={() => setScreen('main')} onStart={() => setScreen('density')} title={previewTitle} icon={previewIcon} />
