@@ -7,7 +7,7 @@ const C = {
   textPrimary: '#060B11',
   textSecondary: '#444B52',
   textTertiary: '#727679',
-  dark: '#2D3339',
+  dark: '#060B11',
   yellow: '#FFEB00',
   chipBg: '#F1F2F3',
   border: '#D6D8D9',
@@ -88,7 +88,7 @@ const FILTER_TABS = [
 
 const CATEGORIES = [
   { key: 'market', label: '시황 분석', items: ['장전 이슈 브리핑', '장마감 리뷰'] },
-  { key: 'news', label: '뉴스', items: ['종목 필터 (종목 검색창)'] },
+  { key: 'news', label: '뉴스', items: ['전체', '+종목 추가'] },
   { key: 'portfolio', label: '포트폴리오', items: ['일간 수익률', '차트', '보유 종목'] },
   { key: 'watchlist', label: '관심 종목', items: ['현재가', '등락', '거래량', '체결강도', '관련 속보'] },
   { key: 'alert', label: '알림', items: ['목표가 도달', '최저가/최고가', '거래 대기', '체결 내역'] },
@@ -348,7 +348,7 @@ function Avatar({ name, code, size = 40 }) {
 }
 function Delta({ c, up, size = 13 }) {
   return (
-    <span style={{ fontSize: size, fontWeight: 500, color: up ? UP : DOWN, display: 'inline-flex', alignItems: 'center', gap: 2, verticalAlign: '-1px' }}>
+    <span style={{ fontSize: size, fontWeight: 600, color: up ? UP : DOWN, display: 'inline-flex', alignItems: 'center', gap: 2, verticalAlign: '-1px' }}>
       <svg width="12.5" height="12.5" viewBox="0 0 20 20">
         {up
           ? <path d="M8.93926 6.54041C9.52505 5.95463 10.4748 5.95463 11.0606 6.54041L15.8583 11.3381C16.8032 12.2831 16.134 13.8988 14.7976 13.8988H5.20223C3.86587 13.8988 3.19662 12.2831 4.14157 11.3381L8.93926 6.54041Z" fill="#FF0019" />
@@ -364,7 +364,7 @@ function CardShell({ title, subtitle, children, showCheck = true, showTitle = tr
     <div>
       {showTitle && (
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span style={{ fontSize: 20, fontWeight: 600, color: C.textPrimary }}>{title}</span>
+        <span style={{ fontSize: 20, fontWeight: 700, lineHeight: 1.4, color: C.dark }}>{title}</span>
         {showCheck && (
           <div onClick={(e) => { e.stopPropagation(); setChecked(!checked); }} style={{ width: 22, height: 22, borderRadius: '50%', background: checked ? C.yellow : 'transparent', border: checked ? 'none' : `1.5px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxSizing: 'border-box' }}>
             {checked && <Check size={13} color={C.textPrimary} strokeWidth={3} />}
@@ -381,7 +381,7 @@ function Tag({ children }) {
   return <span style={{ display: 'inline-block', background: C.yellow, color: C.textPrimary, fontSize: 12, fontWeight: 500, borderRadius: 100, padding: '7px 14px' }}>{children}</span>;
 }
 function Note({ children }) {
-  return <div style={{ background: '#F7F9F9', borderRadius: 10, padding: 12, marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{children}</div>;
+  return <div style={{ background: '#F7F9F9', borderRadius: 10, padding: 12, marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.6 }}>{children}</div>;
 }
 function ArrowIcon({ up }) {
   return (
@@ -401,9 +401,10 @@ function Underline({ items, active, onChange, disabled = [] }) {
               key={t}
               onClick={() => !isDisabled && onChange(t)}
               style={{
-                background: 'none', border: 'none', cursor: 'pointer', padding: '0 0 8px', fontFamily: FONT, fontSize: 14,
-                fontWeight: active === t ? 700 : 500,
-                color: active === t ? C.textPrimary : C.textTertiary,
+                background: 'none', border: 'none', cursor: 'pointer', padding: '0 0 8px', fontFamily: FONT, fontSize: 16,
+                fontWeight: 700,
+                lineHeight: 1.4,
+                color: C.dark,
                 borderBottom: active === t ? `2px solid ${C.textPrimary}` : 'none',
               }}
             >{t}</button>
@@ -514,8 +515,8 @@ function CloseReviewCard({ showCheck = true, subtitle, showMore = true } = {}) {
       <div style={{ marginTop: 12 }}>
         <Tag>오늘 시장</Tag>
         <div style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
-          <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52' }}>코스피 6,689 <Delta c="1.64%" up size={13} /> 상승 마감</div>
-          <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>
+          <div style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.4, color: C.dark }}>코스피 6,689 <Delta c="1.64%" up size={13} /> 상승 마감</div>
+          <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.6 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>
         </div>
       </div>
       {sections.map((s, i) => (
@@ -523,8 +524,8 @@ function CloseReviewCard({ showCheck = true, subtitle, showMore = true } = {}) {
           <Tag>{s.tag}</Tag>
           {s.items && s.items.map((item, idx) => (
             <div key={idx} style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
-              {item.title && <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52' }}>{item.title}</div>}
-              {item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{item.body}</div>}
+              {item.title && <div style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.4, color: C.dark }}>{item.title}</div>}
+              {item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.6 }}>{item.body}</div>}
             </div>
           ))}
           {s.stocks && s.stocks.map((st) => (
@@ -532,11 +533,11 @@ function CloseReviewCard({ showCheck = true, subtitle, showMore = true } = {}) {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Avatar name={st.n} code={st.t} size={32} />
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{st.n}</div>
-                  <div style={{ fontSize: 12, color: C.textTertiary }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
+                  <div style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.4, color: C.dark, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{st.n}</div>
+                  <div style={{ fontSize: 14, fontWeight: 400, lineHeight: 1.4, color: '#444B52' }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
                 </div>
               </div>
-              <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{st.body}</div>
+              <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.6 }}>{st.body}</div>
             </div>
           ))}
         </div>
@@ -596,7 +597,7 @@ function PortfolioCard({ showCheck = true, subtitle, showTitle = true } = {}) {
     <CardShell title="포트폴리오" showCheck={showCheck} subtitle={subtitle} showTitle={showTitle}>
       <div style={{ marginTop: 12 }}>
         <div style={{ fontSize: 12.5, color: C.textTertiary }}>총 평가액</div>
-        <div style={{ fontSize: 22, fontWeight: 500, color: C.textPrimary, marginTop: 0 }}>{formatWon(totalEval)}</div>
+        <div style={{ fontSize: 28, fontWeight: 600, lineHeight: 1.4, color: C.textPrimary, marginTop: 0 }}>{formatWon(totalEval)}</div>
         <div style={{ marginTop: -4 }}><Delta c={`${Math.abs(changePct).toFixed(2)}% (${formatWon(Math.abs(changeAmount))})`} up={up} size={13} /></div>
       </div>
       <div style={{ marginTop: 14, display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -759,7 +760,7 @@ function CommunityCard({ showCheck = true, subtitle, showTitle = true } = {}) {
                   </div>
                 </div>
                 <div style={{
-                  fontSize: 13, color: C.textPrimary, marginTop: 10, lineHeight: 1.5,
+                  fontSize: 13, color: C.textPrimary, marginTop: 10, lineHeight: 1.6,
                   display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
                 }}>{p.body}</div>
               </div>
@@ -958,7 +959,7 @@ const POPULAR_REPORTS = [
   { title: '조선업 리포트: 수주 잔고 확대와 실적 개선 전망', src: '미래에셋증권 김철수 · 08.31', icon: 'shipbuilding' },
 ];
 function ReportCard({ showCheck = true, subtitle, showTitle = true } = {}) {
-  const [tab, setTab] = useState('신규 목표가');
+  const [tab, setTab] = useState('인기');
   return (
     <CardShell title="리포트" showCheck={showCheck} subtitle={subtitle} showTitle={showTitle}>
       <PillTabs items={['인기', '신규 목표가']} active={tab} onChange={setTab} />
@@ -968,7 +969,7 @@ function ReportCard({ showCheck = true, subtitle, showTitle = true } = {}) {
           <div key={i} style={{ flexShrink: 0, width: 240, background: '#F7F9F9', borderRadius: 10, padding: 16 }}>
             <img src={REPORT_ICONS[r.icon]} alt="" style={{ width: 40, height: 40, borderRadius: 10, display: 'block' }} />
             <div style={{
-              fontSize: 14, fontWeight: 600, color: C.textPrimary, marginTop: 20, lineHeight: 1.5,
+              fontSize: 14, fontWeight: 600, color: C.textPrimary, marginTop: 20, lineHeight: 1.6,
               display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
             }}>{r.title}</div>
             <div style={{ fontSize: 11, color: C.textTertiary, marginTop: 20 }}>{r.src}</div>
@@ -978,7 +979,7 @@ function ReportCard({ showCheck = true, subtitle, showTitle = true } = {}) {
           <div key={i} style={{ flexShrink: 0, width: 240, background: '#F7F9F9', borderRadius: 10, padding: 16 }}>
             <Avatar name={r.n} code={r.t} size={32} />
             <div style={{ fontSize: 13.5, fontWeight: 600, color: C.textPrimary, marginTop: 8, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{r.n}</div>
-            <div style={{ fontSize: 15, fontWeight: 500, color: C.textPrimary, marginTop: 2 }}>{r.target}</div>
+            <div style={{ fontSize: 24, fontWeight: 600, lineHeight: 1.4, color: C.dark, marginTop: 2 }}>{r.target}</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
               <Delta c={r.c} up={r.up} size={12} />
               <span style={{ background: '#FBE9EC', color: UP, fontSize: 11, fontWeight: 500, borderRadius: 5, padding: '2px 6px' }}>{r.tag}</span>
@@ -1072,8 +1073,8 @@ function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동�
         {variant !== 'home' && (
           <div style={{ padding: '0 4px', fontFamily: FONT }}>
             <Illustration icon={icon} />
-            <h1 style={{ fontSize: 22, fontWeight: 600, lineHeight: 1.5, margin: '4px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>{title}</h1>
-            <p style={{ fontSize: 14, color: C.textTertiary, margin: '8px 0 0' }}>드래그 해서 순서를 바꿀 수 있어요</p>
+            <h1 style={{ fontSize: 24, fontWeight: 700, lineHeight: 1.4, margin: '4px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>{title}</h1>
+            <p style={{ fontSize: 16, fontWeight: 400, lineHeight: 1.4, color: C.textTertiary, margin: '8px 0 0' }}>드래그 해서 순서를 바꿀 수 있어요</p>
           </div>
         )}
         <div style={{ height: 20 }} />
@@ -1111,7 +1112,7 @@ function BottomSheet({ title, subtitle, onClose, children }) {
       <div onClick={onClose} style={{ position: 'absolute', inset: 0, background: 'rgba(6,11,17,0.5)', touchAction: 'none', overscrollBehavior: 'none' }} />
       <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, maxHeight: '82%', background: C.white, borderRadius: '24px 24px 0 0', display: 'flex', flexDirection: 'column', fontFamily: FONT, boxShadow: '0 -8px 24px rgba(6,11,17,0.12)', overscrollBehavior: 'contain' }}>
         <div style={{ padding: '24px 20px 4px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-          <span style={{ fontSize: 20, fontWeight: 600, color: C.textPrimary }}>{title}</span>
+          <span style={{ fontSize: 20, fontWeight: 700, lineHeight: 1.4, color: C.dark }}>{title}</span>
           <X size={22} color={C.textPrimary} strokeWidth={2} onClick={onClose} style={{ cursor: 'pointer', flexShrink: 0 }} />
         </div>
         <div style={{ padding: '8px 20px 0', fontSize: 14, color: C.textTertiary, flexShrink: 0 }}>{subtitle}</div>
@@ -1140,16 +1141,16 @@ function CloseReviewInfoBody() {
     <div>
       <Tag>오늘 시장</Tag>
       <div style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
-        <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52' }}>코스피 6,689 <Delta c="1.64%" up size={13} /> 상승 마감</div>
-        <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>
+        <div style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.4, color: C.dark }}>코스피 6,689 <Delta c="1.64%" up size={13} /> 상승 마감</div>
+        <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.6 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>
       </div>
       {CLOSE_SECTIONS.map((s, i) => (
         <div key={i} style={{ marginTop: 12 }}>
           <Tag>{s.tag}</Tag>
           {s.items && s.items.map((item, idx) => (
             <div key={idx} style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
-              {item.title && <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52' }}>{item.title}</div>}
-              {item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{item.body}</div>}
+              {item.title && <div style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.4, color: C.dark }}>{item.title}</div>}
+              {item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.6 }}>{item.body}</div>}
             </div>
           ))}
           {s.stocks && s.stocks.map((st) => (
@@ -1157,11 +1158,11 @@ function CloseReviewInfoBody() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Avatar name={st.n} code={st.t} size={32} />
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{st.n}</div>
-                  <div style={{ fontSize: 12, color: C.textTertiary }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
+                  <div style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.4, color: C.dark, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{st.n}</div>
+                  <div style={{ fontSize: 14, fontWeight: 400, lineHeight: 1.4, color: '#444B52' }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
                 </div>
               </div>
-              <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{st.body}</div>
+              <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.6 }}>{st.body}</div>
             </div>
           ))}
         </div>
@@ -1224,7 +1225,7 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
           </div>
         </div>
         <div style={{ padding: '20px 24px 0', fontFamily: FONT }}>
-          <h1 style={{ fontSize: 24, fontWeight: 600, lineHeight: 1.5, margin: 0, color: C.textPrimary, letterSpacing: '-0.3px' }}>
+          <h1 style={{ fontSize: 24, fontWeight: 600, lineHeight: 1.6, margin: 0, color: C.textPrimary, letterSpacing: '-0.3px' }}>
             나만을 위한<br />투자 피드 만들기
           </h1>
           <p style={{ fontSize: 14, color: C.textTertiary, margin: '8px 0 0' }}>나에게 필요한 정보만 모아 볼 수 있어요.</p>
@@ -1353,6 +1354,7 @@ function ExampleSheet({ categoryKey, onClose }) {
 function ManualScreen({ onBack, onPreview }) {
   const initial = {};
   ALL_CATEGORIES_FOR_MANUAL.forEach((cat) => cat.items.forEach((it) => (initial[`${cat.key}:${it}`] = false)));
+  initial['news:전체'] = true;
   const [state, setState] = useState(initial);
 
   const toggle = (k) => setState((prev) => ({ ...prev, [k]: !prev[k] }));
@@ -1367,7 +1369,7 @@ function ManualScreen({ onBack, onPreview }) {
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 2, background: HEADER_GRADIENT, paddingBottom: 20 }}>
         <div style={{ padding: '20px 24px 0', fontFamily: FONT }}>
           <BackButton onClick={onBack} bg={C.white} />
-          <h1 style={{ fontSize: 24, fontWeight: 600, lineHeight: 1.5, margin: '16px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>
+          <h1 style={{ fontSize: 24, fontWeight: 600, lineHeight: 1.6, margin: '16px 0 0', color: C.textPrimary, letterSpacing: '-0.3px' }}>
             보고 싶은 정보를<br />선택해주세요
           </h1>
         </div>
@@ -1445,12 +1447,12 @@ function DensityExampleCard({ level }) {
   const detailed = level !== 'summary';
   return (
     <div style={{ background: C.white, borderRadius: 16, padding: 16, fontFamily: FONT }}>
-      <div style={{ fontSize: 20, fontWeight: 600, color: C.textPrimary }}>장마감 리뷰</div>
+      <div style={{ fontSize: 20, fontWeight: 700, lineHeight: 1.4, color: C.dark }}>장마감 리뷰</div>
       <div style={{ marginTop: 12 }}>
         <Tag>오늘 시장</Tag>
         <div style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
-          <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52' }}>코스피 6,687 <Delta c="1.64%" up size={13} /> 상승 마감</div>
-          {detailed && <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>}
+          <div style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.4, color: C.dark }}>코스피 6,687 <Delta c="1.64%" up size={13} /> 상승 마감</div>
+          {detailed && <div style={{ marginTop: 8, fontSize: 13, color: C.textTertiary, lineHeight: 1.6 }}>반도체 대형주 중심 매수세가 유입되며 코스피가 상승 마감했어요.</div>}
         </div>
       </div>
       {CLOSE_SECTIONS.map((s, i) => (
@@ -1458,8 +1460,8 @@ function DensityExampleCard({ level }) {
           <Tag>{s.tag}</Tag>
           {s.items && s.items.map((item, idx) => (
             <div key={idx} style={{ marginTop: 8, background: '#F7F9F9', borderRadius: 10, padding: 12 }}>
-              {item.title && <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52' }}>{item.title}</div>}
-              {detailed && item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{item.body}</div>}
+              {item.title && <div style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.4, color: C.dark }}>{item.title}</div>}
+              {detailed && item.body && <div style={{ marginTop: item.title ? 8 : 0, fontSize: 13, color: C.textTertiary, lineHeight: 1.6 }}>{item.body}</div>}
             </div>
           ))}
           {s.stocks && s.stocks.map((st) => (
@@ -1467,11 +1469,11 @@ function DensityExampleCard({ level }) {
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <Avatar name={st.n} code={st.t} size={32} />
                 <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 14, fontWeight: 500, color: '#444B52', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{st.n}</div>
-                  <div style={{ fontSize: 12, color: C.textTertiary }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
+                  <div style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.4, color: C.dark, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{st.n}</div>
+                  <div style={{ fontSize: 14, fontWeight: 400, lineHeight: 1.4, color: '#444B52' }}>최대 <Delta c={st.c} up={st.up} size={12} /> {st.tag}</div>
                 </div>
               </div>
-              {detailed && <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.5 }}>{st.body}</div>}
+              {detailed && <div style={{ marginTop: 6, fontSize: 13, color: C.textTertiary, lineHeight: 1.6 }}>{st.body}</div>}
             </div>
           ))}
         </div>
