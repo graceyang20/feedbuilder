@@ -1252,22 +1252,9 @@ function ChipInfoSheet({ chipKey, onClose }) {
 function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
   const [activeTab, setActiveTab] = useState('reco');
   const [selectedCard, setSelectedCard] = useState('reco');
-  const [pinned, setPinned] = useState(false);
   const [infoChip, setInfoChip] = useState(null);
   const refs = useRef({});
-  const rowRef = useRef(null);
-  const headerRef = useRef(null);
-  const naturalTop = useRef(null);
-  const [headerHeight, setHeaderHeight] = useState(64);
-
-  useEffect(() => { naturalTop.current = rowRef.current?.offsetTop; }, []);
-  useEffect(() => {
-    if (headerRef.current) setHeaderHeight(headerRef.current.offsetHeight);
-  }, []);
-  const onScroll = (e) => {
-    if (naturalTop.current == null) return;
-    setPinned(e.target.scrollTop >= naturalTop.current - 100);
-  };
+  const RECO_HEADER_H = 48; // fixed CSS height of the sticky back-button header below
 
   const scrollTo = (key) => {
     setActiveTab(key);
@@ -1284,22 +1271,21 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
 
   return (
     <Frame>
-      <div ref={headerRef} style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 2, background: C.white, padding: '16px 24px 4px' }}>
-        <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', color: C.textPrimary, marginTop: 20 }}>
-          <BackIcon />
+      <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 148 }}>
+        <div style={{ position: 'sticky', top: 0, zIndex: 2, background: C.white, padding: '16px 24px 4px' }}>
+          <div style={{ width: 24, height: 24, display: 'flex', alignItems: 'center', color: C.textPrimary, marginTop: 4 }}>
+            <BackIcon />
+          </div>
         </div>
-      </div>
-
-      <div onScroll={onScroll} style={{ flex: 1, overflowY: 'auto', paddingTop: headerHeight + 36, paddingBottom: 148 }}>
         <div style={{ padding: '20px 24px 0', fontFamily: FONT }}>
           <h1 style={{ fontSize: 24, fontWeight: 600, lineHeight: 1.5, margin: 0, color: C.textPrimary, letterSpacing: '-0.3px' }}>
             나만을 위한<br />투자 피드 만들기
           </h1>
           <p style={{ fontSize: 14, color: C.textTertiary, margin: '8px 0 0' }}>나에게 필요한 정보만 모아 볼 수 있어요.</p>
         </div>
-        {pinned && <div style={{ height: 48 }} />}
-        <div style={{ position: pinned ? 'absolute' : 'static', top: pinned ? headerHeight : 'auto', left: 0, right: 0, zIndex: 1 }}>
-          <div ref={rowRef} className="no-scrollbar" style={{ display: 'flex', gap: 8, overflowX: 'auto', padding: pinned ? '0 24px 12px' : '20px 24px 0', scrollbarWidth: 'none', msOverflowStyle: 'none', background: C.white }}>
+        <div style={{ height: 20 }} />
+        <div style={{ position: 'sticky', top: RECO_HEADER_H, zIndex: 1, left: 0, right: 0 }}>
+          <div ref={(el) => (refs.current.rowEl = el)} className="no-scrollbar" style={{ display: 'flex', gap: 8, overflowX: 'auto', padding: '0 24px 12px', scrollbarWidth: 'none', msOverflowStyle: 'none', background: C.white }}>
           {FILTER_TABS.map((t) => (
             <button
               key={t.key}
