@@ -97,9 +97,12 @@ export default async function handler(req, res) {
     const n = Math.min(10, Math.max(1, Number(req.query.n) || 3));
     const withThumb = req.query.thumb === '1';
 
-    const url = `https://openapi.naver.com/v1/search/news.json?query=${encodeURIComponent(query)}&display=${Math.min(30, n * 4)}&sort=date`;
+    const url = `https://naverapihub.apigw.ntruss.com/search/v1/news?query=${encodeURIComponent(query)}&display=${Math.min(30, n * 4)}&sort=date&format=json`;   
     const response = await fetchWithTimeout(url, {
-      headers: { 'X-Naver-Client-Id': clientId, 'X-Naver-Client-Secret': clientSecret },
+      headers: {
+        'X-NCP-APIGW-API-KEY-ID': clientId,
+        'X-NCP-APIGW-API-KEY': clientSecret,
+      },
     }, 5000);
     const body = await response.json().catch(() => ({}));
     if (!response.ok) {
