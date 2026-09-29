@@ -52,7 +52,7 @@ function titleKey(t) {
   return t.replace(/[^0-9A-Za-z가-힣]/g, '').slice(0, 18);
 }
 
-async function fetchWithTimeout(url, options = {}, ms = 2500) {
+async function fetchWithTimeout(url, options = {}, ms = 1000) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), ms);
   try {
