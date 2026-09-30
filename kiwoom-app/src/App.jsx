@@ -1293,13 +1293,13 @@ function NewsCard({ showCheck = true, subtitle, showTitle = true, density = 'ana
         )))}
         {(status === 'error' || status === 'empty') && <NewsNotice status={status} style={{ padding: '12px 0' }} />}
         {summary && shown.map((n, i) => (
-          <div key={i} onClick={() => openNews(n.url)} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: n.url ? 'pointer' : 'default' }}>
+          <div key={i} onClick={() => openNews(n.url)} style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: n.url ? 'pointer' : 'default', ...(i ? { borderTop: `1px solid ${C.borderLight}`, paddingTop: 12 } : {}) }}>
             <span style={{ flex: 1, minWidth: 0, fontSize: 15, fontWeight: 500, color: C.textPrimary, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{n.title}</span>
             <span style={{ flexShrink: 0, fontSize: 12, color: C.textTertiary }}>{newsTime(n)}</span>
           </div>
         ))}
         {!summary && shown.map((n, i) => (
-          <div key={i} onClick={() => openNews(n.url)} style={{ cursor: n.url ? 'pointer' : 'default' }}>
+          <div key={i} onClick={() => openNews(n.url)} style={{ cursor: n.url ? 'pointer' : 'default', ...(i ? { borderTop: `1px solid ${C.borderLight}`, paddingTop: 14 } : {}) }}>
             <div style={{ display: 'flex', gap: 10 }}>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 15.75, fontWeight: 500, color: C.textPrimary, lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{n.title}</div>
@@ -1438,7 +1438,7 @@ function CommunityCard({ showCheck = true, subtitle, showTitle = true } = {}) {
   );
 }
 
-const RANK_TABS = ['상승', '하락', '거래대금', '인기'];
+const RANK_TABS = ['인기', '상승', '하락', '거래대금'];
 const RANK_API_TYPE = { 상승: 'up', 하락: 'down', 거래대금: 'amount', 인기: 'popular' };
 const RANK = [
   { n: '삼성전자', t: '005930', c: '1.40%', up: false, p: '247,000원' },
@@ -1448,7 +1448,7 @@ const RANK = [
   { n: '두산에너빌리티', t: '034020', c: '2.71%', up: true, p: '64,700원' },
 ];
 function RankingCard({ showCheck = true, subtitle, showTitle = true } = {}) {
-  const [tab, setTab] = useState('상승');
+  const [tab, setTab] = useState('인기');
   const [liveRows, setLiveRows] = useState({}); // { '상승': [...], '하락': [...] }
   useEffect(() => {
     const type = RANK_API_TYPE[tab];
@@ -1491,6 +1491,30 @@ function RankingCard({ showCheck = true, subtitle, showTitle = true } = {}) {
   );
 }
 
+// 기사 제목에서 칩에 쓸 대표 키워드 뽑기 (예: 'SK하이닉스, HBM 추가 수주 기대에 사상 최고가' → 'HBM 추가 수주')
+// 머리말([속보] 등)과 종목명을 빼고, 구분 기호 앞 첫 구절에서 앞쪽 단어 2~3개만 남긴다.
+const KEYWORD_PARTICLES = /(에서|으로|에게|까지|부터|에|의|로|과|와|을|를|이|가|은|는|도|만)$/;
+function newsKeyword(title, stockName) {
+  // 따옴표로 강조한 짧은 구절이 있으면 그게 곧 대표 키워드
+  const quoted = String(title || '').match(/[“"‘']([^“”"‘’']{2,12})[”"’']/);
+  if (quoted && quoted[1].trim() !== stockName) return quoted[1].trim();
+  let t = String(title || '')
+    .replace(/\[[^\]]*\]|【[^】]*】|\([^)]*\)/g, ' ')
+    .replace(/[“”"'‘’]/g, ' ');
+  if (stockName) t = t.split(stockName).join(' ');
+  const seg = t.split(/…|\.\.\.|·|,|\||:|\s[-–—]\s/).map((x) => x.trim()).find((x) => x.replace(/\s/g, '').length >= 2);
+  if (!seg) return '';
+  const words = seg.split(/\s+/).filter(Boolean);
+  const picked = [];
+  let len = 0;
+  for (const w of words) {
+    if (picked.length >= 3 || len >= 7) break;
+    picked.push(w);
+    len += w.length;
+  }
+  if (picked.length > 1) picked[picked.length - 1] = picked[picked.length - 1].replace(KEYWORD_PARTICLES, '');
+  return picked.filter(Boolean).join(' ').trim();
+}
 // 관심 종목 펼침 영역의 '관련 속보' 타임라인 - 해당 종목 최신 뉴스 3건
 function WatchlistNews({ name }) {
   const fallback = MOCK_NEWS_FEED.map((m) => ({ timeText: m.t, source: m.tag, title: m.h }));
@@ -1510,7 +1534,11 @@ function WatchlistNews({ name }) {
           </div>
           <div style={{ paddingBottom: 8, minWidth: 0 }}>
             <div style={{ fontSize: 11.5, color: C.textTertiary }}>{newsTime(n)}</div>
-            {n.source && <span style={{ display: 'inline-block', marginTop: 7, background: '#E5E7E9', color: C.textSecondary, fontSize: 11, borderRadius: 5, padding: '2px 6px' }}>{n.source}</span>}
+            {(() => {
+              // 목업은 지정된 태그 그대로, 실제 기사는 제목에서 뽑은 대표 키워드
+              const tag = n.timeText != null ? n.source : newsKeyword(n.title, name);
+              return tag ? <span style={{ display: 'inline-block', marginTop: 7, background: '#E5E7E9', color: C.textSecondary, fontSize: 11, borderRadius: 5, padding: '2px 6px' }}>{tag}</span> : null;
+            })()}
             {n.title && <div style={{ fontSize: 14.0625, color: C.textPrimary, marginTop: 8, lineHeight: 1.5 }}>{n.title}</div>}
           </div>
         </div>
