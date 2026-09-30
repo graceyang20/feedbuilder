@@ -1035,9 +1035,9 @@ function CloseReviewBody({ level = 'briefing', collapsed = false }) {
       </div>
       {!collapsed && (
         <>
-          {!analysis && <ReviewDivider style={{ marginTop: 24 }} />}
+          <ReviewDivider style={{ marginTop: 24 }} />
           <TextSection section={flows} analysis={analysis} />
-          {!analysis && <ReviewDivider style={{ marginTop: 24 }} />}
+          <ReviewDivider style={{ marginTop: 24 }} />
           <div style={{ marginTop: 24 }}>
             <ReviewTag>{stocks.tag}</ReviewTag>
             {stocks.items.map((st, i) => (
@@ -1048,7 +1048,7 @@ function CloseReviewBody({ level = 'briefing', collapsed = false }) {
               </div>
             ))}
           </div>
-          {!analysis && <ReviewDivider style={{ marginTop: 24 }} />}
+          <ReviewDivider style={{ marginTop: 24 }} />
           <TextSection section={outlook} />
         </>
       )}
@@ -1071,7 +1071,9 @@ function ReviewToggle({ open, onToggle }) {
   );
 }
 
-function CloseReviewCard({ showCheck = true, subtitle, showMore = true, level = 'analysis' } = {}) {
+// level: 직접 지정 (밀도 설정 화면 예시) / density: 홈에서 저장한 밀도 / 둘 다 없으면 분석
+function CloseReviewCard({ showCheck = true, subtitle, showMore = true, level: levelProp, density } = {}) {
+  const level = levelProp || density || 'analysis';
   const [open, setOpen] = useState(true);
   const canToggle = showMore && level !== 'summary';
   // 접힌 상태: 제목 + 오른쪽 아래 화살표만 남은 한 줄 카드. 제목 줄을 누르면 다시 펼쳐진다.
