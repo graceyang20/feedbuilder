@@ -1,4 +1,9 @@
-// GET /api/kiwoom/ranking?type=up|down
+// GET /api/kiwoom/ranking?type=up|down|popular|amount
+//
+// type=amount: Kiwoom TR ka10032 (거래대금상위요청) = 화면의 "거래대금" 탭.
+//
+// type=popular: Kiwoom TR ka00198 (실시간종목조회순위, HTS 0198과 동일)
+// 의 당일 누적(qry_tp "4") 조회순위 = 화면의 "인기" 탭.
 //
 // Wraps Kiwoom TR ka10027 (전일대비등락률상위요청) for the domestic
 // market's top gainers (sort_tp: "1" 상승률) or top losers
@@ -24,11 +29,94 @@ function formatPct(rawPctStr) {
   return `${Math.abs(n).toFixed(2)}%`;
 }
 
+const UP_SIGNS = ['1', '2']; // 1: 상한, 2: 상승 (3 보합, 4 하한, 5 하락)
+
+async function fetchPopular(token, baseUrl) {
+  const response = await fetch(`${baseUrl}/api/dostk/stkinfo`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      authorization: `Bearer ${token.token}`,
+      'api-id': 'ka00198',
+      'cont-yn': 'N',
+      'next-key': '',
+    },
+    body: JSON.stringify({ qry_tp: '4' }), // 1:1분 2:10분 3:1시간 4:당일누적 5:30초
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok || (body.return_code !== undefined && body.return_code !== 0)) {
+    throw new Error(`Kiwoom ka00198 failed (HTTP ${response.status}): ${body.return_msg || response.statusText}`);
+  }
+  const list = body.item_inq_rank;
+  if (!Array.isArray(list)) {
+    throw new Error(`Kiwoom ka00198 response missing expected list: ${JSON.stringify(body)}`);
+  }
+  return list
+    .slice()
+    .sort((a, b) => Number(a.bigd_rank) - Number(b.bigd_rank))
+    .slice(0, 5)
+    .map((item) => ({
+      code: String(item.stk_cd || '').replace(/_.*$/, ''),
+      name: item.stk_nm,
+      price: formatPrice(item.past_curr_prc),
+      changePct: formatPct(item.base_comp_chgr),
+      up: UP_SIGNS.includes(String(item.base_comp_sign)),
+      thumbnailUrl: getThumbnailUrl(item.stk_cd),
+    }));
+}
+
+async function fetchAmount(token, baseUrl) {
+  const response = await fetch(`${baseUrl}/api/dostk/rkinfo`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+      authorization: `Bearer ${token.token}`,
+      'api-id': 'ka10032',
+      'cont-yn': 'N',
+      'next-key': '',
+    },
+    body: JSON.stringify({ mrkt_tp: '000', mang_stk_incls: '0', stex_tp: '3' }), // 전체시장, 관리종목 미포함, 통합
+  });
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok || (body.return_code !== undefined && body.return_code !== 0)) {
+    throw new Error(`Kiwoom ka10032 failed (HTTP ${response.status}): ${body.return_msg || response.statusText}`);
+  }
+  const list = body.trde_prica_upper;
+  if (!Array.isArray(list)) {
+    throw new Error(`Kiwoom ka10032 response missing expected list: ${JSON.stringify(body)}`);
+  }
+  return list
+    .slice()
+    .sort((a, b) => Number(a.now_rank) - Number(b.now_rank))
+    .slice(0, 5)
+    .map((item) => ({
+      code: String(item.stk_cd || '').replace(/_.*$/, ''),
+      name: item.stk_nm,
+      price: formatPrice(item.cur_prc),
+      changePct: formatPct(item.flu_rt),
+      up: UP_SIGNS.includes(String(item.pred_pre_sig)),
+      thumbnailUrl: getThumbnailUrl(item.stk_cd),
+    }));
+}
+
 export default async function handler(req, res) {
   try {
-    const type = req.query.type === 'down' ? 'down' : 'up';
     const token = await getValidToken();
     const baseUrl = process.env.KIWOOM_BASE_URL || 'https://mockapi.kiwoom.com';
+
+    if (req.query.type === 'amount') {
+      const rows = await fetchAmount(token, baseUrl);
+      res.status(200).json({ type: 'amount', rows, source: 'kiwoom:ka10032' });
+      return;
+    }
+
+    if (req.query.type === 'popular') {
+      const rows = await fetchPopular(token, baseUrl);
+      res.status(200).json({ type: 'popular', rows, source: 'kiwoom:ka00198' });
+      return;
+    }
+
+    const type = req.query.type === 'down' ? 'down' : 'up';
 
     const response = await fetch(`${baseUrl}/api/dostk/rkinfo`, {
       method: 'POST',

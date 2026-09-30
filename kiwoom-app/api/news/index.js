@@ -10,7 +10,7 @@
 //           (네이버 뉴스 API는 이미지를 주지 않음). 원문 사이트가 느리거나
 //           막혀 있으면 그 기사만 썸네일 없이 내려간다.
 //
-// 응답: { query, items: [{ title, url, source, domain, logo, publishedAt, thumbnail }] }
+// 응답: { query, items: [{ title, description, url, source, domain, logo, publishedAt, thumbnail }] }
 // 같은 검색어는 Vercel 엣지에서 5분간 캐시되어 네이버 호출량을 아낀다.
 
 // 원문 링크 도메인 → 언론사 이름. 목록에 없으면 도메인을 그대로 보여준다.
@@ -123,6 +123,7 @@ export default async function handler(req, res) {
       const published = new Date(item.pubDate);
       picked.push({
         title,
+        description: cleanText(item.description),
         url: link,
         source: sourceFor(host),
         domain: host.replace(/^www\./, ''),
