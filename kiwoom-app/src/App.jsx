@@ -945,7 +945,7 @@ function StockHead({ st, size }) {
         <Avatar name={st.n} code={st.t} size={24} />
         <OneLine style={{ flex: 1, minWidth: 0, display: 'flex' }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 15, color: R.meta }}>
-            <span style={{ fontSize: 17, fontWeight: 600, color: R.title, marginRight: 2 }}>{st.n}</span>
+            <span style={{ fontSize: 17, fontWeight: 600, color: R.strong, marginRight: 2 }}>{st.n}</span>
             {st.live ? '' : '최대 '}<ReviewDelta c={st.c} up={st.up} size={15} weight={400} /> <span style={{ color: st.up ? R.up : R.down }}>{st.tag}</span>
           </span>
         </OneLine>
@@ -997,13 +997,13 @@ function CloseReviewBody({ level = 'briefing', collapsed = false }) {
       <div>
         <div style={{ marginTop: 16 }}>
           <Label>{market.tag}</Label>
-          <div style={{ marginTop: 8 }}><IndexHeadline idx={market.index} /></div>
+          <div style={{ marginTop: 8 }}><IndexHeadline idx={market.index} strong /></div>
         </div>
         <ReviewDivider style={{ marginTop: 14 }} />
         <div style={{ marginTop: 16 }}>
           <Label>{flows.tag}</Label>
           {flows.items.map((it, i) => (
-            <OneLine key={i} style={{ marginTop: i ? 4 : 8, fontSize: 17, lineHeight: 1.5, color: R.title }}>{it.headline}</OneLine>
+            <OneLine key={i} style={{ marginTop: i ? 4 : 8, fontSize: 17, lineHeight: 1.5, fontWeight: 600, color: R.strong }}>{it.headline}</OneLine>
           ))}
         </div>
         <ReviewDivider style={{ marginTop: 14 }} />
@@ -1017,7 +1017,7 @@ function CloseReviewBody({ level = 'briefing', collapsed = false }) {
         <div style={{ marginTop: 16 }}>
           <Label>{outlook.tag}</Label>
           {outlook.items.map((it, i) => (
-            <OneLine key={i} style={{ marginTop: 8, fontSize: 17, lineHeight: 1.5, color: R.title }}>{it.headline}</OneLine>
+            <OneLine key={i} style={{ marginTop: 8, fontSize: 17, lineHeight: 1.5, fontWeight: 600, color: R.strong }}>{it.headline}</OneLine>
           ))}
         </div>
       </div>
