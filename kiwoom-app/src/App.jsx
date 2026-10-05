@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useId } from 'react';
+import { useState, useRef, useEffect, useId, createContext, useContext } from 'react';
 import {
   ChevronLeft, Check, Bell, Menu, Bookmark, Activity, MessageCircle, X,
 } from 'lucide-react';
@@ -393,14 +393,23 @@ function Delta({ c, up, size = 13 }) {
     </span>
   );
 }
+// 미리보기 화면에서 카드의 선택 여부를 카드 바깥(래퍼)과 공유하기 위한 컨텍스트
+const CardCheckContext = createContext(null);
+
 function CardShell({ title, subtitle, children, showCheck = true, showTitle = true, headerRight, onHeaderClick }) {
-  const [checked, setChecked] = useState(true);
+  const ctx = useContext(CardCheckContext);
+  const [localChecked, setLocalChecked] = useState(true);
+  const checked = ctx ? ctx.checked : localChecked;
+  const setChecked = ctx ? ctx.setChecked : setLocalChecked;
+  // 선택 해제된 카드: 체크 버튼만 그대로 두고 나머지는 흐리게, 누를 수 없게
+  const off = showCheck && !checked;
+  const fade = off ? { opacity: 0.35, pointerEvents: 'none', transition: 'opacity 0.2s' } : { transition: 'opacity 0.2s' };
   return (
     <div>
       {showTitle && (
       <div onClick={onHeaderClick} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, cursor: onHeaderClick ? 'pointer' : 'default' }}>
-        <span style={{ fontSize: 20, fontWeight: 700, lineHeight: 1.4, color: C.dark, flex: 1 }}>{title}</span>
-        {headerRight}
+        <span style={{ fontSize: 20, fontWeight: 700, lineHeight: 1.4, color: C.dark, flex: 1, ...fade }}>{title}</span>
+        {headerRight && <span style={{ display: 'flex', ...fade }}>{headerRight}</span>}
         {showCheck && (
           <div onClick={(e) => { e.stopPropagation(); setChecked(!checked); }} style={{ width: 22, height: 22, borderRadius: '50%', background: checked ? C.yellow : 'transparent', border: checked ? 'none' : `1.5px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxSizing: 'border-box' }}>
             {checked && <Check size={13} color={C.textPrimary} strokeWidth={3} />}
@@ -408,8 +417,8 @@ function CardShell({ title, subtitle, children, showCheck = true, showTitle = tr
         )}
       </div>
       )}
-      {subtitle && <div style={{ marginTop: 4, fontSize: 14, color: C.textTertiary }}>{subtitle}</div>}
-      {children}
+      {subtitle && <div style={{ marginTop: 4, fontSize: 14, color: C.textTertiary, ...fade }}>{subtitle}</div>}
+      <div style={fade}>{children}</div>
     </div>
   );
 }
@@ -1072,7 +1081,7 @@ function ReviewToggle({ open, onToggle }) {
 }
 
 // level: 직접 지정 (밀도 설정 화면 예시) / density: 홈에서 저장한 밀도 / 둘 다 없으면 분석
-function CloseReviewCard({ showCheck = true, subtitle, showMore = true, level: levelProp, density } = {}) {
+function CloseReviewCard({ showCheck = true, subtitle, showMore = true, showTitle = true, level: levelProp, density } = {}) {
   const level = levelProp || density || 'analysis';
   const [open, setOpen] = useState(true);
   const canToggle = showMore && level !== 'summary';
@@ -1092,7 +1101,7 @@ function CloseReviewCard({ showCheck = true, subtitle, showMore = true, level: l
     );
   }
   return (
-    <CardShell title="장마감 리뷰" showCheck={showCheck} subtitle={subtitle}>
+    <CardShell title="장마감 리뷰" showCheck={showCheck} subtitle={subtitle} showTitle={showTitle}>
       <CloseReviewBody level={level} />
       {canToggle && <ReviewToggle open={open} onToggle={() => setOpen(!open)} />}
     </CardShell>
@@ -1760,6 +1769,18 @@ function HomeBottomTabBar() {
   );
 }
 
+// 미리보기의 카드 한 장: 선택을 해제하면 카드 전체가 비활성처럼 흐려진다
+function PreviewCard({ children }) {
+  const [checked, setChecked] = useState(true);
+  return (
+    <CardCheckContext.Provider value={{ checked, setChecked }}>
+      <div style={{ padding: '16px', marginBottom: 16, borderRadius: 16, fontFamily: FONT, background: checked ? C.white : 'rgba(255,255,255,0.55)', transition: 'background 0.2s' }}>
+        {children}
+      </div>
+    </CardCheckContext.Provider>
+  );
+}
+
 function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동님 맞춤 피드 미리보기', icon = 'reco', density = 'analysis' }) {
   const order = CATEGORIES_FEED.map((c) => c.id);
 
@@ -1785,15 +1806,11 @@ function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동�
         <div style={{ height: 20 }} />
         {order.map((id) => {
           const cat = CATEGORIES_FEED.find((c) => c.id === id);
-          const style = {
-            padding: '16px', marginBottom: 16, borderRadius: 16, fontFamily: FONT,
-            background: C.white,
-          };
           const Comp = cat.Comp;
           return (
-            <div key={id} style={style}>
+            <PreviewCard key={id}>
               <Comp showCheck={variant !== 'home'} density={density} />
-            </div>
+            </PreviewCard>
           );
         })}
       </div>
@@ -1811,7 +1828,7 @@ function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동�
   );
 }
 
-function BottomSheet({ title, subtitle, onClose, children }) {
+function BottomSheet({ title, subtitle, onClose, toolbar, children }) {
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: 10 }}>
       <div onClick={onClose} style={{ position: 'absolute', inset: 0, background: 'rgba(6,11,17,0.5)', touchAction: 'none', overscrollBehavior: 'none' }} />
@@ -1821,6 +1838,7 @@ function BottomSheet({ title, subtitle, onClose, children }) {
           <X size={22} color={C.textPrimary} strokeWidth={2} onClick={onClose} style={{ cursor: 'pointer', flexShrink: 0 }} />
         </div>
         <div style={{ padding: '8px 20px 0', fontSize: 14, color: C.textTertiary, flexShrink: 0 }}>{subtitle}</div>
+        {toolbar && <div style={{ padding: '16px 20px 0', flexShrink: 0 }}>{toolbar}</div>}
         <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '16px 20px 28px', overscrollBehavior: 'contain' }}>{children}</div>
       </div>
     </div>
@@ -1841,20 +1859,23 @@ function IndexInfoBody() {
   );
 }
 
-function CloseReviewInfoBody() {
-  return <CloseReviewBody level="analysis" />;
+// 정보 밀도에 따라 모습이 달라지는 카드의 설명 시트에서만 밀도 슬라이더를 보여준다
+const DENSITY_INFO_CHIPS = new Set(['시황 분석', '장마감 리뷰', '뉴스']);
+
+function CloseReviewInfoBody({ level = 'analysis' }) {
+  return <CloseReviewBody level={level} />;
 }
 
 // 장마감 리뷰 / 지수는 첨부된 레퍼런스를 그대로 트레이스했고, 나머지는 이미 구현된
 // 카드 컴포넌트를 그대로 재사용한 것 (자체 제목이 한 번 더 보임 - 의도된 절충).
 const CHIP_INFO = {
-  '시황 분석': { title: '장마감 리뷰', subtitle: '오늘 하루 국내외 시장 흐름을 한 번에 정리해드려요', body: () => <CloseReviewInfoBody /> },
-  '장마감 리뷰': { subtitle: '장 마감 후 주요 이슈와 내일 살펴볼 변수를 짚어드려요', body: () => <CloseReviewInfoBody /> },
+  '시황 분석': { title: '장마감 리뷰', subtitle: '오늘 하루 국내외 시장 흐름을 한 번에 정리해드려요', body: (level) => <CloseReviewInfoBody level={level} /> },
+  '장마감 리뷰': { subtitle: '장 마감 후 주요 이슈와 내일 살펴볼 변수를 짚어드려요', body: (level) => <CloseReviewInfoBody level={level} /> },
   '지수': { subtitle: '코스피부터 원자재, 환율까지 주요 지표를 모아봐요', body: () => <IndexInfoBody /> },
   '포트폴리오': { subtitle: '보유 종목의 평가손익과 수익률을 한눈에 확인해요', body: () => <PortfolioCard showCheck={false} showTitle={false} /> },
   '관심 종목': { subtitle: '관심 등록한 종목의 시세와 관련 소식을 모아봐요', body: () => <WatchlistCard showCheck={false} showTitle={false} /> },
   '알림': { subtitle: '거래 체결 내역과 대기 주문을 바로 확인할 수 있어요', body: () => <AlertCard showCheck={false} showTitle={false} /> },
-  '뉴스': { subtitle: '관심 기업 관련 최신 뉴스를 골라서 보여드려요', body: () => <NewsCard showCheck={false} showTitle={false} /> },
+  '뉴스': { subtitle: '관심 기업 관련 최신 뉴스를 골라서 보여드려요', body: (level) => <NewsCard showCheck={false} showTitle={false} density={level} /> },
   '커뮤니티': { subtitle: '종목 토론방 여론과 실시간 인기 검색어를 확인해요', body: () => <CommunityCard showCheck={false} showTitle={false} /> },
   '랭킹': { subtitle: '상승률, 거래대금 등 다양한 기준의 종목 순위예요', body: () => <RankingCard showCheck={false} showTitle={false} /> },
   '증권 캘린더': { subtitle: '실적 발표, 배당, IPO 등 주요 일정을 미리 챙겨요', body: () => <CalendarCard showCheck={false} showTitle={false} /> },
@@ -1863,9 +1884,16 @@ const CHIP_INFO = {
 
 function ChipInfoSheet({ chipKey, onClose }) {
   const info = CHIP_INFO[chipKey] || { subtitle: `${chipKey}에 대한 설명이에요`, body: () => null };
+  const [level, setLevel] = useState('analysis');
+  const hasDensity = DENSITY_INFO_CHIPS.has(chipKey);
   return (
-    <BottomSheet title={info.title || chipKey} subtitle={info.subtitle} onClose={onClose}>
-      {info.body()}
+    <BottomSheet
+      title={info.title || chipKey}
+      subtitle={info.subtitle}
+      onClose={onClose}
+      toolbar={hasDensity ? <DensitySlider value={level} onChange={setLevel} /> : null}
+    >
+      {info.body(level)}
     </BottomSheet>
   );
 }
@@ -2001,8 +2029,8 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
 }
 
 const EXAMPLE_META = {
-  market: { subtitle: '장 마감 후 주요 이슈와 내일 살펴볼 변수를 짚어드려요', Comp: CloseReviewCard },
-  news: { subtitle: '관심 기업 관련 최신 뉴스를 골라서 보여드려요', Comp: NewsCard },
+  market: { subtitle: '장 마감 후 주요 이슈와 내일 살펴볼 변수를 짚어드려요', Comp: CloseReviewCard, title: '장마감 리뷰', densityProp: 'level' },
+  news: { subtitle: '관심 기업 관련 최신 뉴스를 골라서 보여드려요', Comp: NewsCard, title: '뉴스', densityProp: 'density' },
   portfolio: { subtitle: '보유 종목의 평가손익과 수익률을 한눈에 확인해요', Comp: PortfolioCard },
   watchlist: { subtitle: '관심 등록한 종목의 시세와 관련 소식을 모아봐요', Comp: WatchlistCard },
   alert: { subtitle: '거래 체결 내역과 대기 주문을 바로 확인할 수 있어요', Comp: AlertCard },
@@ -2015,8 +2043,24 @@ const EXAMPLE_META = {
 
 function ExampleSheet({ categoryKey, onClose }) {
   const meta = EXAMPLE_META[categoryKey];
+  const [level, setLevel] = useState('analysis'); // 열 때마다 분석부터
   if (!meta) return null;
-  const { Comp, subtitle } = meta;
+  const { Comp, subtitle, densityProp, title } = meta;
+
+  // 정보 밀도가 있는 카드: 제목 + X, 설명, 그 아래에 밀도 슬라이더, 그 아래에 예시 카드
+  if (densityProp) {
+    return (
+      <BottomSheet
+        title={title}
+        subtitle={subtitle}
+        onClose={onClose}
+        toolbar={<DensitySlider value={level} onChange={setLevel} />}
+      >
+        <Comp showCheck={false} showMore={false} showTitle={false} {...{ [densityProp]: level }} />
+      </BottomSheet>
+    );
+  }
+
   return (
     <>
       <div onClick={onClose} style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)', zIndex: 10, touchAction: 'none', overscrollBehavior: 'none' }} />
