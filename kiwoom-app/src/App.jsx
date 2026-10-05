@@ -57,13 +57,13 @@ const SECTIONS = [
     cards: [
       { id: 'risk-stable', label: '안정추구형', tagline: '손실은 줄이고 마음은 편하게', icon: 'risk-stable', chips: ['포트폴리오', '증권 캘린더', '지수'] },
       { id: 'risk-neutral', label: '위험중립형', tagline: '균형 있게, 기회는 놓치지 않게', icon: 'risk-neutral', chips: ['포트폴리오', '관심 종목', '지수', '랭킹', '리포트'] },
-      { id: 'risk-aggressive', label: '공격투자형', tagline: '빠른 정보로 기회를 선점하게', icon: 'risk-aggressive', chips: ['관심 종목', '랭킹', '커뮤니티', '지수', '알림'] },
+      { id: 'risk-aggressive', label: '공격투자형', tagline: '빠른 정보로 기회를 선점하게', icon: 'risk-aggressive', chips: ['관심 종목', '랭킹', '커뮤니티', '지수', '주문'] },
     ],
   },
   {
     key: 'level', title: '숙련도별',
     cards: [
-      { id: 'lv-1', label: '초보자용', tagline: '어려운 용어 없이 쉽게 시작', icon: 'lv-1', chips: ['시황 분석', '포트폴리오', '알림'] },
+      { id: 'lv-1', label: '초보자용', tagline: '어려운 용어 없이 쉽게 시작', icon: 'lv-1', chips: ['시황 분석', '포트폴리오', '주문'] },
       { id: 'lv-2', label: '중급자용', tagline: '필요한 정보만 골라서', icon: 'lv-2', chips: ['관심 종목', '포트폴리오', '지수'] },
       { id: 'lv-3', label: '전문가용', tagline: '깊이 있는 데이터까지 전부', icon: 'lv-3', chips: ['리포트', '랭킹', '지수', '커뮤니티', '관심 종목'] },
     ],
@@ -71,9 +71,9 @@ const SECTIONS = [
   {
     key: 'asset', title: '관심 자산별',
     cards: [
-      { id: 'asset-stock', label: '개별 종목 중심', tagline: '종목 하나하나 깊이 있게', icon: 'asset-stock', chips: ['관심 종목', '리포트', '커뮤니티', '알림'] },
+      { id: 'asset-stock', label: '개별 종목 중심', tagline: '종목 하나하나 깊이 있게', icon: 'asset-stock', chips: ['관심 종목', '리포트', '커뮤니티', '주문'] },
       { id: 'asset-etf', label: 'ETF·인덱스 중심', tagline: '지수 흐름 하나로 심플하게', icon: 'asset-etf', chips: ['지수', '포트폴리오', '증권 캘린더'] },
-      { id: 'asset-overseas', label: '해외주식 중심', tagline: '시차 걱정 없이 해외 시장까지', icon: 'asset-overseas', chips: ['지수', '시황 분석', '뉴스', '알림'] },
+      { id: 'asset-overseas', label: '해외주식 중심', tagline: '시차 걱정 없이 해외 시장까지', icon: 'asset-overseas', chips: ['지수', '시황 분석', '뉴스', '주문'] },
       { id: 'asset-domestic', label: '국내주식 중심', tagline: '국내 시장에 집중해서 확실하게', icon: 'asset-domestic', chips: ['관심 종목', '시황 분석', '증권 캘린더', '랭킹', '커뮤니티'] },
     ],
   },
@@ -92,7 +92,7 @@ const CATEGORIES = [
   { key: 'news', label: '뉴스', items: ['전체', '+종목 추가'] },
   { key: 'portfolio', label: '포트폴리오', items: ['일간 수익률', '차트', '보유 종목'] },
   { key: 'watchlist', label: '관심 종목', items: ['현재가', '등락', '거래량', '체결강도', '관련 속보'] },
-  { key: 'alert', label: '알림', items: ['목표가 도달', '최저가/최고가', '거래 대기', '체결 내역'] },
+  { key: 'alert', label: '주문', items: ['거래 대기', '체결 내역'] },
   { key: 'calendar', label: '증권 캘린더', items: ['실적 발표', '배당', 'IPO', '경제 지표'] },
   { key: 'community', label: '커뮤니티', items: ['여론 분석', '인기 토론방', '실시간 검색어'] },
   { key: 'index', label: '지수', items: ['코스피', '코스닥', 'S&P500', '나스닥', '다우존스', '닛케이225', '항셍', '상하이종합', '유로스톡스50', '달러 환율', '엔 환율', 'WTI', '금', '구리', '천연가스', '비트코인'] },
@@ -1191,7 +1191,7 @@ const PENDING_ORDERS = [
 function AlertCard({ showCheck = true, subtitle, showTitle = true } = {}) {
   const [tab, setTab] = useState('체결내역');
   return (
-    <CardShell title="알림" showCheck={showCheck} subtitle={subtitle} showTitle={showTitle}>
+    <CardShell title="주문" showCheck={showCheck} subtitle={subtitle} showTitle={showTitle}>
       <Underline items={['체결내역', '거래 대기']} active={tab} onChange={setTab} />
       {tab === '거래 대기' && (
         <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -1712,7 +1712,7 @@ const CATEGORIES_FEED = [
   { id: 'index', title: '지수', Comp: IndexCard },
   { id: 'close', title: '장마감 리뷰', Comp: CloseReviewCard },
   { id: 'portfolio', title: '포트폴리오', Comp: PortfolioCard },
-  { id: 'alert', title: '알림', Comp: AlertCard },
+  { id: 'alert', title: '주문', Comp: AlertCard },
   { id: 'news', title: '뉴스', Comp: NewsCard },
   { id: 'community', title: '커뮤니티', Comp: CommunityCard },
   { id: 'ranking', title: '랭킹', Comp: RankingCard },
@@ -1874,7 +1874,7 @@ const CHIP_INFO = {
   '지수': { subtitle: '코스피부터 원자재, 환율까지 주요 지표를 모아봐요', body: () => <IndexInfoBody /> },
   '포트폴리오': { subtitle: '보유 종목의 평가손익과 수익률을 한눈에 확인해요', body: () => <PortfolioCard showCheck={false} showTitle={false} /> },
   '관심 종목': { subtitle: '관심 등록한 종목의 시세와 관련 소식을 모아봐요', body: () => <WatchlistCard showCheck={false} showTitle={false} /> },
-  '알림': { subtitle: '거래 체결 내역과 대기 주문을 바로 확인할 수 있어요', body: () => <AlertCard showCheck={false} showTitle={false} /> },
+  '주문': { subtitle: '거래 체결 내역과 대기 주문을 바로 확인할 수 있어요', body: () => <AlertCard showCheck={false} showTitle={false} /> },
   '뉴스': { subtitle: '관심 기업 관련 최신 뉴스를 골라서 보여드려요', body: (level) => <NewsCard showCheck={false} showTitle={false} density={level} /> },
   '커뮤니티': { subtitle: '종목 토론방 여론과 실시간 인기 검색어를 확인해요', body: () => <CommunityCard showCheck={false} showTitle={false} /> },
   '랭킹': { subtitle: '상승률, 거래대금 등 다양한 기준의 종목 순위예요', body: () => <RankingCard showCheck={false} showTitle={false} /> },
@@ -1913,7 +1913,7 @@ function RecommendScreen({ onManual, onPreview, onStartTemplate }) {
   const [expanded, setExpanded] = useState(false);
   const recoCard = {
     id: 'reco', label: '홍길동님 맞춤 피드', icon: 'reco', totalCount: 10,
-    chips: ['시황 분석', '포트폴리오', '관심 종목', '지수', '알림', '증권 캘린더'],
+    chips: ['시황 분석', '포트폴리오', '관심 종목', '지수', '주문', '증권 캘린더'],
     more: ['뉴스', '커뮤니티', '랭킹', '리포트'],
   };
   const recoSelected = selectedCard === 'reco';
