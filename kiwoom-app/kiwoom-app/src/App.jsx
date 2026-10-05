@@ -1428,7 +1428,7 @@ function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동�
           <button onClick={onStart} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 600, color: C.textPrimary, cursor: 'pointer' }}>
             다음
           </button>
-          <div style={{ fontSize: 12.5, color: C.textTertiary, marginTop: 12 }}>다음 화면에서 세부사항을 수정할 수 있어요</div>
+          <div style={{ fontSize: 12.5, color: C.textTertiary, marginTop: 12 }}>다음 화면에서 정보 밀도를 조정할 수 있어요</div>
         </div>
       )}
     </Frame>

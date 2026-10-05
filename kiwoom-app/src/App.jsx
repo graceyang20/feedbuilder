@@ -1676,7 +1676,7 @@ function ReportCard({ showCheck = true, subtitle, showTitle = true } = {}) {
   const [tab, setTab] = useState('인기');
   return (
     <CardShell title="리포트" showCheck={showCheck} subtitle={subtitle} showTitle={showTitle}>
-      <PillTabs items={['인기', '신규 목표가']} active={tab} onChange={setTab} />
+      <Underline items={['인기', '신규 목표가']} active={tab} onChange={setTab} />
       <div style={{ position: 'relative' }}>
       <div className="no-scrollbar" style={{ display: 'flex', gap: 8, marginTop: 12, overflowX: 'auto', scrollbarWidth: 'none' }}>
         {tab === '인기' && POPULAR_REPORTS.map((r, i) => (
@@ -1774,7 +1774,7 @@ function PreviewCard({ children }) {
   const [checked, setChecked] = useState(true);
   return (
     <CardCheckContext.Provider value={{ checked, setChecked }}>
-      <div style={{ padding: '16px', marginBottom: 16, borderRadius: 16, fontFamily: FONT, background: checked ? C.white : 'rgba(255,255,255,0.55)', transition: 'background 0.2s' }}>
+      <div style={{ padding: '16px', marginBottom: 16, borderRadius: 16, fontFamily: FONT, background: checked ? C.white : 'rgba(255,255,255,0.55)', opacity: checked ? 1 : 0.35, transition: 'opacity 0.2s, background 0.2s' }}>
         {children}
       </div>
     </CardCheckContext.Provider>
@@ -1821,7 +1821,7 @@ function PreviewScreen({ onBack, onStart, variant = 'edit', title = '홍길동�
           <button onClick={onStart} style={{ width: '100%', height: 56, borderRadius: 28, border: 'none', background: C.yellow, fontSize: 16, fontWeight: 600, color: C.textPrimary, cursor: 'pointer' }}>
             다음
           </button>
-          <div style={{ fontSize: 12.5, color: C.textTertiary, marginTop: 12 }}>다음 화면에서 세부사항을 수정할 수 있어요</div>
+          <div style={{ fontSize: 12.5, color: C.textTertiary, marginTop: 12 }}>다음 화면에서 정보 밀도를 조정할 수 있어요</div>
         </div>
       )}
     </Frame>
