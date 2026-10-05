@@ -403,7 +403,7 @@ function CardShell({ title, subtitle, children, showCheck = true, showTitle = tr
   const setChecked = ctx ? ctx.setChecked : setLocalChecked;
   // 선택 해제된 카드: 체크 버튼만 그대로 두고 나머지는 흐리게, 누를 수 없게
   const off = showCheck && !checked;
-  const fade = off ? { opacity: 0.35, pointerEvents: 'none', transition: 'opacity 0.2s' } : { transition: 'opacity 0.2s' };
+  const fade = off ? { opacity: 0.75, pointerEvents: 'none', transition: 'opacity 0.2s' } : { transition: 'opacity 0.2s' };
   return (
     <div>
       {showTitle && (
@@ -1774,7 +1774,7 @@ function PreviewCard({ children }) {
   const [checked, setChecked] = useState(true);
   return (
     <CardCheckContext.Provider value={{ checked, setChecked }}>
-      <div style={{ padding: '16px', marginBottom: 16, borderRadius: 16, fontFamily: FONT, background: checked ? C.white : 'rgba(255,255,255,0.55)', opacity: checked ? 1 : 0.35, transition: 'opacity 0.2s, background 0.2s' }}>
+      <div style={{ padding: '16px', marginBottom: 16, borderRadius: 16, fontFamily: FONT, background: checked ? C.white : 'rgba(255,255,255,0.55)', opacity: checked ? 1 : 0.75, transition: 'opacity 0.2s, background 0.2s' }}>
         {children}
       </div>
     </CardCheckContext.Provider>
